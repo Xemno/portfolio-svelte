@@ -16,19 +16,27 @@
 
 		// return !isBlank(email) && reg.test(email);
 		return reg.test(email);
-
 	};
 </script>
 
 <svelte:head>
 	<title>{useTitle(title, TITLE_SUFFIX)}</title>
 </svelte:head>
+
 <div
-	class="col self-center flex-1 md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-0px p-x-10px"
+	class="col self-center flex-[0.25] md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-5px p-x-10px border-dotted border-amber"
+>
+	Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum quod consectetur dicta
+	suscipit dolor ipsam placeat fugit aliquid nihil reiciendis, tempora ut, rem molestiae sint animi
+	quas iusto ipsa. Enim?
+</div>
+
+<div
+	class="col self-center flex-[0.25] md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-5px p-x-10px border-dotted border-amber"
 >
 	<div class="md:flex-1 gap-10px">
-		<MainTitle classes="md:text-left ">{name} {lastName},</MainTitle>
-		<p class="text-[var(--tertiary-text)]  text-center md:text-left text-[1.2em] font-extralight">
+		<MainTitle classes="md:text-left animate-fade-in">{name} {lastName}</MainTitle>
+		<p class="text-[var(--tertiary-text)] text-center md:text-left text-[1.2em] font-extralight">
 			{description}
 		</p>
 		<div class="row justify-center md:justify-start p-y-15px p-x-0px gap-2">
@@ -45,4 +53,12 @@
 		</div>
 	</div>
 	<Carrousel items={skills ?? MY_SKILLS} />
+</div>
+
+<div
+	class="col self-center flex-[0.5] md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-5px p-x-10px border-dotted border-amber"
+>
+	Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias sint sunt consequatur accusamus
+	deleniti! Officiis vero consequatur sed impedit repudiandae minus quod autem unde. Perspiciatis a
+	natus voluptatum veritatis minus.
 </div>

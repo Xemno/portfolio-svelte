@@ -46,16 +46,16 @@
 				href={`${base}/search`}
 				class="text-inherit col-center self-stretch px-2 hover:bg-[color:var(--main-hover)]"
 			>
-				<UIcon icon="i-carbon-search" />
+				<UIcon icon="i-carbon-search" classes="text-1.2em" />
 			</a>
 			<button
 				class="bg-transparent text-1em border-none cursor-pointer hover:bg-[color:var(--main-hover)] text-[var(--secondary-text)] px-2"
 				on:click={() => toggleTheme()}
 			>
 				{#if $theme}
-					<UIcon icon="i-carbon-moon" />
+					<UIcon icon="i-line-md-moon-rising-loop" classes="text-1.5em" />
 				{:else}
-					<UIcon icon="i-carbon-sun" />
+					<UIcon icon="i-line-md-sun-rising-loop" classes="text-1.5em" />
 				{/if}
 			</button>
 		</div>

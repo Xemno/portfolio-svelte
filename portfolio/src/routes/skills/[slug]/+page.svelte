@@ -71,17 +71,21 @@
 
 <div class="pb-10 overflow-x-hidden col flex-1">
 	{#if data.skill === undefined}
+
 		<div class="p-5 col-center gap-3 m-y-auto text-[var(--accent-text)]">
 			<UIcon icon="i-carbon-software-resource-cluster" classes="text-3.5em" />
 			<p class="font-300">Could not load skill data.</p>
 		</div>
+
 	{:else}
+
 		<div class="flex flex-col items-center overflow-x-hidden">
 			<Banner img={getAssetURL(data.skill.logo)}>
 				<MainTitle>{data.skill.name}</MainTitle>
 			</Banner>
 			<div class="pt-3 pb-1 overflow-x-hidden w-full">
 				<div class="px-10px m-y-5">
+
 					{#if data.skill.description}
 						<Markdown content={data.skill.description ?? 'This place is yet to be filled...'} />
 					{:else}
@@ -90,13 +94,15 @@
 							<p class="font-300">No description</p>
 						</div>
 					{/if}
+
 				</div>
 			</div>
 			<div class="self-stretch mb-2">
 				<CardDivider />
 			</div>
-			<div class="flex flex-row gap-1 self-stretch flex-wrap ">
+			<div class="flex flex-row gap-1 self-stretch flex-wrap">
 				<div class="px-10px">
+
 					{#each related as item}
 						<Chip
 							classes="inline-flex flex-row items-center justify-center"
@@ -106,8 +112,10 @@
 							<span class="text-[0.9em]">{item.display}</span>
 						</Chip>
 					{/each}
+					
 				</div>
 			</div>
 		</div>
+		
 	{/if}
 </div>
