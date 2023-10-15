@@ -1,6 +1,11 @@
+// vite.config.ts
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import UnoCSS from 'unocss/vite'
+import { defineConfig } from 'vite'
 
 export default defineConfig({
-	plugins: [sveltekit()]
-});
+  plugins: [
+	sveltekit(),
+	UnoCSS(),
+  ],
+})
