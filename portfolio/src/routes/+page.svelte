@@ -7,6 +7,8 @@
 	import MY_SKILLS from '$lib/skills.params';
 	import { useTitle } from '$lib/utils/helpers';
 	// import { isBlank } from '@riadh-adrani/utils';
+	// import { createScene } from '$lib/scenes/scene2';
+	import { onMount } from 'svelte';
 
 	const { description, lastName, links, name, title, skills } = HOME;
 
@@ -17,22 +19,30 @@
 		// return !isBlank(email) && reg.test(email);
 		return reg.test(email);
 	};
+
+	// let el: HTMLCanvasElement;
+
+	// onMount(() => {
+	// 	createScene(el);
+	// });
 </script>
 
 <svelte:head>
 	<title>{useTitle(title, TITLE_SUFFIX)}</title>
 </svelte:head>
 
-<div
+<!-- <div
 	class="col self-center flex-[0.25] md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-5px p-x-10px border-dotted border-amber"
 >
 	Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum quod consectetur dicta
 	suscipit dolor ipsam placeat fugit aliquid nihil reiciendis, tempora ut, rem molestiae sint animi
 	quas iusto ipsa. Enim?
-</div>
+</div> -->
+
+<!-- <canvas id="" bind:this={el} /> -->
 
 <div
-	class="col self-center flex-[0.25] md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-5px p-x-10px border-dotted border-amber"
+	class="col self-center flex-1 md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-5px p-x-10px"
 >
 	<div class="md:flex-1 gap-10px">
 		<MainTitle classes="md:text-left animate-fade-in">{name} {lastName}</MainTitle>
@@ -51,14 +61,30 @@
 				</a>
 			{/each}
 		</div>
+		
+
+		<!-- NOTE: test layout -->
+		<div class="col justify-center md:justify-start p-y-15px p-x-0px gap-2">
+			<div class="form-group col-sm-6">
+				<label for="noiseInput" class="form-label">Noise Coef</label>
+				<input type="range" min="1" max="100" class="custom-range" id="noiseInput" />
+			</div>
+			<div class="form-group col-sm-6">
+				<label for="heightInput" class="form-label">Height Coef</label>
+				<input type="range" min="1" max="100" class="custom-range" id="heightInput" />
+			</div>
+		</div>
+		<button id="trigger" class="primary"> Random Colors </button>
+		<!-- NOTE: test layout -->
+
+
 	</div>
 	<Carrousel items={skills ?? MY_SKILLS} />
 </div>
 
-<div
+<!-- <div
 	class="col self-center flex-[0.5] md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-5px p-x-10px border-dotted border-amber"
->
-	Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias sint sunt consequatur accusamus
-	deleniti! Officiis vero consequatur sed impedit repudiandae minus quod autem unde. Perspiciatis a
-	natus voluptatum veritatis minus.
-</div>
+> -->
+<!-- <canvas id="" bind:this={el} /> -->
+
+<!-- </div> -->
