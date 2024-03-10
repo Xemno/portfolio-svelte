@@ -6,9 +6,6 @@
 	import { HOME, getPlatfromIcon } from '$lib/params';
 	import MY_SKILLS from '$lib/skills.params';
 	import { useTitle } from '$lib/utils/helpers';
-	// import { isBlank } from '@riadh-adrani/utils';
-	// import { createScene } from '$lib/scenes/scene2';
-	import { onMount } from 'svelte';
 
 	const { description, lastName, links, name, title, skills } = HOME;
 
@@ -19,27 +16,11 @@
 		// return !isBlank(email) && reg.test(email);
 		return reg.test(email);
 	};
-
-	// let el: HTMLCanvasElement;
-
-	// onMount(() => {
-	// 	createScene(el);
-	// });
 </script>
 
 <svelte:head>
 	<title>{useTitle(title, TITLE_SUFFIX)}</title>
 </svelte:head>
-
-<!-- <div
-	class="col self-center flex-[0.25] md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-5px p-x-10px border-dotted border-amber"
->
-	Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum quod consectetur dicta
-	suscipit dolor ipsam placeat fugit aliquid nihil reiciendis, tempora ut, rem molestiae sint animi
-	quas iusto ipsa. Enim?
-</div> -->
-
-<!-- <canvas id="" bind:this={el} /> -->
 
 <div
 	class="col self-center flex-1 md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-5px p-x-10px"
@@ -61,9 +42,8 @@
 				</a>
 			{/each}
 		</div>
-		
 
-		<!-- NOTE: test layout -->
+		<!-- NOTE: test layout for Noise and Height Coefficients-->
 		<div class="col justify-center md:justify-start p-y-15px p-x-0px gap-2">
 			<div class="form-group col-sm-6">
 				<label for="noiseInput" class="form-label">Noise Coef</label>
@@ -76,8 +56,6 @@
 		</div>
 		<button id="trigger" class="primary"> Random Colors </button>
 		<!-- NOTE: test layout -->
-
-
 	</div>
 	<Carrousel items={skills ?? MY_SKILLS} />
 </div>

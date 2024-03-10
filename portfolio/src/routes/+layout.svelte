@@ -4,23 +4,17 @@
 	import '$lib/index.scss';
 	import { onHydrated, theme } from '$lib/stores/theme';
 	import { onMount } from 'svelte';
-	import { createScene } from '$lib/scenes/scene2';
+	import MainScene from '$lib/components/Graphics/MainScene.svelte';
 
-	onMount(() => onHydrated());
-
-	let canvasElement: HTMLCanvasElement;
-	onMount(() => {
-		createScene(canvasElement);
-	});
+	let mainSceneComp: MainScene;
 </script>
 
 <div class={`body contents ${$theme ? 'theme-dark' : 'theme-light'}`} id="mydiv">
 	<NavMenu />
+	<MainScene bind:this={mainSceneComp} />
 	<div class="content container"><slot /></div>
-
-
-	<canvas id="canvas1" bind:this={canvasElement} />
 </div>
+
 
 <style lang="scss">
 	.content {
@@ -38,11 +32,8 @@
 		display: flex;
 		flex-direction: column;
 		transition-duration: 200ms;
-
 		letter-spacing: 1px;
-
 		min-height: 100vh;
-
 		background: transparent;
 	}
 
@@ -52,16 +43,5 @@
 
 	:global(h1, h2, h3, h4, h5, h6) {
 		margin: 5px 0px;
-	}
-
-	canvas {
-		width: 100vw;
-		height: 100vh;
-		display: block;
-		position: fixed;
-		top: 0;
-		left: 0;
-		z-index: -9999;
-		
 	}
 </style>

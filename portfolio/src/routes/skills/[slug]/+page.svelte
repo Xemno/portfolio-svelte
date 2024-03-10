@@ -27,6 +27,7 @@
 
 	const { title } = SKILLS;
 
+	// NOTE: search for related projects to that skill and show on the bottom
 	const getRelatedProjects = (): Array<Related> => {
 		const out: Array<Related> = [];
 
@@ -87,11 +88,11 @@
 				<div class="px-10px m-y-5">
 
 					{#if data.skill.description}
-						<Markdown content={data.skill.description ?? 'This place is yet to be filled...'} />
+						<Markdown content={data.skill.description ?? 'This has yet to be filled...'} />
 					{:else}
 						<div class="p-5 col-center gap-3 m-y-auto text-[var(--border)]">
 							<UIcon icon="i-carbon-text-font" classes="text-3.5em" />
-							<p class="font-300">No description</p>
+							<p class="font-300">No description yet</p>
 						</div>
 					{/if}
 
@@ -103,6 +104,7 @@
 			<div class="flex flex-row gap-1 self-stretch flex-wrap">
 				<div class="px-10px">
 
+					<!-- NOTE: render each related item as a Chip component -->
 					{#each related as item}
 						<Chip
 							classes="inline-flex flex-row items-center justify-center"

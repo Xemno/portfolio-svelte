@@ -27,8 +27,10 @@
 	{#if result.length === 0}
 		<!-- NOTE: if search result is empty -->
 		<div class="p-5 col-center gap-3 m-y-auto text-[var(--accent-text)] flex-1">
-			<UIcon icon="i-carbon-cube" classes="text-3.5em" />
-			<p class="font-300">Could not find anything...</p>
+			<UIcon icon="i-line-md-emoji-smile-twotone" classes="text-3.0em" />
+			<p class="font-300">
+				I don't have that kind of skill...
+			</p>
 		</div>
 	{:else}
 		<!-- NOTE: result is either filled completely or filtered with search result -->

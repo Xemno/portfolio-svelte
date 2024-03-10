@@ -106,6 +106,31 @@ let loadingScreen: HTMLInputElement | null;
 let controls: OrbitControls;
 let stats: Stats;
 
+
+// let textureURL = "moon_lroc_color_poles_1k.jpg"; 
+// let displacementURL = "moon_ldem_3_8bit.jpg"; 
+
+// let moongeometry = new SphereGeometry( 2,60,60 );
+// let textureLoader = new TextureLoader();
+// let texture = textureLoader.load( textureURL );
+// let displacementMap = textureLoader.load( displacementURL );
+
+// var moonmaterial = new MeshPhongMaterial ( 
+// 	{ color: 0xffffff ,
+// 	map: texture ,
+// 	   displacementMap: displacementMap,
+// 	displacementScale: 0.06,
+// 	bumpMap: displacementMap,
+// 	bumpScale: 0.06,
+// 	 reflectivity:0, 
+// 	 shininess :0
+// 	} 
+
+//   );
+
+// var moon = new Mesh( moongeometry, moonmaterial );
+
+
 export const createScene = (el: HTMLCanvasElement) => {
 	init(el);
 	render();
@@ -124,11 +149,12 @@ function init(el: HTMLCanvasElement) {
 
 
 
+
 	onWindowResize();
 	window.addEventListener('resize', onWindowResize, false);
 
-	noiseInput = (<HTMLInputElement>document.getElementById('noiseInput'));
-	heightInput = (<HTMLInputElement>document.getElementById('heightInput'));
+	// noiseInput = (<HTMLInputElement>document.getElementById('noiseInput'));
+	// heightInput = (<HTMLInputElement>document.getElementById('heightInput'));
 
 	document.addEventListener('mousemove', e => {
 		const v = new Vector3();
@@ -182,7 +208,7 @@ function initScene() {
 
 	sky = new Sky();
 	sky.scale.setScalar(10000); // NOTE: box of the sky, could animate for dark/light theme
-	scene.add(sky);
+	// scene.add(sky);
 
 	sun = new Vector3();
 	const phi = MathUtils.degToRad(90 - parameters.elevation);
@@ -197,6 +223,10 @@ function initScene() {
 	folderSky.add(parameters, 'azimuth', - 180, 180, 0.1).onChange(updateSun);
 	folderSky.open();
 
+	// scene.add( moon );
+	// const light = new DirectionalLight(0xFFFFFF, 1);
+	// light.position.set(-100, 10,50);
+	// scene.add(light);
 
 	let mat = new MeshLambertMaterial({ color: 0xf0f0f0, side: DoubleSide });
 	// let mat = new MeshBasicMaterial( { color: 0x0044ff, map: texture } );
@@ -208,19 +238,20 @@ function initScene() {
 	scene.add(plane);
 
 	// NOTE: final preset --- 
-	// plane.rotation.x = -Math.PI / 2 - 0.2;
-	// plane.position.y = -25;
-	// camera.position.z = 60;
+	plane.rotation.x = -Math.PI / 2 - 0.2;
+	plane.position.y = -25;
+	camera.position.z = 60;
+	// camera.position.z = 160;
 	// NOTE: final preset --- ^
 
 
-	plane.rotation.x = -Math.PI / 2;
+	// plane.rotation.x = -Math.PI / 2;
 
-	camera.position.z = 80;
-	camera.position.y = 25;
-	camera.rotation.x -= Math.PI / 10;
-	const gridHelper = new GridHelper(300, 300);
-	scene.add(gridHelper);
+	// camera.position.z = 80;
+	// camera.position.y = 25;
+	// camera.rotation.x -= Math.PI / 10;
+	// const gridHelper = new GridHelper(300, 300);
+	// scene.add(gridHelper);
 }
 
 function updateSun() {
@@ -274,7 +305,7 @@ function initLights() {
 	// scene.add(light);
 	let light0 = new PointLight(0xffff, 1000.0, 100);
 	light0.position.set(0, 10, 10);
-	scene.add(light0);
+	// scene.add(light0);
 
 	sphere.position.set(0, 10, 10);
 	scene.add(sphere);
