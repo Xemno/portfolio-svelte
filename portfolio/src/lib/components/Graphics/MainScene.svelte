@@ -1,14 +1,20 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { onHydrated, theme } from '$lib/stores/theme';
-	import { createScene } from '$lib/graphics/scenes/scene2';
+	import MainScene from '$lib/graphics/scenes/mainScene';
 
 	let canvas: HTMLCanvasElement;
+	let scene: MainScene;
 
 	onMount(() => onHydrated());
 
 	onMount(() => {
-		createScene(canvas);
+		scene = new MainScene(canvas);
+		scene.start();
+
+		return () => {
+			scene.stop();
+		};
 	});
 </script>
 
