@@ -48,24 +48,28 @@ export function getTimeDiff(date1: Date, date2 = new Date(Date.now() + 1000 * 60
 
 	const duration = dayjs.duration(d2.diff(d1));
 
-	let n = 0;
-	let u = 'day';
+	let d = 0;
+	let tStr = 'day';
+	let m = 0;
+	let x = 'month'
 
 	if (duration.as('days') <= 7) {
-		u = 'day';
-		n = duration.as('days');
+		tStr = 'day';
+		d = duration.as('days');
 	} else if (duration.as('months') <= 1) {
-		u = 'week';
-		n = duration.as('weeks');
+		tStr = 'week';
+		d = duration.as('weeks');
 	} else if (duration.as('years') <= 1) {
-		u = 'month';
-		n = duration.as('months');
+		tStr = 'month';
+		d = duration.as('months');
 	} else {
-		u = 'year';
-		n = duration.as('years');
+		tStr = 'year';
+		d = duration.as('years');
+		m = duration.as('months') - Math.trunc(d) * 12;
 	}
 
-	n = Math.trunc(n);
+	d = Math.trunc(d);
 
-	return `${Math.trunc(n)} ${u}${n > 1 ? 's' : ''}`;
+	return `${Math.trunc(d)} ${tStr}${d > 1 ? 's' : ''} 
+			${m > 0 ? Math.trunc(m) : '' } ${m > 0 ? x : ''}${m > 1 ? 's' : ''}`;
 }

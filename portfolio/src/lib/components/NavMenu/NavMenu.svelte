@@ -17,9 +17,9 @@
 	}
 
 	const items = [
-		{ title: NavBar.skills, to: '/skills', icon: 'i-carbon-software-resource-cluster' },
-		{ title: NavBar.personal, to: '/projects', icon: 'i-carbon-cube' },
+		{ title: NavBar.projects, to: '/projects', icon: 'i-carbon-cube' },
 		{ title: NavBar.career, to: '/experience', icon: 'i-carbon-development' },
+		{ title: NavBar.skills, to: '/skills', icon: 'i-carbon-software-resource-cluster' },
 		{ title: NavBar.resume, to: '/resume', icon: 'i-carbon-result' }
 	];
 </script>
@@ -33,6 +33,7 @@
 			<UIcon icon="i-carbon-code" classes="text-2em" />
 			<span class="ml-2 text-md font-bold hidden md:inline">{HOME.name} {HOME.lastName}</span>
 		</a>
+
 		<div class="flex flex-row flex-1 self-center justify-center">
 			{#each items as item}
 				<a href={`${base}${item.to}`} class="nav-menu-item !text-[var(--secondary-text)]">
@@ -41,6 +42,7 @@
 				</a>
 			{/each}
 		</div>
+
 		<div class="flex flex-row self-stretch items-stretch gap-1 text-1.15em">
 			<a
 				href={`${base}/search`}
@@ -91,7 +93,6 @@
 					}
 				}
 			}
-
 			&:hover {
 				background-color: var(--main-hover);
 			}

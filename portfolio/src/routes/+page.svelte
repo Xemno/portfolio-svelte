@@ -2,8 +2,10 @@
 	import Carrousel from '$lib/components/Carrousel/Carrousel.svelte';
 	import Icon from '$lib/components/Icon/Icon.svelte';
 	import MainTitle from '$lib/components/MainTitle/MainTitle.svelte';
+	import MY_EXPERIENCES from '$lib/experiences.params';
 	import { TITLE_SUFFIX } from '$lib/params';
 	import { HOME, getPlatfromIcon } from '$lib/params';
+	import MY_PROJECTS from '$lib/projects.params';
 	import MY_SKILLS from '$lib/skills.params';
 	import { useTitle } from '$lib/utils/helpers';
 
@@ -57,12 +59,7 @@
 		<button id="trigger" class="primary"> Random Colors </button>
 		<!-- NOTE: test layout -->
 	</div>
-	<Carrousel items={skills ?? MY_SKILLS} />
+
+	<Carrousel items={skills ?? MY_PROJECTS} />
+	
 </div>
-
-<!-- <div
-	class="col self-center flex-[0.5] md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-5px p-x-10px border-dotted border-amber"
-> -->
-<!-- <canvas id="" bind:this={el} /> -->
-
-<!-- </div> -->

@@ -16,7 +16,7 @@ export const TITLE_SUFFIX = 'Portfolio';
 
 export const NavBar = {
 	home: 'Home',
-	personal: 'Projects',
+	projects: 'Projects',
 	career: 'Experiences',
 	resume: 'Resume',
 	skills: 'Skills'
@@ -48,31 +48,32 @@ export const HOME: HomePageParams = {
 	description:
 		'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corrupti, rerum. Debitis accusantium deleniti enim iste dignissimos? Similique, exercitationem! Odit vero, numquam quae ratione maxime sunt reiciendis laudantium quaerat iure ipsum!',
 	links: [
-		{ platform: Platform.GitHub, link: 'https://github.com/' },
+		{ platform: Platform.GitHub, link: 'https://github.com/Xemno' },
 		{
 			platform: Platform.Linkedin,
-			link: 'https://www.linkedin.com/'
-		},
-		{
-			platform: Platform.Twitter,
-			link: 'https://twitter.com/'
-		},
-		{
-			platform: Platform.StackOverflow,
-			link: 'https://stackoverflow.com/'
+			link: 'https://www.linkedin.com/in/qais-el-okaili-442703181/'
 		},
 		{
 			platform: Platform.Email,
-			link: 'riadh-adrani@hotmail.fr'
-		},
-		{
-			platform: Platform.Youtube,
-			link: 'https://www.youtube.com'
-		},
-		{
-			platform: Platform.Facebook,
-			link: 'https://www.facebook.com'
+			link: 'elokaili.qais@gmail.com'
 		}
+		// {
+		// 	platform: Platform.Twitter,
+		// 	link: 'https://twitter.com/'
+		// },
+		// {
+		// 	platform: Platform.StackOverflow,
+		// 	link: 'https://stackoverflow.com/'
+		// },
+
+		// {
+		// 	platform: Platform.Youtube,
+		// 	link: 'https://www.youtube.com/channel/UCHOSq6Lc1WlCYeqqGDOj9Vw'
+		// },
+		// {
+		// 	platform: Platform.Facebook,
+		// 	link: 'https://www.facebook.com'
+		// }
 	]
 };
 
@@ -82,7 +83,7 @@ export const PROJECTS: ProjectPageParams = {
 };
 
 export const EXPERIENCES: ExperiencePageParams = {
-	title: 'Experiences',
+	title: 'Work Experience',
 	items: MY_EXPERIENCES
 };
 

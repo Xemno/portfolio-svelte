@@ -2,8 +2,7 @@
 	import 'uno.css';
 	import NavMenu from '$lib/components/NavMenu/NavMenu.svelte';
 	import '$lib/index.scss';
-	import { onHydrated, theme } from '$lib/stores/theme';
-	import { onMount } from 'svelte';
+	import { theme } from '$lib/stores/theme';
 	import MainScene from '$lib/components/Graphics/MainScene.svelte';
 
 	let mainSceneComp: MainScene;

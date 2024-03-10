@@ -4,7 +4,8 @@ import type { Project } from './types';
 
 const MY_PROJECTS: Array<Project> = [
 	{
-		slug: 'slick-portfolio-angular',
+		slug: 'my-portfolio-website',
+		name: 'This Website',
 		color: '#5e95e3',
 		description:
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
@@ -12,7 +13,6 @@ const MY_PROJECTS: Array<Project> = [
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
 		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
 		logo: Assets.Unknown,
-		name: 'Slick Portfolio',
 		period: {
 			from: new Date()
 		},
@@ -20,7 +20,8 @@ const MY_PROJECTS: Array<Project> = [
 		type: 'Website Template'
 	},
 	{
-		slug: 'slick-portfolio-svelte',
+		slug: 'master-thesis',
+		name: 'Master Thesis',
 		color: '#ff3e00',
 		description:
 			'A Vercel-like developer portfolio website template made with Typescript and SvelteKit.',
@@ -28,7 +29,7 @@ const MY_PROJECTS: Array<Project> = [
 			'A Vercel-like developer portfolio website template made with Typescript and SvelteKit.',
 		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
 		logo: Assets.Svelte,
-		name: 'Slick Portfolio',
+
 		period: {
 			from: new Date()
 		},
@@ -60,7 +61,92 @@ const MY_PROJECTS: Array<Project> = [
 				src: 'https://images.unsplash.com/photo-1585079542156-2755d9c8a094?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHByb2dyYW1taW5nfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60'
 			}
 		]
-	}
+	},
+
+	{
+		slug: 'bachelor-thesis',
+		name: 'Bachelor Thesis',
+		color: '#5e95e3',
+		description:
+			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+		shortDescription:
+			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
+		logo: Assets.Unknown,
+		period: {
+			from: new Date()
+		},
+		skills: getSkills('angular', 'ts', 'tailwind'),
+		type: 'Website Template'
+	},
+
+	{
+		slug: 'mr-lab-eth',
+		name: 'Mixed Reality Lab',
+		color: '#5e95e3',
+		description:
+			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+		shortDescription:
+			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
+		logo: Assets.Unknown,
+		period: {
+			from: new Date()
+		},
+		skills: getSkills('angular', 'ts', 'tailwind'),
+		type: 'Website Template'
+	},
+
+	{
+		slug: 'fast-cpu-raymarcher',
+		name: 'Fast CPU Raymarcher',
+		color: '#5e95e3',
+		description:
+			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+		shortDescription:
+			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
+		logo: Assets.Unknown,
+		period: {
+			from: new Date()
+		},
+		skills: getSkills('angular', 'ts', 'tailwind'),
+		type: 'Website Template'
+	},
+
+	{
+		slug: 'soft-body-physics-engine',
+		name: 'Soft-body Physics Engine',
+		color: '#5e95e3',
+		description:
+			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+		shortDescription:
+			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
+		logo: Assets.Unknown,
+		period: {
+			from: new Date()
+		},
+		skills: getSkills('angular', 'ts', 'tailwind'),
+		type: 'Website Template'
+	},
+
+	{
+		slug: 'ai-road-segmentation',
+		name: 'AI Road Segmentation',
+		color: '#5e95e3',
+		description:
+			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+		shortDescription:
+			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
+		logo: Assets.Unknown,
+		period: {
+			from: new Date()
+		},
+		skills: getSkills('angular', 'ts', 'tailwind'),
+		type: 'Website Template'
+	},
 ];
 
 export default MY_PROJECTS;
