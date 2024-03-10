@@ -22,7 +22,7 @@ import {
 	Camera,
 	DoubleSide,
 	MeshPhongMaterial,
-	AmbientLight, 
+	AmbientLight,
 	Clock,
 	LoadingManager,
 	PolarGridHelper,
@@ -33,6 +33,7 @@ import {
 	RepeatWrapping,
 	SRGBColorSpace,
 	MeshBasicMaterial,
+	PMREMGenerator,
 } from 'three';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -41,7 +42,8 @@ import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise"
 import Stats from 'three/examples/jsm/libs/stats.module';
 
 
-// import { Sky } from 'three/examples/jsm/objects/Sky';
+import { Sky } from 'three/examples/jsm/objects/Sky';
+import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min'
 
 
 let clock: Clock;
@@ -149,33 +151,56 @@ function init(el: HTMLCanvasElement) {
 }
 
 function initGui() {
-	noiseInput.value = 101 - conf.xyCoef;
-	heightInput.value = conf.zCoef * 100 / 25;
+	// noiseInput.value = 101 - conf.xyCoef;
+	// heightInput.value = conf.zCoef * 100 / 25;
 
-	noiseInput?.addEventListener('input', e => {
-		conf.xyCoef = 101 - noiseInput.value;
-	});
-	heightInput?.addEventListener('input', e => {
-		conf.zCoef = heightInput.value * 25 / 100;
-	});
+	// noiseInput?.addEventListener('input', e => {
+	// 	conf.xyCoef = 101 - noiseInput.value;
+	// });
+	// heightInput?.addEventListener('input', e => {
+	// 	conf.zCoef = heightInput.value * 25 / 100;
+	// });
 
-	document.getElementById('trigger').addEventListener('click', e => {
-		updateLightsColors();
-	});
+	// document.getElementById('trigger').addEventListener('click', e => {
+	// 	updateLightsColors();
+	// });
 }
+
+let sky: Sky;
+let sun: Vector3;
+const parameters = {
+	elevation: 0,
+	azimuth: 150
+};
 
 function initScene() {
 	scene = new Scene();
 
-	scene.fog = new FogExp2( 0xfff00f, 0.005 );
+	scene.fog = new FogExp2(0xfff00f, 0.005);
 
-	// sky = new Sky();
-	// sky.scale.setScalar( 10000 );
-	// scene.add( sky );
+	const pmremGenerator = new PMREMGenerator(renderer);
+
+	sky = new Sky();
+	sky.scale.setScalar(10000); // NOTE: box of the sky, could animate for dark/light theme
+	scene.add(sky);
+
+	sun = new Vector3();
+	const phi = MathUtils.degToRad(90 - parameters.elevation);
+	const theta = MathUtils.degToRad(parameters.azimuth);
+	sun.setFromSphericalCoords(1, phi, theta);
+	sky.material.uniforms['sunPosition'].value.copy(sun);
+
+
+	const gui = new GUI
+	const folderSky = gui.addFolder('Sky');
+	folderSky.add(parameters, 'elevation', -10, 90, 0.1).onChange(updateSun);
+	folderSky.add(parameters, 'azimuth', - 180, 180, 0.1).onChange(updateSun);
+	folderSky.open();
+
 
 	let mat = new MeshLambertMaterial({ color: 0xf0f0f0, side: DoubleSide });
 	// let mat = new MeshBasicMaterial( { color: 0x0044ff, map: texture } );
-	
+
 	// let mat = new MeshPhongMaterial({ color: 0xfff00f });
 	// let mat = new MeshStandardMaterial({ color: 0x808080, roughness: 0.5, metalness: 0.1 });
 	let geo = new PlaneGeometry(wWidth, wHeight, wWidth / 2, wHeight / 2);
@@ -183,19 +208,39 @@ function initScene() {
 	scene.add(plane);
 
 	// NOTE: final preset --- 
-	plane.rotation.x = -Math.PI / 2 - 0.2;
-	plane.position.y = -25;
-	camera.position.z = 60;
+	// plane.rotation.x = -Math.PI / 2 - 0.2;
+	// plane.position.y = -25;
+	// camera.position.z = 60;
 	// NOTE: final preset --- ^
 
 
-	// plane.rotation.x = -Math.PI / 2;
+	plane.rotation.x = -Math.PI / 2;
 
-	// camera.position.z = 80;
-	// camera.position.y = 25;
-	// camera.rotation.x -= Math.PI/10;
-	// const gridHelper = new GridHelper( 300, 300 );
-	// scene.add( gridHelper );
+	camera.position.z = 80;
+	camera.position.y = 25;
+	camera.rotation.x -= Math.PI / 10;
+	const gridHelper = new GridHelper(300, 300);
+	scene.add(gridHelper);
+}
+
+function updateSun() {
+
+	const phi = MathUtils.degToRad(90 - parameters.elevation);
+	const theta = MathUtils.degToRad(parameters.azimuth);
+
+	sun.setFromSphericalCoords(1, phi, theta);
+
+	sky.material.uniforms['sunPosition'].value.copy(sun);
+	// water.material.uniforms[ 'sunDirection' ].value.copy( sun ).normalize();
+
+	// if ( renderTarget !== undefined ) renderTarget.dispose();
+
+	// sceneEnv.add( sky );
+	// renderTarget = pmremGenerator.fromScene( sceneEnv );
+	// scene.add( sky );
+
+	// scene.environment = renderTarget.texture;
+
 }
 
 function render() {
@@ -210,7 +255,7 @@ function render() {
 	renderPlane();
 	renderLights();
 
-	// controls.update(delta);
+	controls.update(delta);
 
 	renderer.render(scene, camera);
 
