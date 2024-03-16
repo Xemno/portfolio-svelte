@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise"
+import type IRenderable from '../IRenderable';
 
 
 let conf = {
@@ -19,7 +20,7 @@ let conf = {
 
 type Pair = [number, number];
 
-class SimplexPlane {
+class SimplexPlane implements IRenderable {
 	private plane: THREE.Mesh;
 	private simplexNoise: SimplexNoise;
 	private geometry: THREE.PlaneGeometry;
@@ -34,7 +35,7 @@ class SimplexPlane {
 		this.plane.position.y = -25;
 	}
 
-	public update(delta: number, mouseScreenPos: THREE.Vector2) {
+	public update(deltaTime: number, mouseScreenPos: THREE.Vector2) {
 		let pArray = this.plane.geometry.attributes.position.array;
 		const time = Date.now() * 0.0002;
 		for (let i = 0; i < pArray.length; i += 3) {
