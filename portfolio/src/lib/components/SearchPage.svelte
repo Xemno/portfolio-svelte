@@ -40,9 +40,12 @@
 </script>
 
 <CommonPage {title}>
+	<!-- NOTE: Search bar -->
 	<div class="w-100% row">
 		<Input bind:value={search} placeholder={'Search...'} />
 	</div>
+
+	<!-- NOTE: Content with skills caroussel cards -->
 	<div class="w-100% col flex-1">
 		<slot />
 	</div>

@@ -31,9 +31,10 @@ class SimplexPlane implements IRenderable {
 		this.simplexNoise = new SimplexNoise();
 		this.material = new THREE.MeshLambertMaterial({ color: 0xf0f0f0, side: THREE.DoubleSide });
 		this.plane = new THREE.Mesh(this.geometry, this.material);
-		this.plane.rotation.x = -Math.PI / 2 - 0.2;
+		this.plane.rotation.x = -Math.PI / 2 - 0.15;
 		this.plane.position.y = -25;
 	}
+
 
 	public update(deltaTime: number, mouseScreenPos: THREE.Vector2) {
 		let pArray = this.plane.geometry.attributes.position.array;
@@ -43,6 +44,15 @@ class SimplexPlane implements IRenderable {
 		}
 		this.plane.geometry.attributes.position.needsUpdate = true;
 		// plane.geometry.computeBoundingSphere();
+	}
+
+	
+	public setPosition(pos: THREE.Vector3) {
+		this.plane.position.set(pos.x, pos.y, pos.z);
+	}
+
+	public setRotation() {
+
 	}
 
 	public getPlane(): THREE.Mesh {
@@ -74,7 +84,7 @@ export default class MainScene {
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(conf.fov, window.innerWidth / window.innerHeight, 0.1, 1000);
 		this.camera.position.z = conf.cameraZ;
-		this.camera.position.z = 60;
+		this.camera.position.z = 100;
 		// this.camera.rotation.x += Math.PI/3;
 
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: canvas });
@@ -89,8 +99,8 @@ export default class MainScene {
 		this.addResizeSupport();
 		this.addMouseInputSupport();
 
-		this.simplexPlane = new SimplexPlane(this.renderWidth, this.renderHeight, this.renderWidth / 2, this.renderHeight / 2);
-
+		this.simplexPlane = new SimplexPlane(this.renderWidth * 2, this.renderHeight * 2, this.renderWidth / 2, this.renderHeight / 2);
+ 
 		this.scene.fog = new THREE.FogExp2(0xfff00f, 0.005);
 
 		this.scene.add(this.simplexPlane.getPlane());
@@ -158,7 +168,7 @@ export default class MainScene {
 			this.raycaster.setFromCamera(this.mouseScreenPos, this.camera);
 			this.raycaster.ray.intersectPlane(this.mousePlane, this.mouseWorldPosition); // TODO:mouseWorldPosition
 			// console.log( this.raycaster.ray ); 
-			// console.log( this.mouseWorldPosition );			
+			// console.log( this.mouseWorldPosition );
 		});
 	}
 

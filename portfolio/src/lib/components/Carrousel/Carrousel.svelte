@@ -45,7 +45,6 @@
 
 		timeout = setTimeout(() => {
 			slide(right);
-
 			toggle(toRight);
 		}, delay);
 	};

@@ -9,6 +9,14 @@ export type ArrayElementType<ArrayType extends readonly unknown[]> =
 
 const MY_SKILLS = [
 	s({
+		slug: 'cpp',
+		color: 'yellow',
+		description:
+			'',
+		logo: Assets.Cpp, // TODO: add small logo and large logo 
+		name: 'C++'
+	}),
+	s({
 		slug: 'js',
 		color: 'yellow',
 		description:

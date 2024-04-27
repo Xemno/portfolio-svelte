@@ -16,12 +16,15 @@
 		}
 	}
 
-	const items = [
+	const navItems = [
 		{ title: NavBar.projects, to: '/projects', icon: 'i-carbon-cube' },
 		{ title: NavBar.career, to: '/experience', icon: 'i-carbon-development' },
 		{ title: NavBar.skills, to: '/skills', icon: 'i-carbon-software-resource-cluster' },
-		{ title: NavBar.resume, to: '/resume', icon: 'i-carbon-result' }
+		{ title: NavBar.resume, to: '/resume', icon: 'i-carbon-result' },
+		{ title: NavBar.test, to: '/test', icon: 'i-carbon-result' }
 	];
+
+
 </script>
 
 <div class="nav-menu">
@@ -35,7 +38,7 @@
 		</a>
 
 		<div class="flex flex-row flex-1 self-center justify-center">
-			{#each items as item}
+			{#each navItems as item}
 				<a href={`${base}${item.to}`} class="nav-menu-item !text-[var(--secondary-text)]">
 					<UIcon icon={item.icon} classes="text-1.3em" />
 					<span class="nav-menu-item-label">{item.title}</span>
