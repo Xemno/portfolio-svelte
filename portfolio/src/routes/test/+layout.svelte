@@ -5,38 +5,8 @@
 	let testSceneComp: TestScene;
 </script>
 
-<div class={`body contents ${$theme ? 'theme-dark' : 'theme-light'}`} id="mydiv">
+<div class={`body contents ${$theme ? 'theme-dark' : 'theme-light'}`} id="mydiv2">
 	<TestScene bind:this={testSceneComp} />
 	<div class="content container"><slot /></div>
 </div>
 
-<style lang="scss">
-	// body {
-	// 	margin:0;
-	// 	overflow:hidden;
-	// 	background: black;
-	// }
-
-	img {
-		display: none;
-	}
-
-	.loading {
-		margin: -50px -50px;
-		border: 0.2em dashed white;
-		position: absolute;
-		width: 100px;
-		height: 100px;
-		border-radius: 100px;
-		animation: load 5s linear infinite;
-	}
-
-	@keyframes load {
-		0% {
-			transform: translateX(50vw) translateY(50vh) rotateZ(0deg);
-		}
-		100% {
-			transform: translateX(50vw) translateY(50vh) rotateZ(360deg);
-		}
-	}
-</style>

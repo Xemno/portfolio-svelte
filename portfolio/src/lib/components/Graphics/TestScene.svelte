@@ -18,8 +18,7 @@
 	});
 </script>
 
-<!-- <canvas id="canvas" class="fixed left-0 top-0 -z-50" bind:this={canvas} /> -->
-<canvas id="myCanvas" bind:this={canvas} />
+<canvas id="canvas" class="fixed left-0 top-10 -z-50" bind:this={canvas} />
 
 <style lang="scss">
 	// body {
