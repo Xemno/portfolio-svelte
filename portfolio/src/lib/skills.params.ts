@@ -70,6 +70,13 @@ const MY_SKILLS = [
 		description: svelte,
 		logo: Assets.Svelte,
 		name: 'Svelte'
+	}),
+	s({
+		slug: 'python',
+		color: 'orange',
+		description: 'Lorem',
+		logo: Assets.Python,
+		name: 'Python'
 	})
 ];
 
