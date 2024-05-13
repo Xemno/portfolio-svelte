@@ -7,7 +7,7 @@ import descSoftBodyEng from './md/descSoftBodyPhysics.md?raw';
 import descCpuRayMarcher from './md/descFastCpuRayMarcher.md?raw';
 import descMRLab from './md/descMixedRealityLab.md?raw';
 import descBachelorThesis from './md/descBachelorThesis.md?raw';
-import descMasterThesis from './md/descMasterTHesis.md?raw';
+import descMasterThesis from './md/descMasterThesis.md?raw';
 import descThisWebsite from './md/descThisWebsite.md?raw';
 
 

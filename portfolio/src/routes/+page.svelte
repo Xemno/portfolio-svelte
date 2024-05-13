@@ -8,9 +8,11 @@
 	import MY_PROJECTS from '$lib/projects.params';
 	import MY_SKILLS from '$lib/skills.params';
 	import { useTitle } from '$lib/utils/helpers';
+	import Markdown from '$lib/components/Markdown.svelte';
 
 	const { description, lastName, links, name, title, skills } = HOME;
 
+	// TODO: move to a Utility class
 	const isEmail = (email: string): boolean => {
 		const reg =
 			/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -30,7 +32,7 @@
 	<div class="md:flex-1 gap-10px">
 		<MainTitle classes="md:text-left animate-fade-in">{name} {lastName}</MainTitle>
 		<p class="text-[var(--tertiary-text)] text-center md:text-left text-[1.2em] font-extralight">
-			{description}
+			<Markdown content={description ?? 'This has yet to be filled...'} />
 		</p>
 		<div class="row justify-center md:justify-start p-y-15px p-x-0px gap-2">
 			{#each links as link}
@@ -45,6 +47,7 @@
 			{/each}
 		</div>
 
+
 		<!-- NOTE: test layout for Noise and Height Coefficients-->
 		<div class="col justify-center md:justify-start p-y-15px p-x-0px gap-2">
 			<div class="form-group col-sm-6">
@@ -58,8 +61,9 @@
 		</div>
 		<button id="trigger" class="primary"> Random Colors </button>
 		<!-- NOTE: test layout -->
+
 	</div>
 
+	<!-- TODO: hyperlink on click on an item of the caroussel, s.t. it redirects to that subpage -->
 	<Carrousel items={skills ?? MY_PROJECTS} />
-	
 </div>
