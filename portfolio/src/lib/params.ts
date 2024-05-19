@@ -11,6 +11,7 @@ import {
 	type SearchPageParams
 } from './types';
 import { Icons } from './utils';
+import descMainPage from './md/descMainPage.md?raw';
 
 export const TITLE_SUFFIX = 'Portfolio';
 
@@ -46,8 +47,7 @@ export const HOME: HomePageParams = {
 	title: 'Home',
 	name: 'Qais',
 	lastName: 'El Okaili',
-	description:
-		'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corrupti, rerum. Debitis accusantium deleniti enim iste dignissimos? Similique, exercitationem! Odit vero, numquam quae ratione maxime sunt reiciendis laudantium quaerat iure ipsum!',
+	description: descMainPage,
 	links: [
 		{ platform: Platform.GitHub, link: 'https://github.com/Xemno' },
 		{

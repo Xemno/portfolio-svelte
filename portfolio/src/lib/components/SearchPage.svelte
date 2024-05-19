@@ -45,7 +45,7 @@
 		<Input bind:value={search} placeholder={'Search...'} />
 	</div>
 
-	<!-- NOTE: Content with skills caroussel cards -->
+	<!-- NOTE: Content with projects / skills / work experience cards -->
 	<div class="w-100% col flex-1">
 		<slot />
 	</div>
