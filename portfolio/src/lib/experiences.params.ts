@@ -16,6 +16,7 @@ const MY_EXPERIENCES: Array<Experience> = [
 		color: '#ffffff',
 		links: [],
 		logo: Assets.Unknown,
+		bannerImage: Assets.Unknown,
 		shortDescription: 'asd'
 	},
 	{
@@ -31,6 +32,7 @@ const MY_EXPERIENCES: Array<Experience> = [
 		color: '#ffffff',
 		links: [],
 		logo: Assets.Unknown,
+		bannerImage: Assets.Unknown,
 		shortDescription: ''
 	}
 ];

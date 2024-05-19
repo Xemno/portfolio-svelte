@@ -19,6 +19,7 @@
 	const navItems = [
 		{ title: NavBar.projects, to: '/projects', icon: 'i-carbon-cube' },
 		{ title: NavBar.career, to: '/experience', icon: 'i-carbon-development' },
+		{ title: NavBar.education, to: '/education', icon: 'i-carbon-education' },
 		{ title: NavBar.skills, to: '/skills', icon: 'i-carbon-software-resource-cluster' },
 		{ title: NavBar.resume, to: '/resume', icon: 'i-carbon-result' },
 		{ title: NavBar.test, to: '/test', icon: 'i-carbon-result' }

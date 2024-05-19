@@ -20,7 +20,8 @@ const MY_PROJECTS: Array<Project> = [
 		shortDescription:
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
 		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
-		logo: Assets.Unknown,
+		logo: Assets.CSS,
+		bannerImage: Assets.Cpp,
 		period: {
 			from: new Date()
 		},
@@ -36,7 +37,7 @@ const MY_PROJECTS: Array<Project> = [
 			'A Vercel-like developer portfolio website template made with Typescript and SvelteKit.',
 		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
 		logo: Assets.Svelte,
-
+		bannerImage: Assets.Unknown,
 		period: {
 			from: new Date()
 		},
@@ -79,6 +80,7 @@ const MY_PROJECTS: Array<Project> = [
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
 		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
 		logo: Assets.Unknown,
+		bannerImage: Assets.Unknown,
 		period: {
 			from: new Date()
 		},
@@ -95,6 +97,7 @@ const MY_PROJECTS: Array<Project> = [
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
 		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
 		logo: Assets.Unknown,
+		bannerImage: Assets.Unknown,
 		period: {
 			from: new Date()
 		},
@@ -111,6 +114,7 @@ const MY_PROJECTS: Array<Project> = [
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
 		links: [{ to: 'https://github.com/Xemno/Optimized-CPU-Ray-Marcher', label: 'GitHub' }],
 		logo: Assets.Unknown,
+		bannerImage: Assets.Unknown,
 		period: {
 			from: new Date()
 		},
@@ -133,6 +137,7 @@ const MY_PROJECTS: Array<Project> = [
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
 		links: [{ to: 'https://github.com/devnio/Flowmo', label: 'GitHub' }],
 		logo: Assets.C,
+		bannerImage: Assets.Unknown,
 		period: {
 			from: new Date()
 		},
@@ -154,6 +159,7 @@ const MY_PROJECTS: Array<Project> = [
 		shortDescription: 'Road Segmentation Project for Computational Intelligence Lab 2019 at ETH Zurich',
 		links: [{ to: 'https://github.com/laurinpaech/segme-net', label: 'GitHub' }],
 		logo: Assets.Unknown,
+		bannerImage: Assets.Unknown,
 		period: {
 			from: new Date()
 		},

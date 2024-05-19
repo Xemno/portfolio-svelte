@@ -1,17 +1,23 @@
 import type { Asset } from '$lib/types';
 import { theme } from '$lib/stores/theme';
+import { base } from '$app/paths';
 
-const gh = (file: string) =>
-	`https://raw.githubusercontent.com/RiadhAdrani/slick-portfolio-svelte/assets/logos/${file}`;
+// TODO: remove and use static logos
+// const gh = (file: string) =>
+// 	`https://raw.githubusercontent.com/Xemno/assets/portfolio/images/${file}`;
 
+// NOTE: use for local retrieval
+const gh = (file: string) => `${base}/logos/${file}`;
+
+// Assets in light and dark mode
 const a = (light: string, dark?: string): Asset =>
 	dark ? { dark: gh(dark), light: gh(light) } : gh(light);
 
 const Assets = {
 	AWS: a('aws.svg'),
 	Bootstrap: a('bootstrap.svg'),
-	C: a('c.svg'),
-	Cpp: a('cpp.svg'),
+	C: a('C.svg'),
+	Cpp: a('Cpp.svg'),
 	Celery: a('celery.svg'),
 	Django: a('djanog.svg'),
 	FastApi: a('fastapi'),
@@ -80,5 +86,5 @@ let currentTheme: boolean;
 theme.subscribe((v) => (currentTheme = v));
 
 export const getAssetURL = (asset: Asset): string => {
-	return typeof asset === 'string' ? asset : currentTheme ? asset.dark : asset.light;
+	return typeof asset === 'string' ? asset : currentTheme ? asset.dark : asset.light; // TODO: fix this to work dark/light mode
 };

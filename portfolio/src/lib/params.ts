@@ -1,6 +1,7 @@
 import MY_EXPERIENCES from './experiences.params';
 import MY_PROJECTS from './projects.params';
 import MY_SKILLS from './skills.params';
+import { MY_EDUCATIONS } from './educations.params';
 import {
 	Platform,
 	type HomePageParams,
@@ -8,7 +9,8 @@ import {
 	type ExperiencePageParams,
 	type SkillsPageParams,
 	type ResumePageParams,
-	type SearchPageParams
+	type SearchPageParams,
+	type EducationPageParams
 } from './types';
 import { Icons } from './utils';
 import descMainPage from './md/descMainPage.md?raw';
@@ -21,6 +23,7 @@ export const NavBar = {
 	career: 'Experiences',
 	resume: 'Resume',
 	skills: 'Skills',
+	education: 'Education',
 	test: 'Test'
 };
 
@@ -91,6 +94,11 @@ export const EXPERIENCES: ExperiencePageParams = {
 export const SKILLS: SkillsPageParams = {
 	title: 'Skills',
 	items: MY_SKILLS
+};
+
+export const EDUCATION: EducationPageParams = {
+	title: 'Education',
+	items: MY_EDUCATIONS
 };
 
 export const RESUME: ResumePageParams = {

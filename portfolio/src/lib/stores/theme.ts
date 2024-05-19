@@ -1,7 +1,9 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
 
-const key = '@riadh-adrani-theme';
+// const key = '@riadh-adrani-theme';
+const key = '@qais-portfolio-website';
+
 
 const updateLocalStorage = (value: boolean) => {
 	if (browser) {
@@ -25,7 +27,7 @@ export const toggleTheme = (value?: boolean) =>
 export const onHydrated = () => {
 	const fromStore = localStorage.getItem(key);
 
-	if (!fromStore) {
+	if (fromStore == null) {
 		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
 			// dark mode
 			toggleTheme(true);

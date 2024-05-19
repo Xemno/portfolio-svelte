@@ -43,6 +43,7 @@ export interface Skill extends Omit<Item, 'shortDescription'> {
 }
 
 export interface Project extends Item {
+	bannerImage: Asset;
 	links: Array<Link>;
 	color: string;
 	period: {
@@ -57,6 +58,17 @@ export interface Experience extends Project {
 	company: string;
 	location: string;
 	contract: ContractType;
+}
+
+export interface Education extends Item {
+	organization: string;
+	location: string;
+	period: {
+		from: Date;
+		to?: Date;
+	};
+	subjects: Array<string>;
+	degree: string;
 }
 
 export interface PageParams {
@@ -87,6 +99,8 @@ export type ProjectPageParams = PageWithSearchParams<Project>;
 export type ExperiencePageParams = PageWithSearchParams<Experience>;
 
 export type SkillsPageParams = PageWithSearchParams<Skill>;
+
+export type EducationPageParams = PageWithSearchParams<Education>;
 
 export interface ResumePageParams extends PageParams {
 	item: string;
