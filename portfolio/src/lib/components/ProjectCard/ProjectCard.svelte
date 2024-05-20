@@ -41,9 +41,13 @@
 		<p>{project.type}</p>
 		<p>{period}</p>
 	</div>
-	<p class="text-[0.95em] text-[var(--secondary-text)] font-300 m-t-20px m-b-40px flex-1">
-		{project.shortDescription}
-	</p>
+	<div class="col sm:h-100px md:h-160px">
+		<p
+			class="text-[0.95em] text-[var(--secondary-text)] font-300 m-t-20px m-b-40px flex-1 line-clamp-3"
+		>
+			{project.shortDescription}
+		</p>
+	</div>
 	<div class="row justify-between text-0.8em font-400">
 		<Chip>{from}</Chip>
 		{#if from !== to}
@@ -51,7 +55,7 @@
 		{/if}
 	</div>
 	<CardDivider />
-	<div class="row">
+	<div class="row flex-wrap">
 		{#each project.skills as tech}
 			<ChipIcon
 				logo={getAssetURL(tech.logo)}
