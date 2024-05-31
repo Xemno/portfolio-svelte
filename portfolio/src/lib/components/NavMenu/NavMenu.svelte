@@ -43,9 +43,9 @@
 			class="nav-menu-left decoration-none w-auto md:w-150px lg:w-auto row flex flex-row items-center cursor-pointer px-4 text-[var(--secondary-text)] self-stretch hover:bg-[color:var(--main-hover)]"
 		>
 			<UIcon icon="i-carbon-code" classes="text-2em" />
-			<span
-				class="ml-2 text-md font-bold hidden md:inline overflow-hidden whitespace-nowrap text-ellipsis"
-				>{HOME.name} {HOME.lastName}
+			<span class="ml-2 text-md font-bold hidden md:inline overflow-hidden whitespace-nowrap text-ellipsis">
+				{HOME.name}
+				{HOME.lastName}
 			</span>
 		</a>
 
@@ -77,9 +77,9 @@
 					on:click={() => toggleTheme()}
 				>
 					{#if $theme}
-						<UIcon icon="i-carbon-moon" />
+					<UIcon icon="i-line-md-moon-rising-loop" classes="text-1.3em" />
 					{:else}
-						<UIcon icon="i-carbon-sun" />
+					<UIcon icon="i-line-md-sun-rising-loop" classes="text-1.3em" />
 					{/if}
 				</button>
 			</div>

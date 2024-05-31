@@ -1,6 +1,7 @@
 <script lang="ts">
-	// import { changeColorOpacity } from '@riadh-adrani/utils';
 	import { onMount } from 'svelte';
+	import { convertNamedToHexColor, type NamedColor } from '$lib/utils/colors';
+	import { changeColorOpacity, isHexColor } from '$lib/utils/colors';
 	import type { MouseEventHandler } from 'svelte/elements';
 
 	let el: HTMLElement;
@@ -12,19 +13,19 @@
 	export let href: undefined | string = undefined;
 	export let bgImg: string | undefined = undefined;
 
-	// $: borderColor = changeColorOpacity(color, 0.5);
-	// $: dropColor = changeColorOpacity(color, 0.15);
-	// $: bgColor = changeColorOpacity(color, 0.01);
+	$: computedColor = isHexColor(color) ? color : convertNamedToHexColor(color as NamedColor);
+	$: borderColor = changeColorOpacity(computedColor, 0.5);
+	$: dropColor = changeColorOpacity(computedColor, 0.15);
+	$: bgColor = changeColorOpacity(computedColor, 0.01);
 
 	$: {
 		if (el) {
-			el.style.setProperty('--border-color', color);
-			el.style.setProperty('--drop-color', color);
-			el.style.setProperty('--bg-color', color);
+			el.style.setProperty('--border-color', borderColor);
+			el.style.setProperty('--drop-color', dropColor);
+			el.style.setProperty('--bg-color', bgColor);
 		}
 	}
 
-	// svelte typing is broken...
 	const onHover: MouseEventHandler<HTMLDivElement> = (ev) => {
 		const target = ev.currentTarget;
 
