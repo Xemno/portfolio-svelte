@@ -73,3 +73,11 @@ export function getTimeDiff(date1: Date, date2 = new Date(Date.now() + 1000 * 60
 	return `${Math.trunc(d)} ${tStr}${d > 1 ? 's' : ''} 
 			${m > 0 ? Math.trunc(m) : '' } ${m > 0 ? x : ''}${m > 1 ? 's' : ''}`;
 }
+
+export const inInterval = (min: number, value: number, max: number): boolean => {
+	return min <= value && value <= max;
+};
+
+export const isBlank = (str: string): boolean => {
+	return str.trim().length === 0;
+};

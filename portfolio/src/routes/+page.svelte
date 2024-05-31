@@ -2,13 +2,12 @@
 	import Carrousel from '$lib/components/Carrousel/Carrousel.svelte';
 	import Icon from '$lib/components/Icon/Icon.svelte';
 	import MainTitle from '$lib/components/MainTitle/MainTitle.svelte';
-	import MY_EXPERIENCES from '$lib/experiences.params';
 	import { TITLE_SUFFIX } from '$lib/params';
 	import { HOME, getPlatfromIcon } from '$lib/params';
 	import MY_PROJECTS from '$lib/projects.params';
-	import MY_SKILLS from '$lib/skills.params';
 	import { useTitle } from '$lib/utils/helpers';
 	import Markdown from '$lib/components/Markdown.svelte';
+	import { isBlank } from '$lib/utils/helpers';
 
 	const { description, lastName, links, name, title, skills } = HOME;
 
@@ -17,8 +16,7 @@
 		const reg =
 			/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-		// return !isBlank(email) && reg.test(email);
-		return reg.test(email);
+		return !isBlank(email) && reg.test(email);
 	};
 </script>
 
@@ -47,7 +45,6 @@
 			{/each}
 		</div>
 
-
 		<!-- NOTE: test layout for Noise and Height Coefficients-->
 		<div class="col justify-center md:justify-start p-y-15px p-x-0px gap-2">
 			<div class="form-group col-sm-6">
@@ -59,9 +56,10 @@
 				<input type="range" min="1" max="100" class="custom-range" id="heightInput" />
 			</div>
 		</div>
-		<button id="trigger" class="primary"> Random Colors </button>
+		<button id="trigger" class="py-1 px-2 font-semibold rounded-lg bg-amber-3 primary">
+			Random Colors
+		</button>
 		<!-- NOTE: test layout -->
-
 	</div>
 
 	<!-- TODO: hyperlink on click on an item of the caroussel, s.t. it redirects to that subpage -->

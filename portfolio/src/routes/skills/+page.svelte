@@ -4,7 +4,7 @@
 	import { SKILLS } from '$lib/params';
 	import SearchPage from '$lib/components/SearchPage.svelte';
 	import type { Skill } from '$lib/types';
-	// import { isBlank } from '@riadh-adrani/utils';
+	import { isBlank } from '$lib/utils/helpers';
 	import { getAssetURL } from '$lib/data/assets';
 	import UIcon from '$lib/components/Icon/UIcon.svelte';
 
@@ -15,9 +15,10 @@
 	const onSearch = (e: CustomEvent<{ search: string }>) => {
 		const query = e.detail.search;
 
-		// if (isBlank(query)) {
-		// 	result = items;
-		// }
+		if (isBlank(query)) {
+			result = items;
+			return;
+		}
 
 		result = items.filter((it) => it.name.toLowerCase().includes(query));
 	};
@@ -28,9 +29,7 @@
 		<!-- NOTE: if search result is empty -->
 		<div class="p-5 col-center gap-3 m-y-auto text-[var(--accent-text)] flex-1">
 			<UIcon icon="i-line-md-emoji-smile-twotone" classes="text-3.0em" />
-			<p class="font-300">
-				I don't have that kind of skill...
-			</p>
+			<p class="font-300">I don't have that kind of skill...</p>
 		</div>
 	{:else}
 		<!-- NOTE: result is either filled completely or filtered with search result -->
@@ -41,6 +40,7 @@
 					tiltDegree={5}
 					href={`${base}/skills/${skill.slug}`}
 					bgImg={getAssetURL(skill.logo)}
+					color={skill.color}
 				>
 					<p class="text-[var(--tertiary-text)]">{skill.name}</p>
 				</Card>
