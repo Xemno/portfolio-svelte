@@ -70,7 +70,7 @@
 	}
 </script>
 
-<SearchPage {title} on:search={(e) => (query = e.detail.search)}>
+<SearchPage {title} on:search={(e) => (query = e.detail.search)} autoFocusSearch={true}>
 	<div class="flex flex-col items-stretch gap-10 p-2" />
 	{#if !query}
 		<div class="flex-1 self-center col-center m-t-10 gap-5 font-300 text-[var(--accent-text)]">
@@ -88,7 +88,7 @@
 				<div class="flex flex-row flex-wrap gap-1">
 					{#each result as item}
 						<Chip href={`${base}/${item.to}`} classes="flex flex-row items-center gap-2">
-							<UIcon icon={item.icon} />
+							<UIcon icon={item.icon} classes="text-1.2em"/>
 							<span>{item.name}</span>
 						</Chip>
 					{/each}

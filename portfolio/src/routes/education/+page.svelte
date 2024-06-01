@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Card from '$lib/components/Card/Card.svelte';
 	import Chip from '$lib/components/Chip/Chip.svelte';
+	import EducationCard from '$lib/components/EducationCard/EducationCard.svelte';
+
 	import UIcon from '$lib/components/Icon/UIcon.svelte';
 	import SearchPage from '$lib/components/SearchPage.svelte';
 	import { getAssetURL } from '$lib/data/assets';
@@ -50,27 +52,7 @@
 					</div>
 
 					<div class="col flex-1 items-stretch">
-						<Card>
-							<div class="flex-1 col gap-2 items-stretch">
-								<img
-									src={getAssetURL(education.logo)}
-									alt={education.organization}
-									height="50"
-									width="50"
-									class="mb-5"
-								/>
-								<div class="text-[1.3em]">{education.degree}</div>
-								<div>{education.organization}</div>
-								<div class="text-[var(--accent-text)] text-[0.9em] font-200 mb-2">
-									{education.location} · {getTimeDiff(education.period.from, education.period.to)}
-								</div>
-								<div class="row flex-wrap gap-1">
-									{#each education.subjects as subject}
-										<Chip>{subject}</Chip>
-									{/each}
-								</div>
-							</div>
-						</Card>
+						<EducationCard {education} />
 					</div>
 				</div>
 			{/each}

@@ -6,6 +6,8 @@
 
 	export let title = 'Title';
 	export let search = '';
+	export let autoFocusSearch = false; // default no auto focus when redirecting to page
+
 
 	const dispatch = createEventDispatcher();
 
@@ -42,7 +44,7 @@
 <CommonPage {title}>
 	<!-- NOTE: Search bar -->
 	<div class="w-100% row">
-		<Input bind:value={search} placeholder={'Search...'} />
+		<Input bind:value={search} placeholder={'Search...'} autoFocusSearch={autoFocusSearch}/>
 	</div>
 
 	<!-- NOTE: Content with projects / skills / work experience cards -->
