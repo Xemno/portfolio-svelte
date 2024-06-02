@@ -10,6 +10,11 @@ import descBachelorThesis from './md/descBachelorThesis.md?raw';
 import descMasterThesis from './md/descMasterThesis.md?raw';
 import descThisWebsite from './md/descThisWebsite.md?raw';
 
+import { base } from '$app/paths';
+
+
+const getImagePath = (file: string) => `${base}/images/${file}`;
+
 
 const MY_PROJECTS: Array<Project> = [
 	{
@@ -23,9 +28,10 @@ const MY_PROJECTS: Array<Project> = [
 		logo: Assets.Unknown,
 		bannerImage: Assets.Unknown,
 		period: {
-			from: new Date()
+			from: new Date(2022,1,20),
+			to: new Date(2023,1,20),
 		},
-		skills: getSkills('angular', 'ts', 'tailwind'),
+		skills: getSkills('svelte', 'ts', 'css', 'js', 'html'),
 		type: 'Website Template'
 	},
 	{
@@ -41,7 +47,7 @@ const MY_PROJECTS: Array<Project> = [
 		period: {
 			from: new Date()
 		},
-		skills: getSkills('svelte', 'ts', 'tailwind', 'sass'),
+		skills: getSkills('csharp', 'unity-engine', 'python'),
 		type: 'Website Template',
 		screenshots: [
 			{
@@ -77,15 +83,15 @@ const MY_PROJECTS: Array<Project> = [
 		color: '#5e95e3',
 		description: descBachelorThesis,
 		shortDescription:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
-		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
+			'In this thesis I am researching touch and/or deformation sensing in soft substrates using electrical resistance/impedance tomography techniques.',
+		links: [],
 		logo: Assets.Unknown,
 		bannerImage: Assets.Unknown,
 		period: {
 			from: new Date()
 		},
-		skills: getSkills('angular', 'ts', 'tailwind'),
-		type: 'Website Template'
+		skills: getSkills('c', 'cpp'),
+		type: 'Computational Robotics'
 	},
 
 	{
@@ -94,15 +100,15 @@ const MY_PROJECTS: Array<Project> = [
 		color: '#5e95e3',
 		description: descMRLab,
 		shortDescription:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
-		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
-		logo: Assets.Unknown,
-		bannerImage: Assets.Unknown,
+			'A focus of this project is to explore synergies between mixed reality and robotics.',
+		links: [],
+		logo: Assets.ETH,
+		bannerImage: getImagePath('julien-tromeur-EWg1-0UjeWY-unsplash.jpg'),
 		period: {
 			from: new Date()
 		},
-		skills: getSkills('angular', 'ts', 'tailwind'),
-		type: 'Website Template'
+		skills: getSkills('csharp', 'unity-engine', 'cpp'),
+		type: 'Computer Graphics'
 	},
 
 	{
@@ -111,15 +117,15 @@ const MY_PROJECTS: Array<Project> = [
 		color: '#5e95e3',
 		description: descCpuRayMarcher,
 		shortDescription:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+			'Implementation and SIMD optimization of a rendering engine using the Ray Marcher method based on Sphere Tracing.',
 		links: [{ to: 'https://github.com/Xemno/Optimized-CPU-Ray-Marcher', label: 'GitHub' }],
-		logo: Assets.Unknown,
-		bannerImage: Assets.Unknown,
+		logo: Assets.ETH,
+		bannerImage: getImagePath('inception_0.png'),
 		period: {
 			from: new Date()
 		},
-		skills: getSkills('angular', 'ts', 'tailwind'),
-		type: 'Website Template',
+		skills: getSkills('c', 'cpp'),
+		type: 'Advanced Systems Lab',
 		// screenshots: [
 		// 	{
 		// 		label: '1',
@@ -130,19 +136,19 @@ const MY_PROJECTS: Array<Project> = [
 
 	{
 		slug: 'soft-body-physics-engine',
-		name: 'Soft-body Physics Engine',
+		name: 'Soft-Body Physics Engine',
 		color: '#5e95e3',
 		description: descSoftBodyEng,
 		shortDescription:
-			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+			'Development of an interactive soft-body and rigid-body physics engine in the Unity game engine.',
 		links: [{ to: 'https://github.com/devnio/Flowmo', label: 'GitHub' }],
-		logo: Assets.Unknown,
-		bannerImage: Assets.Unknown,
+		logo: Assets.ETH,
+		bannerImage: getImagePath('flowmo_tree.jpg'),
 		period: {
 			from: new Date()
 		},
-		skills: getSkills('angular', 'ts', 'tailwind'),
-		type: 'Website Template',
+		skills: getSkills('csharp', 'unity-engine'),
+		type: 'Computer Graphics',
 		// screenshots: [
 		// 	{
 		// 		label: '1',
@@ -156,26 +162,27 @@ const MY_PROJECTS: Array<Project> = [
 		name: 'AI Road Segmentation',
 		color: '#5e95e3',
 		description: descAiRoadSeg,
-		shortDescription: 'Road Segmentation Project for Computational Intelligence Lab 2019 at ETH Zurich',
+		shortDescription: 'Road Image Segmentation Project for Computational Intelligence Lab 2019 at ETH Zurich',
 		links: [{ to: 'https://github.com/laurinpaech/segme-net', label: 'GitHub' }],
-		logo: Assets.Unknown,
-		bannerImage: Assets.Unknown,
+		logo: Assets.ETH,
+		bannerImage: getImagePath('chicago108.png'),
 		period: {
 			from: new Date()
 		},
 		skills: getSkills('python'),
 		type: 'Machine Learning',
-		screenshots: [
-			{
-				label: '1',
-				src: 'https://images.unsplash.com/photo-1516116216624-53e697fedbea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cHJvZ3JhbW1pbmd8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60'
-			},
-			{
-				label: '2',
-				src: 'https://images.unsplash.com/photo-1537432376769-00f5c2f4c8d2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHByb2dyYW1taW5nfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60'
-			},
+		// TODO: maybe remove screenshots?
+		// screenshots: [
+		// 	{
+		// 		label: '1',
+		// 		src: getImagePath('label108.png')
+		// 	},
+		// 	{
+		// 		label: 'Lorem',
+		// 		src: getImagePath('chicago108.png')
+		// 	},
 
-		]
+		// ]
 	},
 ];
 
