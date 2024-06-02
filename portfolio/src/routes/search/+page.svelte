@@ -73,27 +73,27 @@
 <SearchPage {title} on:search={(e) => (query = e.detail.search)} autoFocusSearch={true}>
 	<div class="flex flex-col items-stretch gap-10 p-2" />
 	{#if !query}
-		<div class="flex-1 self-center col-center m-t-10 gap-5 font-300 text-[var(--accent-text)]">
-			<UIcon icon="i-carbon-search-locate-mirror" classes="text-2em" />
-			<span> Try typing something... </span>
+		<div
+			class="flex-1 self-center col-center m-t-10 mb-100 gap-5 font-300 text-[var(--accent-text)]"
+		>
+			<UIcon icon="i-carbon-search-locate-mirror" classes="text-2.5em" />
+			<p class="font-300">Search this website...</p>
+		</div>
+	{:else if result.length === 0}
+		<div
+			class="flex-1 self-center col-center m-t-10 mb-100 gap-5 font-300 text-[var(--accent-text)]"
+		>
+			<UIcon icon="i-carbon-help" classes="text-2.5em" />
+			<p class="font-300">Could not find anything...</p>
 		</div>
 	{:else}
-		<div>
-			{#if result.length === 0}
-				<div class="flex-1 self-center col-center m-t-10 gap-5 font-300 text-[var(--accent-text)]">
-					<UIcon icon="i-carbon-cube" classes="text-2em" />
-					<span> Oops ! nothing to show ! </span>
-				</div>
-			{:else}
-				<div class="flex flex-row flex-wrap gap-1">
-					{#each result as item}
-						<Chip href={`${base}/${item.to}`} classes="flex flex-row items-center gap-2">
-							<UIcon icon={item.icon} classes="text-1.2em"/>
-							<span>{item.name}</span>
-						</Chip>
-					{/each}
-				</div>
-			{/if}
+		<div class="flex flex-row flex-wrap gap-1">
+			{#each result as item}
+				<Chip href={`${base}/${item.to}`} classes="flex flex-row items-center gap-2">
+					<UIcon icon={item.icon} classes="text-1.2em" />
+					<span>{item.name}</span>
+				</Chip>
+			{/each}
 		</div>
 	{/if}
 </SearchPage>

@@ -31,8 +31,8 @@
 <SearchPage {title} {search} on:search={onSearch}>
 	<div class="col items-center relative mt-10 flex-1">
 		{#if result.length === 0}
-			<div class="p-5 col-center gap-3 m-y-auto text-[var(--accent-text)] flex-1">
-				<UIcon icon="i-carbon-development" classes="text-3.5em" />
+			<div class="p-5 mb-100 col-center gap-3 m-y-auto text-[var(--accent-text)] flex-1">
+				<UIcon icon="i-carbon-help" classes="text-2.5em" />
 				<p class="font-300">Could not find anything...</p>
 			</div>
 		{:else}
