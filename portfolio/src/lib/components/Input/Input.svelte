@@ -1,7 +1,8 @@
 <script lang="ts">
-	import UIcon from '../Icon/UIcon.svelte';
+	// TODO: rename to SearchInput
 
 	import { onMount } from 'svelte';
+	import UIcon from '../Icon/UIcon.svelte';
 
 	export let value = '';
 	export let placeholder = '';
@@ -65,7 +66,11 @@
 		class="input text-[inherit] text-[1.15em] border-[var(--border)] border-[0px] border-solid bg-[var(--btn-search)]"
 	/>
 
-	<i class="i-carbon-search" />
+	{#if value == ''}
+		<i class="i-carbon-search" />
+	{:else}
+		<i class="i-carbon-close" />
+	{/if}
 </div>
 
 <style lang="scss">
