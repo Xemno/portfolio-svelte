@@ -65,7 +65,7 @@ export function getTimeDiff(date1: Date, date2 = new Date(Date.now() + 1000 * 60
 	} else {
 		tStr = 'year';
 		d = duration.as('years');
-		m = duration.as('months') - Math.trunc(d) * 12;
+		m = Math.trunc(duration.as('months') - Math.trunc(d) * 12);
 	}
 
 	d = Math.trunc(d);
