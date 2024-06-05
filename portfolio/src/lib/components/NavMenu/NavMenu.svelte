@@ -42,7 +42,7 @@
 			href={`${base}/`}
 			class="nav-menu-left decoration-none w-auto md:w-150px lg:w-auto row flex flex-row items-center cursor-pointer px-4 text-[var(--secondary-text)] self-stretch hover:bg-[color:var(--main-hover)]"
 		>
-			<UIcon icon="i-carbon-code" classes="text-2em" />
+			<UIcon icon="i-line-md-coffee-loop" classes="text-2em" />
 			<span class="ml-2 text-md font-bold hidden md:inline overflow-hidden whitespace-nowrap text-ellipsis">
 				{HOME.name}
 				{HOME.lastName}
@@ -77,9 +77,9 @@
 					on:click={() => toggleTheme()}
 				>
 					{#if $theme}
-					<UIcon icon="i-line-md-moon-rising-loop" classes="text-1.3em" />
+					<UIcon icon="i-line-md-sunny-outline-to-moon-loop-transition" classes="text-1.3em" />
 					{:else}
-					<UIcon icon="i-line-md-sun-rising-loop" classes="text-1.3em" />
+					<UIcon icon="i-line-md-moon-to-sunny-outline-loop-transition" classes="text-1.3em" />
 					{/if}
 				</button>
 			</div>
@@ -121,10 +121,10 @@
 				on:click={() => toggleTheme()}
 			>
 				{#if $theme}
-					<UIcon icon="i-line-md-moon-rising-loop" classes="text-1.5em" />
+					<UIcon icon="i-line-md-sunny-outline-to-moon-loop-transition" classes="text-1.5em" />
 					<span>Dark Theme</span>
 				{:else}
-					<UIcon icon="i-line-md-sun-rising-loop" classes="text-1.5em" />
+					<UIcon icon="i-line-md-moon-to-sunny-outline-loop-transition" classes="text-1.5em" />
 					<span>Light Theme</span>
 				{/if}
 			</button>
@@ -178,7 +178,7 @@
 		top: 51px;
 		transform: translateY(-100vh);
 		transition-property: transform opacity;
-		transition: 400ms ease;
+		transition: 300ms ease;
 		opacity: 0;
 		&-open {
 			opacity: 1;

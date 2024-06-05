@@ -29,6 +29,9 @@ export const onHydrated = () => {
 		if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
 			// dark mode
 			toggleTheme(true);
+		} else {
+			// light mode
+			toggleTheme(false);
 		}
 	} else {
 		toggleTheme(JSON.parse(fromStore));
