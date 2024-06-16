@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise"
 import type IRenderable from '../IRenderable';
-import { NAMED_COLORS } from '$lib/utils/colors';
+import { type Color, NAMED_COLORS } from '$lib/utils/colors';
 
 
 let conf = {
