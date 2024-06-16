@@ -2,12 +2,17 @@ import Assets from './data/assets';
 import { getSkills } from './skills.params';
 import { ContractType, type Experience } from './types';
 
+import descQualitasExp from './md/Experiences/descQualitasExp.md?raw';
+import descUGExp from './md/Experiences/descUGExp.md?raw';
+
+
 const MY_EXPERIENCES: Array<Experience> = [
 	{
 		slug: 'qualitas-ag',
 		company: 'Qualitas AG',
 		name: 'Software Engineer',
-		description: 'Full-Stack Java Developer',
+		description: descQualitasExp,
+		shortDescription: 'C++ Game Developer working on the game Transport Fever 2.',
 		contract: ContractType.FullTime,
 		type: 'Software Engineer',
 		location: 'Zug',
@@ -17,13 +22,13 @@ const MY_EXPERIENCES: Array<Experience> = [
 		links: [],
 		logo: Assets.Unknown,
 		bannerImage: Assets.Unknown,
-		shortDescription: 'asd'
 	},
 	{
 		slug: 'urban-games',
 		name: 'Software Engineer',
 		company: 'Urban Games GmbH',
-		description: 'C++ Game Developer working on the game Transport Fever 2.',
+		description: descUGExp,
+		shortDescription: 'C++ Game Developer working on the game Transport Fever 2.',
 		contract: ContractType.FullTime,
 		type: 'Software Development',
 		location: 'Schaffhausen',
@@ -33,7 +38,6 @@ const MY_EXPERIENCES: Array<Experience> = [
 		links: [],
 		logo: Assets.Unknown,
 		bannerImage: Assets.Unknown,
-		shortDescription: ''
 	}
 ];
 

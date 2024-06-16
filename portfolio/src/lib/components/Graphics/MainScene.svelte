@@ -10,6 +10,9 @@
 
 	onMount(() => {
 		scene = new MainScene(canvas);
+		theme.subscribe((v) => (
+			scene.themeCallback(v)
+		));
 		scene.start();
 
 		return () => {

@@ -72,7 +72,7 @@
 			</Banner>
 			
 			<div class="pt-3 pb-1 overflow-x-hidden w-full">
-				<div class="px-10px m-y-5">
+				<div class="px-10px m-y-5 blurred-box">
 					{#if data.project.description}
 						<Markdown content={data.project.description} />
 					{:else}
@@ -107,3 +107,7 @@
 		</div>
 	{/if}
 </div>
+
+<style lang="scss">
+
+</style>

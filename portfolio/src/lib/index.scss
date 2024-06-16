@@ -337,3 +337,39 @@ body {
 		}
 	}
 }
+
+// video container
+.video-container {
+	// position:absolute;
+	width: 100%    !important;
+	height: auto   !important;
+	overflow: hidden;
+}
+.video-container video {
+	min-width: 100%;
+	min-height: 100%;
+}
+
+// background blur effect
+.blurred-box{
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background: inherit;
+	border-radius: 2px;
+	overflow: hidden;
+}
+.blurred-box:after{
+	content: '';
+	width: 100%;
+	height: 100%;
+	background: inherit; 
+	position: absolute;
+	left: 0px;
+	right: 0;
+	top: -25px;  
+	bottom: 0;
+	box-shadow: inset 0 0 0 1000px rgba(161, 161, 161, 0.1);
+	backdrop-filter: blur(40px);
+	z-index: -99;
+}

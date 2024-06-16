@@ -75,7 +75,7 @@
 				</div>
 			</Banner>
 			<div class="pt-3 pb-1 overflow-x-hidden w-full">
-				<div class="px-10px m-y-5">
+				<div class="px-10px m-y-5 blurred-box">
 					{#if data.experience.description}
 						<Markdown
 							content={data.experience.description ?? 'This place is yet to be filled...'}

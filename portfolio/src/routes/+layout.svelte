@@ -14,7 +14,6 @@
 	<div class="content container"><slot /></div>
 </div>
 
-
 <style lang="scss">
 	.content {
 		display: flex;

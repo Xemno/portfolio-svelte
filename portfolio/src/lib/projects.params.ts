@@ -2,13 +2,13 @@ import Assets from './data/assets';
 import { getSkills } from './skills.params';
 import type { Project } from './types';
 
-import descAiRoadSeg from './md/descAiRoadSeg.md?raw';
-import descSoftBodyEng from './md/descSoftBodyPhysics.md?raw';
-import descCpuRayMarcher from './md/descFastCpuRayMarcher.md?raw';
-import descMRLab from './md/descMixedRealityLab.md?raw';
-import descBachelorThesis from './md/descBachelorThesis.md?raw';
-import descMasterThesis from './md/descMasterThesis.md?raw';
-import descThisWebsite from './md/descThisWebsite.md?raw';
+import descAiRoadSeg from './md/Projects/descAiRoadSeg.md?raw';
+import descSoftBodyEng from './md/Projects/descSoftBodyPhysics.md?raw';
+import descCpuRayMarcher from './md/Projects/descFastCpuRayMarcher.md?raw';
+import descMRLab from './md/Projects/descMixedRealityLab.md?raw';
+import descBachelorThesis from './md/Projects/descBachelorThesis.md?raw';
+import descMasterThesis from './md/Projects/descMasterThesis.md?raw';
+import descThisWebsite from './md/Projects/descThisWebsite.md?raw';
 
 import { base } from '$app/paths';
 
