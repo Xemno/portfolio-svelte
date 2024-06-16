@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise"
 import type IRenderable from '../IRenderable';
+import { NAMED_COLORS } from '$lib/utils/colors';
 
 
 let conf = {
@@ -29,7 +30,7 @@ class SimplexPlane implements IRenderable {
 	constructor(width?: number, height?: number, widthSegments?: number, heightSegments?: number) {
 		this.geometry = new THREE.PlaneGeometry(width, height, widthSegments, heightSegments);
 		this.simplexNoise = new SimplexNoise();
-		this.material = new THREE.MeshLambertMaterial({ color: 0xf0f0f0, side: THREE.DoubleSide });
+		this.material = new THREE.MeshLambertMaterial({ color: 0xffffff, side: THREE.DoubleSide });
 		this.plane = new THREE.Mesh(this.geometry, this.material);
 		this.plane.rotation.x = -Math.PI / 2 - 0.15;
 		this.plane.position.y = -25;
@@ -46,7 +47,11 @@ class SimplexPlane implements IRenderable {
 		// plane.geometry.computeBoundingSphere();
 	}
 
-	
+	public setEmissive(color: Color) {
+		this.material.emissive = new THREE.Color(color);
+	}
+
+
 	public setPosition(pos: THREE.Vector3) {
 		this.plane.position.set(pos.x, pos.y, pos.z);
 	}
@@ -62,7 +67,7 @@ class SimplexPlane implements IRenderable {
 
 export default class MainScene {
 	private camera: THREE.PerspectiveCamera;
-	private scene: THREE.Scene;
+	private scene!: THREE.Scene;
 	private renderer: THREE.WebGLRenderer;
 	private clock: THREE.Clock;
 
@@ -91,7 +96,7 @@ export default class MainScene {
 		this.clock = new THREE.Clock();
 		// this.controls = new OrbitControls(this.camera, canvas)
 		this.controls = new OrbitControls(this.camera, this.renderer.domElement);;
-		
+
 		this.initScene();
 	}
 
@@ -100,10 +105,25 @@ export default class MainScene {
 		this.addMouseInputSupport();
 
 		this.simplexPlane = new SimplexPlane(this.renderWidth * 2, this.renderHeight * 2, this.renderWidth / 2, this.renderHeight / 2);
- 
-		this.scene.fog = new THREE.FogExp2(0xfff00f, 0.005);
+
+		this.scene.fog = new THREE.FogExp2(0xfff00f, 0.004); // TODO: fog color
+
 
 		this.scene.add(this.simplexPlane.getPlane());
+	}
+
+	public themeCallback(val: boolean) {
+		console.log("themeCallback: " + val)
+		if (val) {
+			// dark mode
+			this.scene.fog!.color = new THREE.Color(NAMED_COLORS.diserria);
+			this.simplexPlane.setEmissive(NAMED_COLORS.black);
+
+		} else {
+			// white mode
+			this.scene.fog!.color = new THREE.Color(NAMED_COLORS.locust); // 0xffc857 0xa3b18a
+			this.simplexPlane.setEmissive(NAMED_COLORS.westar); //  0xf7ede2 0xf2e9e4 0xd6ccc2  0xd5bdaf
+		}
 	}
 
 	public start(): void {
