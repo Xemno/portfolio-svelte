@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { NAMED_COLORS } from '$lib/utils/colors';
 import { SimplexPlane } from "../renderables/SimplexPlane"
 import { TextCloud } from '../renderables/TextCloud';
+import type IRenderable from '../renderables/IRenderable';
 
 
 
@@ -43,6 +44,8 @@ export default class MainScene {
 	private windowScreenWidth: number = 0;
 	private windowScreenHeight: number = 0;
 
+	private renderables: Array<IRenderable> = new Array<IRenderable>();
+
 	constructor(canvas: HTMLCanvasElement) {
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(conf.fov, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -52,10 +55,7 @@ export default class MainScene {
 
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: canvas });
 		this.clock = new THREE.Clock();
-		// this.controls = new OrbitControls(this.camera, canvas)
 		this.controls = new OrbitControls(this.camera, this.renderer.domElement);;
-
-		this.textCloud = new TextCloud(this.scene);
 
 		this.initScene();
 	}
@@ -64,11 +64,16 @@ export default class MainScene {
 		this.addResizeSupport();
 		this.addMouseInputSupport();
 
-		this.simplexPlane = new SimplexPlane(this.renderWidth * 2, this.renderHeight * 2, this.renderWidth / 2, this.renderHeight / 2);
-
 		this.scene.fog = new THREE.FogExp2(0xfff00f, 0.004); // TODO: fog color
 
+		this.simplexPlane = new SimplexPlane(this.renderWidth * 2, this.renderHeight * 2, this.renderWidth / 2, this.renderHeight / 2);
 		this.scene.add(this.simplexPlane.getPlane());
+
+		this.textCloud = new TextCloud(this.scene, ['Hello', 'There']);
+
+		// init renderables to update
+		this.renderables.push(this.textCloud);
+		this.renderables.push(this.simplexPlane);
 	}
 
 	public themeCallback(val: boolean) {
@@ -85,6 +90,10 @@ export default class MainScene {
 		}
 	}
 
+	public onNavigationChange(item: string) {
+		console.log('onNavigationChange: ', item);
+	}
+
 	public start(): void {
 		this.update();
 	}
@@ -98,7 +107,9 @@ export default class MainScene {
 		const delta = this.clock.getDelta();
 		const time = this.clock.getElapsedTime() * 10;
 
-		this.simplexPlane.update(delta, this.mouseScreenPos);
+		this.renderables.forEach((item) => {
+			item.update(delta, this.mouseScreenPos);
+		})
 
 		this.controls.update(delta);
 

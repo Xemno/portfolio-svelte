@@ -6,6 +6,7 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { randomPointsInBufferGeometry } from '../utils/VectorUtils';
 
 
 
@@ -42,12 +43,15 @@ export class TextCloud implements IRenderable {
 
 	private triggers: HTMLCollectionOf<HTMLSpanElement>;
 
+	private lookAt?: THREE.Vector3;
 
-	private texts: GeometryItems = [
-		{ idx: 0, geometry: new TextGeometry('HELLO'), particles: new THREE.BufferGeometry(), points: [] }
-	];
 
-	private particles = new THREE.BufferGeometry();
+
+	private particleTexts: Array<THREE.BufferGeometry> = new Array<THREE.BufferGeometry>();
+
+
+
+	// private particles = new THREE.BufferGeometry();
 	private pMaterial = new THREE.PointsMaterial({
 		size: particleSize, vertexColors: true
 	});
@@ -64,7 +68,7 @@ export class TextCloud implements IRenderable {
 		rotation: -45
 	}
 
-	constructor(scene: THREE.Scene) {
+	constructor(scene: THREE.Scene, texts: Array<string>, pos?: THREE.Vector3, lookAt?: THREE.Vector3) {
 
 		this.triggers = document.getElementsByTagName('span');
 
@@ -77,51 +81,51 @@ export class TextCloud implements IRenderable {
 
 		}
 
-		
 
 		this.fontLoader.load(typeface, (font) => {
-			Array.from(this.triggers).forEach((trigger: HTMLSpanElement, idx) => {
 
-				// TODO: only load what we need
+			texts.forEach((textContent) => {
 
-				if (trigger.textContent == null) {
-					console.log('returned on trigger.textContent: ', trigger.textContent);
+
+				console.log('textContent: ', textContent);
+
+
+				if (textContent == null) {
+					console.log('returned on trigger.textContent: ', textContent);
 					return;
 				}
 
-
-				// console.log('idx: ', idx, ' trigger.textContent: ', trigger.textContent);
-
-
-				this.texts.push({
-					idx: idx,
-					geometry: new TextGeometry(trigger.textContent, {
-						font: font,
-						size: window.innerWidth * 0.003,
-						height: 1,
-						curveSegments: 10,
-					}),
-					particles: new THREE.BufferGeometry(),
-					points: randomPointsInBufferGeometry(this.texts[idx].geometry, particleCount)
+				let geometry = new TextGeometry(textContent, {
+					font: font,
+					size: window.innerWidth * 0.003,
+					height: 1,
+					curveSegments: 10,
 				});
+				geometry.center;
 
-				this.texts[idx].geometry.center;
-				this.texts[idx].particles.setFromPoints(this.texts[idx].points);
+				let points = randomPointsInBufferGeometry(geometry, particleCount);
+				let particles = new THREE.BufferGeometry().setFromPoints(points);
 
-				this.enableTrigger(trigger, idx);
-				// console.log('success on: ', trigger.textContent);
-
+				this.particleTexts.push(particles);
 			});
-			
+
+
 			// console.log('this.texts: ', this.texts);
-				
+
+			// Init points particle system
 			this.particleSystem = new THREE.Points(
-				this.texts.at(2)?.particles,
+				this.particleTexts.at(0),
 				this.pMaterial
 			);
 
-			// console.log('particleSystem: ', this.particleSystem);
+			if (lookAt != null) {
+				this.particleSystem.lookAt(lookAt);
+				this.lookAt = lookAt;
+			}
 
+
+			// console.log('particleSystem: ', this.particleSystem);
+			// TODO: set position
 			this.particleSystem.position.x = -52;
 			this.particleSystem.position.y = 15;
 
@@ -133,7 +137,21 @@ export class TextCloud implements IRenderable {
 
 
 	public update(deltaTime: number, mouseScreenPos: THREE.Vector2 | void): void {
-		throw new Error('Method not implemented.');
+		if (this.lookAt != null) {
+			this.particleSystem.lookAt(this.lookAt);
+		}
+	}
+
+	public transitionToNext() {
+			// this.particleSystem.geometry = this.particleTexts.at(0); // TODO: set geometry
+
+	}
+
+	public transitionTo(idx: number) {
+
+	}
+
+	private initParticles() {
 
 	}
 
@@ -195,144 +213,3 @@ export class TextCloud implements IRenderable {
 
 
 
-
-function randomPointsInBufferGeometry(geometry: THREE.BufferGeometry, n: number) {
-
-	let i: number;
-	let totalArea: number = 0;
-	let vertices = geometry.attributes.position.array;
-	let cumulativeAreas: Array<number> = [];
-	let vA: THREE.Vector3, vB: THREE.Vector3, vC: THREE.Vector3;
-
-	// precompute face areas
-	vA = new THREE.Vector3();
-	vB = new THREE.Vector3();
-	vC = new THREE.Vector3();
-
-	// geometry._areas = [];
-	var il = vertices.length / 9;
-
-	for (i = 0; i < il; i++) {
-
-		vA.set(vertices[i * 9 + 0], vertices[i * 9 + 1], vertices[i * 9 + 2]);
-		vB.set(vertices[i * 9 + 3], vertices[i * 9 + 4], vertices[i * 9 + 5]);
-		vC.set(vertices[i * 9 + 6], vertices[i * 9 + 7], vertices[i * 9 + 8]);
-
-		totalArea += triangleArea(vA, vB, vC);
-
-		cumulativeAreas.push(totalArea);
-
-	}
-
-	// binary search cumulative areas array
-	function binarySearchIndices(value: number) {
-
-		function binarySearch(start: number, end: number) {
-
-			// return closest larger index
-			// if exact number is not found
-
-			if (end < start)
-				return start;
-
-			var mid = start + Math.floor((end - start) / 2);
-
-			if (cumulativeAreas[mid] > value) {
-
-				return binarySearch(start, mid - 1);
-
-			} else if (cumulativeAreas[mid] < value) {
-
-				return binarySearch(mid + 1, end);
-
-			} else {
-
-				return mid;
-
-			}
-
-		}
-
-		let result = binarySearch(0, cumulativeAreas.length - 1);
-		return result;
-
-	}
-
-	// pick random face weighted by face area
-
-	let r: number;
-	let index: number;
-	let result: Array<THREE.Vector3> = [];
-
-	for (i = 0; i < n; i++) {
-
-		r = Math.random() * totalArea;
-
-		index = binarySearchIndices(r);
-
-		// result[ i ] = GeometryUtils.randomPointInFace( faces[ index ], geometry, true );
-		vA.set(vertices[index * 9 + 0], vertices[index * 9 + 1], vertices[index * 9 + 2]);
-		vB.set(vertices[index * 9 + 3], vertices[index * 9 + 4], vertices[index * 9 + 5]);
-		vC.set(vertices[index * 9 + 6], vertices[index * 9 + 7], vertices[index * 9 + 8]);
-		result[i] = randomPointInTriangle(vA, vB, vC);
-
-	}
-
-	return result;
-
-};
-
-// Get random point in triangle (via barycentric coordinates)
-// 	(uniform distribution)
-// 	http://www.cgafaq.info/wiki/Random_Point_In_Triangle
-function randomPointInTriangle(vectorA: THREE.Vector3, vectorB: THREE.Vector3, vectorC: THREE.Vector3) {
-
-	let vector = new THREE.Vector3();
-	let point = new THREE.Vector3();
-
-	let a = Math.random();
-	let b = Math.random();
-
-	if ((a + b) > 1) {
-
-		a = 1 - a;
-		b = 1 - b;
-
-	}
-
-	let c = 1 - a - b;
-
-	point.copy(vectorA);
-	point.multiplyScalar(a);
-
-	vector.copy(vectorB);
-	vector.multiplyScalar(b);
-
-	point.add(vector);
-
-	vector.copy(vectorC);
-	vector.multiplyScalar(c);
-
-	point.add(vector);
-
-	return point;
-
-};
-
-// Get triangle area (half of parallelogram)
-// http://mathworld.wolfram.com/TriangleArea.html
-
-function triangleArea(vectorA: THREE.Vector3, vectorB: THREE.Vector3, vectorC: THREE.Vector3) {
-
-	let vector1 = new THREE.Vector3();
-	let vector2 = new THREE.Vector3();
-
-
-	vector1.subVectors(vectorB, vectorA);
-	vector2.subVectors(vectorC, vectorA);
-	vector1.cross(vector2);
-
-	return 0.5 * vector1.length();
-
-
-}
