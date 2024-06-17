@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { onHydrated, theme } from '$lib/stores/theme';
+	import { page } from '$app/stores';
 	import MainScene from '$lib/graphics/scenes/mainScene';
+	import { routeToName } from '$lib/params';
 
 	let canvas: HTMLCanvasElement;
 	let scene: MainScene;
@@ -10,9 +12,11 @@
 
 	onMount(() => {
 		scene = new MainScene(canvas);
-		theme.subscribe((v) => (
-			scene.themeCallback(v)
-		));
+		theme.subscribe((v) => scene.themeCallback(v));
+		page.subscribe((v) => {
+			let vv = routeToName(v.url.pathname);
+			scene.onNavigationChange(vv);
+		});
 		scene.start();
 
 		return () => {

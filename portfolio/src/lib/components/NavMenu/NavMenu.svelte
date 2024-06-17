@@ -1,12 +1,12 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { HOME, NavBar } from '$lib/params';
 	import { theme, toggleTheme } from '$lib/stores/theme';
-
-	import { base } from '$app/paths';
+	import { navItems } from '$lib/params';
 	import UIcon from '../Icon/UIcon.svelte';
 
-	let currentRoute = '/';
+	let currentRoute = '/'; // Home
 
 	let expanded = false;
 
@@ -21,19 +21,8 @@
 	$: {
 		if ($page) {
 			currentRoute = $page.url.pathname;
-
-			// console.log(currentRoute);
 		}
 	}
-
-	const navItems = [
-		{ title: NavBar.projects, to: '/projects', icon: 'i-carbon-cube' },
-		{ title: NavBar.career, to: '/experience', icon: 'i-carbon-development' },
-		{ title: NavBar.education, to: '/education', icon: 'i-carbon-education' },
-		{ title: NavBar.skills, to: '/skills', icon: 'i-carbon-software-resource-cluster' },
-		{ title: NavBar.resume, to: '/resume', icon: 'i-carbon-result' },
-		{ title: NavBar.test, to: '/test', icon: 'i-carbon-result' }
-	] as const;
 </script>
 
 <div class="nav-menu">
@@ -43,7 +32,9 @@
 			class="nav-menu-left decoration-none w-auto md:w-150px lg:w-auto row flex flex-row items-center cursor-pointer px-4 text-[var(--secondary-text)] self-stretch hover:bg-[color:var(--main-hover)]"
 		>
 			<UIcon icon="i-line-md-coffee-loop" classes="text-2em" />
-			<span class="ml-2 text-md font-bold hidden md:inline overflow-hidden whitespace-nowrap text-ellipsis">
+			<span
+				class="ml-2 text-md font-bold hidden md:inline overflow-hidden whitespace-nowrap text-ellipsis"
+			>
 				{HOME.name}
 				{HOME.lastName}
 			</span>
@@ -77,9 +68,9 @@
 					on:click={() => toggleTheme()}
 				>
 					{#if $theme}
-					<UIcon icon="i-line-md-sunny-outline-to-moon-loop-transition" classes="text-1.3em" />
+						<UIcon icon="i-line-md-sunny-outline-to-moon-loop-transition" classes="text-1.3em" />
 					{:else}
-					<UIcon icon="i-line-md-moon-to-sunny-outline-loop-transition" classes="text-1.3em" />
+						<UIcon icon="i-line-md-moon-to-sunny-outline-loop-transition" classes="text-1.3em" />
 					{/if}
 				</button>
 			</div>
@@ -185,5 +176,4 @@
 			transform: translateY(0vh);
 		}
 	}
-
 </style>

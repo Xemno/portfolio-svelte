@@ -13,4 +13,3 @@ export function map(value: number, start1: number, stop1: number, start2: number
 export function clamp(value: number, min: number, max: number): number {
 	return Math.min(Math.max(value, min), max);
 }
-
