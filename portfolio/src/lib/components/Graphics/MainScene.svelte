@@ -13,10 +13,7 @@
 	onMount(() => {
 		scene = new MainScene(canvas);
 		theme.subscribe((v) => scene.themeCallback(v));
-		page.subscribe((v) => {
-			let vv = routeToName(v.url.pathname);
-			scene.onNavigationChange(vv);
-		});
+		page.subscribe((v) => scene.onNavigationChange(routeToName(v.url.pathname)));
 		scene.start();
 
 		return () => {
