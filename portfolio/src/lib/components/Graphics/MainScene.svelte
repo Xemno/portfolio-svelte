@@ -11,7 +11,7 @@
 	onMount(() => onHydrated());
 
 	onMount(() => {
-		scene = new MainScene(canvas);
+		scene = new MainScene(canvas, routeToName($page.url.pathname));
 		theme.subscribe((v) => scene.themeCallback(v));
 		page.subscribe((v) => scene.onNavigationChange(routeToName(v.url.pathname)));
 		scene.start();
@@ -33,6 +33,6 @@
 		position: fixed;
 		top: 0;
 		left: 0;
-		z-index: -9999; // NOTE: comment to make input controls accessible, uncomment to bring canvas behind
+		// z-index: -9999; // NOTE: comment to make input controls accessible, uncomment to bring canvas behind
 	}
 </style>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
-	import { HOME, NavBar } from '$lib/params';
+	import { HOME } from '$lib/params';
 	import { theme, toggleTheme } from '$lib/stores/theme';
 	import { navItems } from '$lib/params';
 	import UIcon from '../Icon/UIcon.svelte';
