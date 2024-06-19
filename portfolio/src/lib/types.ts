@@ -1,5 +1,7 @@
 import type { Color } from './utils/colors';
 
+export type NavItem = { idx: number; id: string };
+
 export enum Platform {
 	GitHub = 'github',
 	StackOverflow = 'stackoverflow',

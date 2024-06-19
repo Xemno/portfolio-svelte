@@ -4,10 +4,11 @@ import type IRenderable from './IRenderable';
 import { type Color } from '$lib/utils/colors';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
-import { gsap, TweenMax } from 'gsap';
+import { gsap, TweenMax, Elastic } from 'gsap';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { randomPointsInBufferGeometry } from '../utils/VectorUtils';
 import { page } from '$app/stores';
+import type { NavItem } from '$lib/types';
 
 
 
@@ -16,6 +17,13 @@ let conf = {
 	zCoef: 10,
 };
 
+interface IVertices {
+	[index: string]: {
+		x: number;
+		y: number;
+		z: number;
+	};
+}
 
 interface Item {
 	idx: number,
@@ -28,7 +36,7 @@ type GeometryItems = Array<Item>;
 // description to buffergeometry
 // type id2BufferGeometry = [string, THREE.BufferGeometry];
 
-// description to buffergeometry
+// description key (navigation string) to buffergeometry vertices
 interface Str2BufferGeometry {
 	[key: string]: THREE.BufferGeometry;
 }
@@ -50,13 +58,15 @@ export class TextCloud implements IRenderable {
 
 	private fontLoader = new FontLoader();
 
-	private triggers: HTMLCollectionOf<HTMLSpanElement>;
 
 	private lookAt?: THREE.Vector3;
 
+	private particleSystem!: THREE.Points;
 
+	private particlesGeometries: Array<Str2BufferGeometry> = new Array<Str2BufferGeometry>(); // NOTE: static, used only for locations
+	private currParticlesGeometry: THREE.BufferGeometry | null = new THREE.BufferGeometry(); // NOTE: dynamic
 
-	private particlesArray: Array<Str2BufferGeometry> = new Array<Str2BufferGeometry>();
+	private currNav: NavItem = { idx: 0, id: '' }; // index into particlesGeometries array
 
 
 	// private particles = new THREE.BufferGeometry();
@@ -64,7 +74,6 @@ export class TextCloud implements IRenderable {
 		size: particleSize, vertexColors: true
 	});
 
-	private particleSystem!: THREE.Points;
 
 	// Animate
 	private normalSpeed: number = (defaultAnimationSpeed / 100);
@@ -76,9 +85,8 @@ export class TextCloud implements IRenderable {
 		rotation: -45
 	};
 
-	constructor(scene: THREE.Scene, texts: Array<string>, initialText: string, pos?: THREE.Vector3, lookAt?: THREE.Vector3) {
+	constructor(scene: THREE.Scene, navItems: Array<NavItem>, initParams: NavItem, pos?: THREE.Vector3, lookAt?: THREE.Vector3) {
 
-		this.triggers = document.getElementsByTagName('span');
 
 		// TODO: wip - properly position this element based on div/h1 element
 		// let mainTitleText: (HTMLElement | null) = document.getElementById("main-title");
@@ -91,18 +99,18 @@ export class TextCloud implements IRenderable {
 		// load font and execute onLoad callback
 		this.fontLoader.load(typeface, (font) => {
 
-			texts.forEach((textContent) => {
+			navItems.forEach((navItem) => {
 
 
-				console.log('textContent: ', textContent);
+				console.log('TextCloud navItems: ', navItem);
 
 
-				if (textContent == null) {
-					console.log('returned on trigger.textContent: ', textContent);
+				if (navItem == null) {
+					console.log('returned on trigger.textContent: ', navItem);
 					return;
 				}
 
-				let geometry = new TextGeometry(textContent, {
+				let geometry = new TextGeometry(navItem.id, {
 					font: font,
 					size: window.innerWidth * 0.003,
 					height: 1,
@@ -110,25 +118,30 @@ export class TextCloud implements IRenderable {
 				});
 				geometry.center;
 
+
 				let points = randomPointsInBufferGeometry(geometry, particleCount);
 				let particles = new THREE.BufferGeometry().setFromPoints(points);
 
+
+				// set up particlesGeometries
 				let entry: Str2BufferGeometry = {};
-				entry[textContent] = particles;
-				this.particlesArray.push(entry);
+				entry[navItem.id] = particles;
+				this.particlesGeometries.push(entry);
 			});
 
-			
+
 			// TODO: move everything below to init function onFinish() or afterInit()
 
 			// Init points particle system
-			let geometry: THREE.BufferGeometry | null = this.getBufferGeometry(initialText);
-			if (geometry == null) {
-				const defaultIdx = 0;
-				geometry = this.particlesArray.at(defaultIdx)![texts[defaultIdx]];
+			this.currParticlesGeometry = this.getBufferGeometry(initParams);
+			if (this.currParticlesGeometry == null) {
+				this.currNav = { idx: 0, id: initParams.id };
+
+				this.currParticlesGeometry = this.particlesGeometries.at(this.currNav.idx)![this.currNav.id];
 			}
+			// initialize particle system
 			this.particleSystem = new THREE.Points(
-				geometry,
+				this.currParticlesGeometry,
 				this.pMaterial
 			);
 
@@ -138,15 +151,12 @@ export class TextCloud implements IRenderable {
 			}
 
 
-			// console.log('particleSystem: ', this.particleSystem);
-			// TODO: set position
-			this.particleSystem.position.x = -52;
-			this.particleSystem.position.y = 15;
+			// TODO: initialize position
+			this.particleSystem.position.x = -20;
+			this.particleSystem.position.y = 40;
 
 			scene.add(this.particleSystem);
 		});
-
-
 	}
 
 
@@ -156,89 +166,78 @@ export class TextCloud implements IRenderable {
 		}
 	}
 
-	public transitionToNext() {
+	public onNavigationChange(item: NavItem) {
+		console.log('::::', item);
 
+
+		this.transitionTo(item);
 	}
 
-	public transitionTo(idx: number) {
+	public transitionTo(item: NavItem) {
 
+		this.morphTo(item);
+
+		this.currNav = item;
 	}
 
 
-	public onNavigationChange(item: string) {
-		this.setParticlesTextTo(item);
-	}
+	// private setParticlesTextTo(id: string) {
+	// 	const geometry: THREE.BufferGeometry | null = this.getBufferGeometry(id);
+	// 	if (geometry != null) {
+	// 		this.particleSystem.geometry = geometry;
+	// 	}
+	// }
 
-	private setParticlesTextTo(id: string) {
-		const geometry: THREE.BufferGeometry | null = this.getBufferGeometry(id);
-		if (geometry != null) {
-			this.particleSystem.geometry = geometry;
-		}
-	}
-
-	private getBufferGeometry(id: string): THREE.BufferGeometry | null {
+	private getBufferGeometry(item: NavItem): THREE.BufferGeometry | null {
 		let result: THREE.BufferGeometry | null = null;
 
-		this.particlesArray.forEach((entry) => {
-			if (entry[id] != null) {
-				result = entry[id];
+		this.particlesGeometries.forEach((entry) => {
+			if (entry[item.id] != null) {
+				result = entry[item.id];
 			}
 		});
 
 		return result;
 	}
 
-	// private enableTrigger(trigger: HTMLSpanElement, idx: number) {
-	// 	trigger.setAttribute('data-disabled', 'false');
+	// private getCurrentGeometry(): THREE.BufferGeometry | null {
+	// 	console.log("current: ", this.currParticlesIdx, ' ', this.currStrId);
 
-	// 	trigger.addEventListener('click', () => {
-	// 		this.morphTo(this.texts[idx].particles, trigger.dataset.color);
-	// 	});
-
-	// 	if (idx == 0) {
-	// 		this.morphTo(this.texts[idx].particles, trigger.dataset.color);
-	// 	}
+	// 	return this.particlesGeometries.at(this.currParticlesIdx)![this.currStrId];
 	// }
 
-	// private morphTo(newParticles, color = '#FFFFFF') {
+	private morphTo(item: NavItem) {
+		let geometryTo: THREE.BufferGeometry | null = this.getBufferGeometry(item);
+		if (geometryTo == null) {
+			console.log('Error in morpTo, geometryTo == null.');
+			return;
+		}
+		if (this.currParticlesGeometry == null) {
+			console.log('Error in morpTo, currParticlesGeometry == null.');
+			return;
+		}
+		let currPosArray = this.currParticlesGeometry.attributes.position.array;
+		let newPosArray = geometryTo.attributes.position.array;
 
-	// 	TweenMax.to(animationVars, .1, {
-	// 		ease: Power4.easeIn,
-	// 		speed: fullSpeed,
-	// 		onComplete: slowDown
-	// 	});
+		// for (var i = 0; i < currPosArray.length; i++) {
+		// 	currPosArray[i] = newPosArray[i];
+		// }
 
-	// 	TweenMax.to(animationVars, 2, {
-	// 		ease: Linear.easeNone,
-	// 		color: color
-	// 	});
+		// this.currParticlesGeometry.attributes.position.needsUpdate = true;
+
+		gsap.to(currPosArray, {
+			endArray: newPosArray,
+			duration: 2,
+			ease: "elastic(0.1, .3)",
+			onUpdate: () => {
+				this.currParticlesGeometry.attributes.position.needsUpdate = true;
+			}
+		});
 
 
-	// 	// particleSystem.material.color.setHex(color);
 
-	// 	for (var i = 0; i < particles.vertices.length; i++) {
-	// 		TweenMax.to(particles.vertices[i], 2, {
-	// 			ease: Elastic.easeOut.config(0.1, .3),
-	// 			x: newParticles.vertices[i].x,
-	// 			y: newParticles.vertices[i].y,
-	// 			z: newParticles.vertices[i].z
-	// 		});
-	// 	}
+	}
 
-	// 	console.log(animationVars.rotation);
-
-	// 	TweenMax.to(animationVars, 2, {
-	// 		ease: Elastic.easeOut.config(0.1, .3),
-	// 		rotation: animationVars.rotation == 45 ? -45 : 45,
-	// 	});
-	// }
-
-	// private slowDown() {
-	// 	TweenMax.to(animationVars, 0.3, {
-	// 		ease:
-	// 			Power2.easeOut, speed: normalSpeed, delay: 0.2
-	// 	});
-	// }
 
 }
 

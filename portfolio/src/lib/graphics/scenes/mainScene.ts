@@ -4,7 +4,8 @@ import { NAMED_COLORS } from '$lib/utils/colors';
 import { SimplexPlane } from "../renderables/SimplexPlane"
 import { TextCloud } from '../renderables/TextCloud';
 import type IRenderable from '../renderables/IRenderable';
-import { NavBar } from '$lib/params';
+import type { NavItem } from '$lib/types';
+import { navItems } from '$lib/params';
 
 
 
@@ -47,7 +48,7 @@ export default class MainScene {
 
 	private renderables: Array<IRenderable> = new Array<IRenderable>();
 
-	constructor(canvas: HTMLCanvasElement, initialText: string) {
+	constructor(canvas: HTMLCanvasElement, initialText: NavItem) {
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(conf.fov, window.innerWidth / window.innerHeight, 0.1, 1000);
 		this.camera.position.z = conf.cameraZ;
@@ -61,7 +62,7 @@ export default class MainScene {
 		this.initScene(initialText);
 	}
 
-	private initScene(initialText: string): void {
+	private initScene(initialText: NavItem) {
 		this.addResizeSupport();
 		this.addMouseInputSupport();
 
@@ -70,8 +71,15 @@ export default class MainScene {
 		this.simplexPlane = new SimplexPlane(this.renderWidth * 2, this.renderHeight * 2, this.renderWidth / 2, this.renderHeight / 2);
 		this.scene.add(this.simplexPlane.getPlane());
 
-		let texts: Array<string> = new Array<string>('Qais El Okaili', 'Projects', 'Experiences', 'Education', 'Search');
+		// initialies TextCloud
+		let texts: Array<NavItem> = new Array<NavItem>();
+		texts.push({idx: 0, id: 'Qais El Okaili'}); // first item
+		Array.from(navItems).forEach(function (item, idx) {
+			texts.push({idx: idx + 1, id: item.title});
+		});
+		texts.push({idx: 7, id: 'Search'}); // last item
 		this.textCloud = new TextCloud(this.scene, texts, initialText);
+
 
 		// init renderables to update
 		this.renderables.push(this.textCloud);
@@ -92,8 +100,8 @@ export default class MainScene {
 		}
 	}
 
-	public onNavigationChange(item: string) {
-		console.log('onNavigationChange: ', item);
+	public onNavigationChange( item: NavItem) {
+		console.log('::: ', item);
 		this.textCloud.onNavigationChange(item);
 	}
 

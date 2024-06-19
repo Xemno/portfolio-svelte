@@ -14,19 +14,21 @@ import {
 } from './types';
 import { Icons } from './utils';
 import descMainPage from './md/descMainPage.md?raw';
+import type { NavItem } from '$lib/types';
 
 export const TITLE_SUFFIX = 'Portfolio';
 
 export const NavBar = {
-	home: 'Home',
+	home: 'Qais El Okaili',
 	projects: 'Projects',
 	career: 'Experiences',
-	resume: 'Resume',
-	skills: 'Skills',
 	education: 'Education',
+	skills: 'Skills',
+	resume: 'Resume',
 	test: 'Test'
-};
+} as const;
 
+// NOTE: Home and Search are not included
 export const navItems = [
 	{ title: NavBar.projects, to: '/projects', icon: 'i-carbon-cube' },
 	{ title: NavBar.career, to: '/experience', icon: 'i-carbon-development' },
@@ -36,27 +38,28 @@ export const navItems = [
 	{ title: NavBar.test, to: '/test', icon: 'i-carbon-result' }
 ] as const;
 
-export function routeToName(route: string): string {
-	let result: string = '';
+export function routeToName(route: string): NavItem {
+	let navItem : NavItem = {idx: 0, id: HOME.name + ' ' + HOME.lastName}; // default is home
+	
+	route = route.replaceAll('/', '');
 
-	Array.from(navItems).forEach(function (item) {
-		if (route === item.to) {
-			result = item.title;
+	Array.from(navItems).forEach(function (item, idx) {
+		const it = item.to.replaceAll('/', '');
+		if (route === it) {
+			navItem = {idx: idx + 1, id: item.title};
 			return;
 		}
 	});
 
-	// Main page navigation
-	if (route === '/') {
-		return HOME.name + ' ' + HOME.lastName;
-	}
-
 	// search page
-	if (route === '/search') {
-		return "Search";
+	if (route === 'search') {
+		navItem = {idx: navItems.length + 1, id: "Search"};
 	}
 
-	return result;
+	console.log('::', navItem, ' - ', route);
+	
+	
+	return navItem;
 }
 
 export const getPlatfromIcon = (platform: Platform): Icons => {
