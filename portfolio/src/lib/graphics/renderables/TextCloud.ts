@@ -131,6 +131,7 @@ export class TextCloud implements IRenderable {
 
 
 			// TODO: move everything below to init function onFinish() or afterInit()
+			console.log('initParams: ', initParams);
 
 			// Init points particle system
 			this.currParticlesGeometry = this.getBufferGeometry(initParams);
@@ -174,6 +175,8 @@ export class TextCloud implements IRenderable {
 	}
 
 	public transitionTo(item: NavItem) {
+		// console.log(this.particlesGeometries);
+		
 
 		this.morphTo(item);
 
@@ -189,15 +192,21 @@ export class TextCloud implements IRenderable {
 	// }
 
 	private getBufferGeometry(item: NavItem): THREE.BufferGeometry | null {
-		let result: THREE.BufferGeometry | null = null;
+		// let result: THREE.BufferGeometry | null = null;
 
-		this.particlesGeometries.forEach((entry) => {
-			if (entry[item.id] != null) {
-				result = entry[item.id];
-			}
-		});
+		// this.particlesGeometries.forEach((entry) => {
+		// 	if (entry[item.id] != null) {
+		// 		result = entry[item.id];
+		// 	}
+		// });
+		console.log('getBufferGeometry: ', item);
 
-		return result;
+		// return this.particlesGeometries[item.idx][item.id];
+		let elem: Str2BufferGeometry = this.particlesGeometries.at(item.idx);
+		if (elem == null) return null;
+		return elem[item.id]
+
+		// return result;
 	}
 
 	// private getCurrentGeometry(): THREE.BufferGeometry | null {
@@ -216,21 +225,33 @@ export class TextCloud implements IRenderable {
 			console.log('Error in morpTo, currParticlesGeometry == null.');
 			return;
 		}
-		let currPosArray = this.currParticlesGeometry.attributes.position.array;
+		
+		let currPositionsAttribute: THREE.BufferAttribute = <THREE.BufferAttribute>this.currParticlesGeometry.attributes.position;
+		currPositionsAttribute.setUsage(THREE.DynamicDrawUsage);
+
+		let currPosArray = currPositionsAttribute.array;
 		let newPosArray = geometryTo.attributes.position.array;
 
+		
+		
 		// for (var i = 0; i < currPosArray.length; i++) {
 		// 	currPosArray[i] = newPosArray[i];
 		// }
 
 		// this.currParticlesGeometry.attributes.position.needsUpdate = true;
+		// gsap.killTweensOf(newPosArray);
 
 		gsap.to(currPosArray, {
 			endArray: newPosArray,
-			duration: 2,
+			duration: 1,
 			ease: "elastic(0.1, .3)",
 			onUpdate: () => {
+				// NOTE: this is gsaps update that is called frequently
 				this.currParticlesGeometry.attributes.position.needsUpdate = true;
+			},
+			onInterrupt: () => {
+				console.log('is interrupted.');
+				
 			}
 		});
 
