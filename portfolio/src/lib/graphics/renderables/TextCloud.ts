@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise";
 import type IRenderable from './IRenderable';
 import { type Color } from '$lib/utils/colors';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { gsap, TweenMax, Elastic } from 'gsap';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
@@ -10,6 +10,7 @@ import { randomPointsInBufferGeometry } from '../utils/VectorUtils';
 import { page } from '$app/stores';
 import type { NavItem } from '$lib/types';
 
+import * as TWEEN from '@tweenjs/tween.js';
 
 
 let conf = {
@@ -37,9 +38,7 @@ type GeometryItems = Array<Item>;
 // type id2BufferGeometry = [string, THREE.BufferGeometry];
 
 // description key (navigation string) to buffergeometry vertices
-interface Str2BufferGeometry {
-	[key: string]: THREE.BufferGeometry;
-}
+type Idx2BufferGeometry = [id: number, data: THREE.BufferGeometry];
 
 
 // Options
@@ -58,22 +57,27 @@ export class TextCloud implements IRenderable {
 
 	private fontLoader = new FontLoader();
 
+	private ready: boolean = false;
+
 
 	private lookAt?: THREE.Vector3;
 
 	private particleSystem!: THREE.Points;
 
-	private particlesGeometries: Array<Str2BufferGeometry> = new Array<Str2BufferGeometry>(); // NOTE: static, used only for locations
-	private currParticlesGeometry: THREE.BufferGeometry | null = new THREE.BufferGeometry(); // NOTE: dynamic
+	private particlesGeometries: Array<Idx2BufferGeometry> = new Array<Idx2BufferGeometry>(); // NOTE: static, used only for locations
+	private currParticlesGeometry: THREE.BufferGeometry | null = null; // NOTE: dynamic
 
 	private currNav: NavItem = { idx: 0, id: '' }; // index into particlesGeometries array
 
 
+	// private tween!: TWEEN.Tween<THREE.TypedArray>;;
+	private activeTweens: Array<TWEEN.Tween<THREE.TypedArray>> = new Array();
+
 	// private particles = new THREE.BufferGeometry();
 	private pMaterial = new THREE.PointsMaterial({
-		size: particleSize, vertexColors: true
+		size: particleSize,
+		vertexColors: true,
 	});
-
 
 	// Animate
 	private normalSpeed: number = (defaultAnimationSpeed / 100);
@@ -86,8 +90,6 @@ export class TextCloud implements IRenderable {
 	};
 
 	constructor(scene: THREE.Scene, navItems: Array<NavItem>, initParams: NavItem, pos?: THREE.Vector3, lookAt?: THREE.Vector3) {
-
-
 		// TODO: wip - properly position this element based on div/h1 element
 		// let mainTitleText: (HTMLElement | null) = document.getElementById("main-title");
 		// if (mainTitleText != null) {
@@ -100,64 +102,82 @@ export class TextCloud implements IRenderable {
 		this.fontLoader.load(typeface, (font) => {
 
 			navItems.forEach((navItem) => {
-
-
 				console.log('TextCloud navItems: ', navItem);
 
-
 				if (navItem == null) {
-					console.log('returned on trigger.textContent: ', navItem);
+					console.log('returned on navItem: ', navItem);
 					return;
 				}
 
-				let geometry = new TextGeometry(navItem.id, {
-					font: font,
-					size: window.innerWidth * 0.003,
-					height: 1,
-					curveSegments: 10,
-				});
-				geometry.center;
-
-
-				let points = randomPointsInBufferGeometry(geometry, particleCount);
-				let particles = new THREE.BufferGeometry().setFromPoints(points);
-
-
-				// set up particlesGeometries
-				let entry: Str2BufferGeometry = {};
-				entry[navItem.id] = particles;
-				this.particlesGeometries.push(entry);
+				this.createParticles(font, navItem.id, navItem.idx);
 			});
 
+			console.log(this.particlesGeometries);
 
-			// TODO: move everything below to init function onFinish() or afterInit()
-			console.log('initParams: ', initParams);
 
-			// Init points particle system
-			this.currParticlesGeometry = this.getBufferGeometry(initParams);
-			if (this.currParticlesGeometry == null) {
-				this.currNav = { idx: 0, id: initParams.id };
+			this.initParticleSystem(initParams);
 
-				this.currParticlesGeometry = this.particlesGeometries.at(this.currNav.idx)![this.currNav.id];
-			}
-			// initialize particle system
-			this.particleSystem = new THREE.Points(
-				this.currParticlesGeometry,
-				this.pMaterial
-			);
 
 			if (lookAt != null) {
 				this.particleSystem.lookAt(lookAt);
 				this.lookAt = lookAt;
 			}
 
-
-			// TODO: initialize position
-			this.particleSystem.position.x = -20;
-			this.particleSystem.position.y = 40;
-
 			scene.add(this.particleSystem);
+
+			this.ready = true;
 		});
+	}
+
+	private createParticles(font: Font, text: string, idx: number) {
+		let geometry = new TextGeometry(text, {
+			font: font,
+			size: window.innerWidth * 0.003,
+			height: 1,
+			curveSegments: 10,
+		});
+		geometry.center();
+
+		// TODO: maybe different material for each
+		// const material = new THREE.PointsMaterial({
+		// 	color: 0xff0000,
+		// 	size: 2
+		// });
+
+		let points = randomPointsInBufferGeometry(geometry, particleCount);
+		let particles = new THREE.BufferGeometry().setFromPoints(points);
+
+
+		// set up particlesGeometries
+		let entry: Idx2BufferGeometry = [idx, particles];
+		// entry[navItem.id] = particles;
+		this.particlesGeometries.push(entry);
+	}
+
+	private initParticleSystem(initParams: NavItem) {
+		// TODO: move everything below to init function onFinish() or afterInit()
+		console.log('initParams: ', initParams);
+
+		// Init points particle system
+		this.currParticlesGeometry = this.getBufferGeometry(initParams);
+		if (this.currParticlesGeometry == null) {
+			console.log('currParticlesGeometry is NULL');
+
+			this.currNav = { idx: 0, id: initParams.id };
+
+			this.currParticlesGeometry = this.particlesGeometries.at(this.currNav.idx)![1];
+		}
+		// initialize particle system
+		this.particleSystem = new THREE.Points(
+			this.currParticlesGeometry,
+			this.pMaterial
+		);
+
+		// TODO: initialize position
+		this.particleSystem.position.x = -20;
+		this.particleSystem.position.y = 5;
+		this.particleSystem.position.z = 50;
+
 	}
 
 
@@ -165,10 +185,14 @@ export class TextCloud implements IRenderable {
 		if (this.lookAt != null) {
 			this.particleSystem.lookAt(this.lookAt);
 		}
+
+		const result = TWEEN.update();
+		// this.tween.update(deltaTime);
 	}
 
 	public onNavigationChange(item: NavItem) {
 		console.log('::::', item);
+		if (!this.ready) return;
 
 
 		this.transitionTo(item);
@@ -176,7 +200,7 @@ export class TextCloud implements IRenderable {
 
 	public transitionTo(item: NavItem) {
 		// console.log(this.particlesGeometries);
-		
+
 
 		this.morphTo(item);
 
@@ -199,24 +223,25 @@ export class TextCloud implements IRenderable {
 		// 		result = entry[item.id];
 		// 	}
 		// });
-		console.log('getBufferGeometry: ', item);
 
 		// return this.particlesGeometries[item.idx][item.id];
-		let elem: Str2BufferGeometry = this.particlesGeometries.at(item.idx);
-		if (elem == null) return null;
-		return elem[item.id]
+		let elem: Idx2BufferGeometry | undefined = this.particlesGeometries.at(item.idx);
+		if (elem == null) {
+			console.log('getBufferGeometry: NULL', ' for ', item);
+			console.log('geom: : ', this.particlesGeometries);
+
+			return null;
+		}
+		console.log('getBufferGeometry: ', item);
+
+		return elem[1];
 
 		// return result;
 	}
 
-	// private getCurrentGeometry(): THREE.BufferGeometry | null {
-	// 	console.log("current: ", this.currParticlesIdx, ' ', this.currStrId);
-
-	// 	return this.particlesGeometries.at(this.currParticlesIdx)![this.currStrId];
-	// }
 
 	private morphTo(item: NavItem) {
-		let geometryTo: THREE.BufferGeometry | null = this.getBufferGeometry(item);
+		const geometryTo: THREE.BufferGeometry | null = this.getBufferGeometry(item);
 		if (geometryTo == null) {
 			console.log('Error in morpTo, geometryTo == null.');
 			return;
@@ -225,38 +250,65 @@ export class TextCloud implements IRenderable {
 			console.log('Error in morpTo, currParticlesGeometry == null.');
 			return;
 		}
-		
-		let currPositionsAttribute: THREE.BufferAttribute = <THREE.BufferAttribute>this.currParticlesGeometry.attributes.position;
-		currPositionsAttribute.setUsage(THREE.DynamicDrawUsage);
+
+		// let currPositionsAttribute: THREE.BufferAttribute = <THREE.BufferAttribute>this.currParticlesGeometry.attributes.position;
+		let currPositionsAttribute: THREE.BufferAttribute = <THREE.BufferAttribute>this.particleSystem.geometry.attributes.position;
+		//currPositionsAttribute.setUsage(THREE.DynamicDrawUsage);
 
 		let currPosArray = currPositionsAttribute.array;
-		let newPosArray = geometryTo.attributes.position.array;
+		const newPosArray = geometryTo.attributes.position.array;
 
-		
-		
-		// for (var i = 0; i < currPosArray.length; i++) {
-		// 	currPosArray[i] = newPosArray[i];
-		// }
 
-		// this.currParticlesGeometry.attributes.position.needsUpdate = true;
-		// gsap.killTweensOf(newPosArray);
-
-		gsap.to(currPosArray, {
-			endArray: newPosArray,
-			duration: 1,
-			ease: "elastic(0.1, .3)",
-			onUpdate: () => {
-				// NOTE: this is gsaps update that is called frequently
-				this.currParticlesGeometry.attributes.position.needsUpdate = true;
-			},
-			onInterrupt: () => {
-				console.log('is interrupted.');
-				
-			}
+		this.activeTweens.forEach((item, idx) => {
+			item.stop();
+			// console.log("removing: ", idx, ' ', item.getId());
+			// if (idx > -1) {
+			// 	this.activeTweens.splice(idx, 1);
+			// }		
 		});
+		this.activeTweens = new Array();
+
+
+		let tween = new TWEEN.Tween(currPosArray)
+			.to(newPosArray, 1000)
+			.easing(TWEEN.Easing.Quartic.Out)
+			.onUpdate(() => {
+				this.currParticlesGeometry!.attributes.position.needsUpdate = true;
+			})
+			.onComplete(() => {
+				let idx = this.activeTweens.indexOf(tween, 0);
+				console.log("onComplete: ", idx, ' ', tween.getId());
+				if (idx > -1) {
+					this.activeTweens.splice(idx, 1);
+				}
+			});
+
+		tween.start();
+
+		this.activeTweens.push(tween);
+
+		console.log('this.activeTweens size: ', this.activeTweens.length);
 
 
 
+
+
+		// NOTE: GSAP way
+		// gsap.to(currPosArray, {
+		// 	endArray: newPosArray,
+		// 	duration: 1,
+		// 	ease: "elastic(0.1, .3)",
+		// 	onUpdate: () => {
+		// 		// NOTE: this is gsaps update that is called frequently
+		// 		this.currParticlesGeometry.attributes.position.needsUpdate = true;
+		// 		console.log('isUpdating');
+
+		// 	},
+		// 	onInterrupt: () => {
+		// 		console.log('is interrupted.');
+
+		// 	}
+		// });
 	}
 
 
