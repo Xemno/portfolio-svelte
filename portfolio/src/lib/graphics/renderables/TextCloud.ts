@@ -38,7 +38,7 @@ type GeometryItems = Array<Item>;
 // type id2BufferGeometry = [string, THREE.BufferGeometry];
 
 // description key (navigation string) to buffergeometry vertices
-type Idx2BufferGeometry = [id: number, data: THREE.BufferGeometry];
+type Idx2PosAttr = [id: number, data: THREE.BufferAttribute];
 
 
 // Options
@@ -62,16 +62,22 @@ export class TextCloud implements IRenderable {
 
 	private lookAt?: THREE.Vector3;
 
-	private particleSystem!: THREE.Points;
+	private particleSystem!: THREE.InstancedMesh;
 
-	private particlesGeometries: Array<Idx2BufferGeometry> = new Array<Idx2BufferGeometry>(); // NOTE: static, used only for locations
-	private currParticlesGeometry: THREE.BufferGeometry | null = null; // NOTE: dynamic
+	private particlesGeometries: Array<Idx2PosAttr> = new Array<Idx2PosAttr>(); // NOTE: static, used only for locations
+	private currParticlesPositions: THREE.BufferAttribute | null = null; // NOTE: dynamic
+
+	// Instanced geometry
+	private particleGeometry: THREE.BufferGeometry = new THREE.SphereGeometry(0.2);
+	// private particleGeometry: THREE.BufferGeometry = new THREE.TorusGeometry(0.1, 0.05, 16, 50);
+	private particleMaterial = new THREE.MeshNormalMaterial({ transparent: true });
+
 
 	private currNav: NavItem = { idx: 0, id: '' }; // index into particlesGeometries array
 
 
 	// private tween!: TWEEN.Tween<THREE.TypedArray>;;
-	private activeTweens: Array<TWEEN.Tween<THREE.TypedArray>> = new Array();
+	private activeTweens: Array<TWEEN.Tween<Array<THREE.Vector3>>> = new Array();
 
 	// private particles = new THREE.BufferGeometry();
 	private pMaterial = new THREE.PointsMaterial({
@@ -115,7 +121,7 @@ export class TextCloud implements IRenderable {
 			console.log(this.particlesGeometries);
 
 
-			this.initParticleSystem(initParams);
+			this.initParticleSystem(font, initParams);
 
 
 			if (lookAt != null) {
@@ -144,40 +150,80 @@ export class TextCloud implements IRenderable {
 		// 	size: 2
 		// });
 
-		let points = randomPointsInBufferGeometry(geometry, particleCount);
-		let particles = new THREE.BufferGeometry().setFromPoints(points);
+		let points = randomPointsInBufferGeometry(geometry, particleCount); // NOTE: Coordinates of each particle --> textureCoordinates
+		let particlePos: THREE.BufferAttribute = <THREE.BufferAttribute>(new THREE.BufferGeometry().setFromPoints(points).attributes.position);
 
 
 		// set up particlesGeometries
-		let entry: Idx2BufferGeometry = [idx, particles];
+		let entry: Idx2PosAttr = [idx, particlePos];
 		// entry[navItem.id] = particles;
 		this.particlesGeometries.push(entry);
 	}
 
-	private initParticleSystem(initParams: NavItem) {
+	private initParticleSystem(font: Font, initParams: NavItem) {
 		// TODO: move everything below to init function onFinish() or afterInit()
 		console.log('initParams: ', initParams);
 
+
+		let geometry = new TextGeometry(initParams.id, {
+			font: font,
+			size: window.innerWidth * 0.003,
+			height: 1,
+			curveSegments: 10,
+		});
+		geometry.center();
+		let points = randomPointsInBufferGeometry(geometry, particleCount); // NOTE: Coordinates of each particle --> textureCoordinates
+		let particlePos: THREE.BufferAttribute = <THREE.BufferAttribute>(new THREE.BufferGeometry().setFromPoints(points).attributes.position);
+
+
 		// Init points particle system
-		this.currParticlesGeometry = this.getBufferGeometry(initParams);
-		if (this.currParticlesGeometry == null) {
+		this.currParticlesPositions = particlePos;
+		if (this.currParticlesPositions == null) {
 			console.log('currParticlesGeometry is NULL');
 
 			this.currNav = { idx: 0, id: initParams.id };
 
-			this.currParticlesGeometry = this.particlesGeometries.at(this.currNav.idx)![1];
+			this.currParticlesPositions = this.particlesGeometries.at(this.currNav.idx)![1];
 		}
+
 		// initialize particle system
-		this.particleSystem = new THREE.Points(
-			this.currParticlesGeometry,
-			this.pMaterial
+		this.particleSystem = new THREE.InstancedMesh( // NOTE: with InstancedMesh we can also use 3D shapes as particles
+			this.particleGeometry,
+			this.particleMaterial,
+			particleCount
 		);
+		this.particleSystem.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
 
 		// TODO: initialize position
 		this.particleSystem.position.x = -20;
 		this.particleSystem.position.y = 5;
 		this.particleSystem.position.z = 50;
 
+		this.updateParticlesMatrices();
+
+	}
+
+	private updateParticlesMatrices() {
+		// this.currParticlesPositions!.array.forEach((p) => {
+
+		// });
+
+		let dummy = new THREE.Object3D();
+
+		let idx = 0;
+		for (let i = 0; i < this.currParticlesPositions!.array.length; i = i + 3) {
+			const x = this.currParticlesPositions!.array[i];
+			const y = this.currParticlesPositions!.array[i + 1];
+			const z = this.currParticlesPositions!.array[i + 2];
+
+			dummy.rotation.set(2 * Math.random(), 2 * Math.random(), 2 * Math.random());
+			dummy.position.set(x, y, z);
+			dummy.updateMatrix();
+
+			this.particleSystem.setMatrixAt(idx, dummy.matrix);
+			idx++;
+		}
+		this.particleSystem.instanceMatrix.needsUpdate = true;
 	}
 
 
@@ -215,7 +261,7 @@ export class TextCloud implements IRenderable {
 	// 	}
 	// }
 
-	private getBufferGeometry(item: NavItem): THREE.BufferGeometry | null {
+	private getBufferGeometry(item: NavItem): THREE.BufferAttribute | null {
 		// let result: THREE.BufferGeometry | null = null;
 
 		// this.particlesGeometries.forEach((entry) => {
@@ -225,7 +271,7 @@ export class TextCloud implements IRenderable {
 		// });
 
 		// return this.particlesGeometries[item.idx][item.id];
-		let elem: Idx2BufferGeometry | undefined = this.particlesGeometries.at(item.idx);
+		let elem: Idx2PosAttr | undefined = this.particlesGeometries.at(item.idx);
 		if (elem == null) {
 			console.log('getBufferGeometry: NULL', ' for ', item);
 			console.log('geom: : ', this.particlesGeometries);
@@ -241,51 +287,91 @@ export class TextCloud implements IRenderable {
 
 
 	private morphTo(item: NavItem) {
-		const geometryTo: THREE.BufferGeometry | null = this.getBufferGeometry(item);
-		if (geometryTo == null) {
+		const toPosAttr: THREE.BufferAttribute | null = this.getBufferGeometry(item);
+		if (toPosAttr == null) {
 			console.log('Error in morpTo, geometryTo == null.');
 			return;
 		}
-		if (this.currParticlesGeometry == null) {
+		if (this.currParticlesPositions == null) {
 			console.log('Error in morpTo, currParticlesGeometry == null.');
 			return;
 		}
 
 		// let currPositionsAttribute: THREE.BufferAttribute = <THREE.BufferAttribute>this.currParticlesGeometry.attributes.position;
-		let currPositionsAttribute: THREE.BufferAttribute = <THREE.BufferAttribute>this.particleSystem.geometry.attributes.position;
+		// let currPositionsAttribute: THREE.BufferAttribute = <THREE.BufferAttribute>this.particleSystem.geometry.attributes.position;
 		//currPositionsAttribute.setUsage(THREE.DynamicDrawUsage);
 
-		let currPosArray = currPositionsAttribute.array;
-		const newPosArray = geometryTo.attributes.position.array;
+		// let currPosArray = currPositionsAttribute.array;
+
+		let currPosArr: THREE.TypedArray = this.currParticlesPositions.array;
+
+		const toPosArr: THREE.TypedArray = toPosAttr.array;
+
+		TWEEN.removeAll(); // TODO: try this
+		// this.activeTweens.forEach((item, idx) => {
+		// 	item.stop();
+		// 	// console.log("removing: ", idx, ' ', item.getId());
+		// 	// if (idx > -1) {
+		// 	// 	this.activeTweens.splice(idx, 1);
+		// 	// }		
+		// });
+		// this.activeTweens = new Array();
+
+		for (let i = 0; i < particleCount; ++i) {
+			let currPos = [
+				this.currParticlesPositions!.array[i * 3],
+				this.currParticlesPositions!.array[i * 3 + 1],
+				this.currParticlesPositions!.array[i * 3 + 2]
+			];
+			let toPos = [
+				toPosAttr.array[i * 3],
+				toPosAttr.array[i * 3 + 1],
+				toPosAttr.array[i * 3 + 2]
+			];
 
 
-		this.activeTweens.forEach((item, idx) => {
-			item.stop();
-			// console.log("removing: ", idx, ' ', item.getId());
-			// if (idx > -1) {
-			// 	this.activeTweens.splice(idx, 1);
-			// }		
-		});
-		this.activeTweens = new Array();
+			let tween = new TWEEN.Tween(currPos)
+				.to(toPos, 1000)
+				.easing(TWEEN.Easing.Quartic.Out)
+				.onUpdate((pos) => {
+
+					this.currParticlesPositions!.array[i * 3] = pos[0];
+					this.currParticlesPositions!.array[i * 3 + 1] = pos[1];
+					this.currParticlesPositions!.array[i * 3 + 2] = pos[2];
+
+					// let dummy = new THREE.Object3D();
+					// dummy.rotation.set(2 * Math.random(), 2 * Math.random(), 2 * Math.random());
+					// dummy.position.set(pos[0], pos[1], pos[2]);
+					// dummy.updateMatrix();
+
+					let matrix: THREE.Matrix4 = new THREE.Matrix4();
+					matrix.makeTranslation(new THREE.Vector3(pos[0], pos[1], pos[2]));
+
+					this.particleSystem.setMatrixAt(i, matrix);
+					this.particleSystem.instanceMatrix.needsUpdate = true;
+				}).start();
+		}
 
 
-		let tween = new TWEEN.Tween(currPosArray)
-			.to(newPosArray, 1000)
-			.easing(TWEEN.Easing.Quartic.Out)
-			.onUpdate(() => {
-				this.currParticlesGeometry!.attributes.position.needsUpdate = true;
-			})
-			.onComplete(() => {
-				let idx = this.activeTweens.indexOf(tween, 0);
-				console.log("onComplete: ", idx, ' ', tween.getId());
-				if (idx > -1) {
-					this.activeTweens.splice(idx, 1);
-				}
-			});
+		// let tween = new TWEEN.Tween(currPosArr)
+		// 	.to(toPosArr, 1000)
+		// 	.easing(TWEEN.Easing.Quartic.Out)
+		// 	.onUpdate((obj) => {
+		// 		// console.log(obj);
 
-		tween.start();
+		// 		this.particleSystem.instanceMatrix.needsUpdate = true;
+		// 	});
+		// .onComplete(() => {
+		// 	let idx = this.activeTweens.indexOf(tween, 0);
+		// 	console.log("onComplete: ", idx, ' ', tween.getId());
+		// 	if (idx > -1) {
+		// 		this.activeTweens.splice(idx, 1);
+		// 	}
+		// });
 
-		this.activeTweens.push(tween);
+		// tween.start();
+
+		// this.activeTweens.push(tween);
 
 		console.log('this.activeTweens size: ', this.activeTweens.length);
 
