@@ -18,7 +18,7 @@ export function toScreenPosition(obj: THREE.Object3D, camera: THREE.Camera, rend
 	return new THREE.Vector2(vector.x, vector.y);
 };
 
-export function randomPointsInBufferGeometry(geometry: THREE.BufferGeometry, n: number) {
+export function randomPointsInBufferGeometry(geometry: THREE.BufferGeometry, n: number): Array<THREE.Vector3> {
 
 	let i: number;
 	let totalArea: number = 0;
@@ -101,7 +101,6 @@ export function randomPointsInBufferGeometry(geometry: THREE.BufferGeometry, n: 
 	}
 
 	return result;
-
 };
 
 /*

@@ -1,12 +1,14 @@
-import Assets from './data/assets';
-import type { Education } from './types';
+import Assets from './assets';
+import type { Education } from '../types';
 
-export const MY_EDUCATIONS: Array<Education> = [
+export const title = 'Education';
+
+export const items: Array<Education> = [
 	{
 		degree: 'Masters Computer Science',
 		description: 'asd1',
 		location: 'Zurich, Switzerland',
-		logo: Assets.ETH2,
+		logo: Assets.ETH,
 		name: 'asd2',
 		organization: 'ETH Zurich',
 		period: { from: new Date(2019, 5, 1), to: new Date(2021, 3, 1) },

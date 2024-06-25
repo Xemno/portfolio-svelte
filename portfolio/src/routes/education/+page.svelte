@@ -1,15 +1,10 @@
 <script lang="ts">
-	import Card from '$lib/components/Card/Card.svelte';
-	import Chip from '$lib/components/Chip/Chip.svelte';
 	import EducationCard from '$lib/components/EducationCard/EducationCard.svelte';
-
 	import UIcon from '$lib/components/Icon/UIcon.svelte';
 	import SearchPage from '$lib/components/SearchPage.svelte';
-	import { getAssetURL } from '$lib/data/assets';
-	import { EDUCATION } from '$lib/params';
+	import { title, items } from '@data/education';
 	import type { Education } from '$lib/types';
-	import { getTimeDiff } from '$lib/utils';
-	const { items, title } = EDUCATION;
+
 	let search = '';
 	let result: Array<Education> = items;
 

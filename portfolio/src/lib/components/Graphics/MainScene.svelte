@@ -2,8 +2,8 @@
 	import { onMount } from 'svelte';
 	import { onHydrated, theme } from '$lib/stores/theme';
 	import { page } from '$app/stores';
+	import { routeToName } from '$lib/utils/helpers';
 	import MainScene from '$lib/graphics/scenes/mainScene';
-	import { routeToName } from '$lib/params';
 
 	let canvas: HTMLCanvasElement;
 	let scene: MainScene;
@@ -33,6 +33,6 @@
 		position: fixed;
 		top: 0;
 		left: 0;
-		// z-index: -9999; // NOTE: comment to make input controls accessible, uncomment to bring canvas behind
+		z-index: -9999; // NOTE: comment to make input controls accessible, uncomment to bring canvas behind
 	}
 </style>

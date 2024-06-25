@@ -1,12 +1,13 @@
-import Assets from './data/assets';
-import { getSkills } from './skills.params';
-import { ContractType, type Experience } from './types';
+import Assets from './assets';
+import { getSkills } from './skills';
+import { ContractType, type Experience } from '../types';
 
-import descQualitasExp from './md/Experiences/descQualitasExp.md?raw';
-import descUGExp from './md/Experiences/descUGExp.md?raw';
+import descQualitasExp from '@md/Experiences/descQualitasExp.md?raw';
+import descUGExp from '@md/Experiences/descUGExp.md?raw';
 
+export const title = 'Experience';
 
-const MY_EXPERIENCES: Array<Experience> = [
+export const items: Array<Experience> = [
 	{
 		slug: 'qualitas-ag',
 		company: 'Qualitas AG',
@@ -40,5 +41,3 @@ const MY_EXPERIENCES: Array<Experience> = [
 		bannerImage: Assets.Unknown,
 	}
 ];
-
-export default MY_EXPERIENCES;

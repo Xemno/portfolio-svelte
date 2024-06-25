@@ -1,22 +1,23 @@
-import Assets from './data/assets';
-import { getSkills } from './skills.params';
-import type { Project } from './types';
+import Assets from './assets';
+import { getSkills } from './skills';
+import type { Project } from '../types';
 
-import descAiRoadSeg from './md/Projects/descAiRoadSeg.md?raw';
-import descSoftBodyEng from './md/Projects/descSoftBodyPhysics.md?raw';
-import descCpuRayMarcher from './md/Projects/descFastCpuRayMarcher.md?raw';
-import descMRLab from './md/Projects/descMixedRealityLab.md?raw';
-import descBachelorThesis from './md/Projects/descBachelorThesis.md?raw';
-import descMasterThesis from './md/Projects/descMasterThesis.md?raw';
-import descThisWebsite from './md/Projects/descThisWebsite.md?raw';
+import descAiRoadSeg from '@md/Projects/descAiRoadSeg.md?raw';
+import descSoftBodyEng from '@md/Projects/descSoftBodyPhysics.md?raw';
+import descCpuRayMarcher from '@md/Projects/descFastCpuRayMarcher.md?raw';
+import descMRLab from '@md/Projects/descMixedRealityLab.md?raw';
+import descBachelorThesis from '@md/Projects/descBachelorThesis.md?raw';
+import descMasterThesis from '@md/Projects/descMasterThesis.md?raw';
+import descThisWebsite from '@md/Projects/descThisWebsite.md?raw';
 
 import { base } from '$app/paths';
 
 
 const getImagePath = (file: string) => `${base}/images/${file}`;
 
+export const title = 'Projects';
 
-const MY_PROJECTS: Array<Project> = [
+export const items: Array<Project> = [
 	{
 		slug: 'my-portfolio-website',
 		name: 'This Website',
@@ -28,8 +29,8 @@ const MY_PROJECTS: Array<Project> = [
 		logo: Assets.Unknown,
 		bannerImage: Assets.Unknown,
 		period: {
-			from: new Date(2022,1,20),
-			to: new Date(2023,1,20),
+			from: new Date(2022, 1, 20),
+			to: new Date(2023, 1, 20),
 		},
 		skills: getSkills('svelte', 'ts', 'css', 'js', 'html'),
 		type: 'Website Template'
@@ -185,5 +186,3 @@ const MY_PROJECTS: Array<Project> = [
 		// ]
 	},
 ];
-
-export default MY_PROJECTS;

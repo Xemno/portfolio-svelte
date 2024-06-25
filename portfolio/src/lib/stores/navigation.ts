@@ -1,4 +1,5 @@
 
 import { writable } from 'svelte/store';
 
-export const navItemTitle = writable<string>('Home');
+export const navItemTitle = writable<string>('');
+

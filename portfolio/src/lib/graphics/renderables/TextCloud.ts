@@ -44,6 +44,7 @@ export class TextCloud implements IRenderable {
 	private currParticlesPos: Array<THREE.Vector3> | null = null;
 
 	private particleMaterial = new THREE.MeshNormalMaterial({ transparent: true });
+
 	// private particleGeometry: THREE.BufferGeometry = new THREE.TorusGeometry(0.1, 0.05, 16, 50);
 
 	private currNav: NavItem = { idx: 0, id: '' }; // index into particlesGeometries array
@@ -118,8 +119,8 @@ export class TextCloud implements IRenderable {
 
 		// TODO: initialize position
 		this.particleSystem.position.x = 0;
-		this.particleSystem.position.y = 0;
-		this.particleSystem.position.z = 50;
+		this.particleSystem.position.y = 25;
+		this.particleSystem.position.z = 30;
 	}
 
 	private updateInstanceMatrix() {

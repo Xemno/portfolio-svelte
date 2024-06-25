@@ -2,14 +2,14 @@
 	import Carrousel from '$lib/components/Carrousel/Carrousel.svelte';
 	import Icon from '$lib/components/Icon/Icon.svelte';
 	import MainTitle from '$lib/components/MainTitle/MainTitle.svelte';
-	import { TITLE_SUFFIX } from '$lib/params';
-	import { HOME, getPlatfromIcon } from '$lib/params';
-	import MY_PROJECTS from '$lib/projects.params';
+	import { titleSuffix } from '@data/app';
+	import { links, description, lastName, name, title, skills } from '@data/home';
+	import { items as projectItems } from '@data/projects';
 	import { useTitle } from '$lib/utils/helpers';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import { isBlank } from '$lib/utils/helpers';
 
-	const { description, lastName, links, name, title, skills } = HOME;
+	import { getPlatfromIcon } from '$lib/utils';
 
 	// TODO: move to a Utility class
 	const isEmail = (email: string): boolean => {
@@ -21,7 +21,7 @@
 </script>
 
 <svelte:head>
-	<title>{useTitle(title, TITLE_SUFFIX)}</title>
+	<title>{useTitle(title, titleSuffix)}</title>
 </svelte:head>
 
 <div
@@ -63,5 +63,5 @@
 	</div>
 
 	<!-- TODO: hyperlink on click on an item of the caroussel, s.t. it redirects to that subpage -->
-	<Carrousel items={skills ?? MY_PROJECTS} />
+	<Carrousel items={projectItems} />
 </div>

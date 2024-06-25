@@ -3,6 +3,7 @@
 
 	let el: HTMLElement;
 
+	// export let color = '#ffffff60'; // NOTE: unused
 	export let active = false;
 	export let size = 'auto';
 	export let classes = '';
@@ -13,6 +14,13 @@
 			? 'bg-[var(--accent)] hover:bg-[var(--accent-hover)]'
 			: 'bg-transparent hover:bg-[var(--main-hover)]'
 	} ${classes}`;
+
+	// $: {
+	// 	if (el) {
+	// 		el.style.setProperty('--border-color', color);
+	// 		el.style.setProperty('--bg-color', color);
+	// 	}
+	// }
 
 	onMount(() => {
 		el.style.setProperty('--size', size);
@@ -32,3 +40,18 @@
 >
 	<slot />
 </svelte:element>
+
+<!-- TODO: define a new Chip for filter buttons in Projects, since these need a different background color -->
+<!-- <style lang="scss">
+	.chip {
+		--border-color: transparent;
+		--bg-color: transparent;
+		
+		// TODO: define new color for chip background that changes with dark mode
+		background: var(--main); // TODO: change color so it is not so dark like the other cards
+
+		&:hover {
+			border-color: var(--border-hover);
+		}
+	}
+</style> -->

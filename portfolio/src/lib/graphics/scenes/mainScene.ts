@@ -1,14 +1,11 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { NAMED_COLORS } from '$lib/utils/colors';
-import { SimplexPlane } from "../renderables/SimplexPlane"
+import { SimplexPlane } from "../renderables/SimplexPlane";
 import { TextCloud } from '../renderables/TextCloud';
 import type IRenderable from '../renderables/IRenderable';
 import type { NavItem } from '$lib/types';
-import { navItems } from '$lib/params';
-
-
-
+import { items as navItems } from '@data/navbar';
 
 
 let conf = {
@@ -56,6 +53,8 @@ export default class MainScene {
 		// this.camera.rotation.x += Math.PI/3;
 
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: canvas });
+		// this.renderer.setPixelRatio(window.devicePixelRatio);
+
 		this.clock = new THREE.Clock();
 		this.controls = new OrbitControls(this.camera, this.renderer.domElement);;
 
@@ -73,11 +72,11 @@ export default class MainScene {
 
 		// initialies TextCloud
 		let texts: Array<NavItem> = new Array<NavItem>();
-		texts.push({idx: 0, id: 'Qais El Okaili'}); // first item
+		texts.push({ idx: 0, id: 'Qais El Okaili' }); // first item
 		Array.from(navItems).forEach(function (item, idx) {
-			texts.push({idx: idx + 1, id: item.title});
+			texts.push({ idx: idx + 1, id: item.title });
 		});
-		texts.push({idx: 7, id: 'Search'}); // last item
+		texts.push({ idx: 7, id: 'Search' }); // last item
 		this.textCloud = new TextCloud(this.scene, texts, initialText);
 
 
@@ -87,7 +86,7 @@ export default class MainScene {
 	}
 
 	public themeCallback(val: boolean) {
-		console.log("themeCallback: " + val)
+		console.log("themeCallback: " + val);
 		if (val) {
 			// dark mode
 			this.scene.fog!.color = new THREE.Color(NAMED_COLORS.diserria);
@@ -100,27 +99,29 @@ export default class MainScene {
 		}
 	}
 
-	public onNavigationChange( item: NavItem) {
-		console.log('::: ', item);
+	public onNavigationChange(item: NavItem) {
+		// console.log('::: ', item);
 		this.textCloud.onNavigationChange(item);
 	}
 
 	public start(): void {
-		this.update();
+		this.update(0);
 	}
 
 	public stop(): void {
 		cancelAnimationFrame(this.animFrameId);
 	}
 
-	private update(): void {
+	private update(time: number): void {
 		this.animFrameId = requestAnimationFrame(this.update.bind(this));
 		const delta = this.clock.getDelta();
-		const time = this.clock.getElapsedTime() * 10;
+		const time2 = this.clock.getElapsedTime() * 10;
+		// console.log('time: ', time, '  - ', time2);
+
 
 		this.renderables.forEach((item) => {
 			item.update(delta, this.mouseScreenPos);
-		})
+		});
 
 		this.controls.update(delta);
 
@@ -134,7 +135,7 @@ export default class MainScene {
 
 	private addResizeSupport(): void {
 		this.onWindowResize(this.camera, this.renderer); // initial call to set renderHeight and renderWidth
-		window.addEventListener('resize', () => { this.onWindowResize(this.camera, this.renderer) }, false);
+		window.addEventListener('resize', () => { this.onWindowResize(this.camera, this.renderer); }, false);
 	}
 
 	private onWindowResize(camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer): void {
@@ -142,7 +143,7 @@ export default class MainScene {
 		this.windowScreenHeight = window.innerHeight;
 
 		if (renderer && camera) {
-			console.log('width: ' + this.windowScreenWidth + ' height: ' + this.windowScreenHeight)
+			console.log('width: ' + this.windowScreenWidth + ' height: ' + this.windowScreenHeight);
 
 			renderer.setSize(this.windowScreenWidth, this.windowScreenHeight);
 			camera.aspect = this.windowScreenWidth / this.windowScreenHeight;

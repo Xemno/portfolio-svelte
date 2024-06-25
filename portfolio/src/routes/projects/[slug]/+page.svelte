@@ -1,11 +1,11 @@
 <script lang="ts">
+	import type { Project } from '$lib/types';
+	import { base } from '$app/paths';
+	import { getAssetURL } from '$lib/data/assets';
+	import { title } from '@data/projects';
+
 	import CardLogo from '$lib/components/Card/CardLogo.svelte';
 	import MainTitle from '$lib/components/MainTitle/MainTitle.svelte';
-
-	import { base } from '$app/paths';
-	import type { Project } from '$lib/types';
-	import { getAssetURL } from '$lib/data/assets';
-	import { PROJECTS } from '$lib/params';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import TabTitle from '$lib/components/TabTitle.svelte';
 	import Chip from '$lib/components/Chip/Chip.svelte';
@@ -15,10 +15,14 @@
 
 	export let data: { project?: Project };
 
-	const { title } = PROJECTS;
-
 	const screenshots = data.project?.screenshots ?? [];
 
+	let screenIndex: number | undefined = undefined;
+
+	$: screenshot =
+		typeof screenIndex !== 'undefined' && screenshots[screenIndex]
+			? screenshots[screenIndex]
+			: undefined;
 	$: computedTitle = data.project ? `${data.project.name} - ${title}` : title;
 </script>
 
@@ -32,7 +36,7 @@
 		</div>
 	{:else}
 		<div class="flex flex-col items-center overflow-x-hidden">
-			<Banner img={getAssetURL(data.project.bannerImage)}> 
+			<Banner img={getAssetURL(data.project.bannerImage)}>
 				<div class="col-center p-y-20">
 					<div class="text-0.9em">
 						<MainTitle>{data.project.name}</MainTitle>
@@ -70,7 +74,7 @@
 					</div>
 				</div>
 			</Banner>
-			
+
 			<div class="pt-3 pb-1 overflow-x-hidden w-full">
 				<div class="px-10px m-y-5 blurred-box">
 					{#if data.project.description}
@@ -87,7 +91,7 @@
 				</div>
 				{#if screenshots.length > 0}
 					<div
-						class="px-10px grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 m-t-10 "
+						class="px-10px grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 m-t-10"
 					>
 						{#each screenshots as item}
 							<div class="col-center gap-3 overflow-hidden w-100% h-100% rounded-5px">
@@ -101,7 +105,6 @@
 						<UIcon icon="i-carbon-image" classes="text-3.5em" />
 						<p class="font-300">No screenshots</p>
 					</div> -->
-
 				{/if}
 			</div>
 		</div>
@@ -109,5 +112,4 @@
 </div>
 
 <style lang="scss">
-
 </style>

@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
-	import { HOME } from '$lib/params';
 	import { theme, toggleTheme } from '$lib/stores/theme';
-	import { navItems } from '$lib/params';
+	import { items } from '@data/navbar';
+	import * as HOME from '@data/home';
+
 	import UIcon from '../Icon/UIcon.svelte';
 
-	let currentRoute = '/'; // Home
+	$: currentRoute = $page.url.pathname;
 
 	let expanded = false;
 
@@ -45,7 +46,7 @@
 			{HOME.lastName}
 		</div>
 		<div class="flex-row flex-1 self-center h-full justify-center hidden md:flex">
-			{#each navItems as item}
+			{#each items as item}
 				<a href={`${base}${item.to}`} class="nav-menu-item !text-[var(--secondary-text)]">
 					<UIcon icon={item.icon} classes="text-1.3em" />
 					<span class="nav-menu-item-label">{item.title}</span>
@@ -87,7 +88,7 @@
 	</nav>
 	<div class={`nav-menu-mobile ${expanded ? 'nav-menu-mobile-open' : ''} md:hidden`}>
 		<div class="flex-col flex-1 self-center h-full justify-center m-t-7">
-			{#each navItems as item}
+			{#each items as item}
 				<a
 					href={`${base}${item.to}`}
 					class="nav-menu-item !text-[var(--secondary-text)] gap-5"

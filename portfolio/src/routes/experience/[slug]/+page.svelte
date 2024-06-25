@@ -1,22 +1,20 @@
 <script lang="ts">
-	import CardLogo from '$lib/components/Card/CardLogo.svelte';
-	import MainTitle from '$lib/components/MainTitle/MainTitle.svelte';
+	import type { Experience } from '$lib/types';
 
 	import { base } from '$app/paths';
-	import type { Experience } from '$lib/types';
 	import { getAssetURL } from '$lib/data/assets';
-	import { EXPERIENCES } from '$lib/params';
+	import { getTimeDiff } from '$lib/utils';
+	import { title } from '@data/experience';
 	import Markdown from '$lib/components/Markdown.svelte';
+	import MainTitle from '$lib/components/MainTitle/MainTitle.svelte';
 	import TabTitle from '$lib/components/TabTitle.svelte';
 	import Chip from '$lib/components/Chip/Chip.svelte';
 	import Banner from '$lib/components/Banner/Banner.svelte';
 	import UIcon from '$lib/components/Icon/UIcon.svelte';
 	import CardDivider from '$lib/components/Card/CardDivider.svelte';
-	import { getTimeDiff } from '$lib/utils';
+	import CardLogo from '$lib/components/Card/CardLogo.svelte';
 
 	export let data: { experience?: Experience };
-
-	const { title } = EXPERIENCES;
 
 	$: computedTitle = data.experience ? `${data.experience.name} - ${title}` : title;
 </script>

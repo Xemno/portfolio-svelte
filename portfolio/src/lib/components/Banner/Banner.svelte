@@ -23,5 +23,8 @@
 			no-repeat 110% 45% / 50% var(--bg-img);
 
 		border-block-end: 1px solid var(--border);
+
+		// backdrop-filter: blur(40px);
+
 	}
 </style>

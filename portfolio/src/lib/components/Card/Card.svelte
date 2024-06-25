@@ -15,7 +15,7 @@
 
 	$: computedColor = isHexColor(color) ? color : convertNamedToHexColor(color as NamedColor);
 	$: borderColor = changeColorOpacity(computedColor, 0.5);
-	$: dropColor = changeColorOpacity(computedColor, 0.15);
+	$: dropColor = changeColorOpacity(computedColor, 0.2);
 	$: bgColor = changeColorOpacity(computedColor, 0.01);
 
 	$: {
@@ -92,6 +92,8 @@
 		background: linear-gradient(90deg, var(--main) 0%, var(--main) 60%, var(--main-60) 100%),
 			no-repeat right 40% / 40% var(--bg-img);
 
+		backdrop-filter: blur(10px);
+
 		&-bg-img {
 			&:hover {
 				background-color: var(--bg-color);
@@ -104,7 +106,7 @@
 		}
 
 		&:hover {
-			transform: perspective(1000px) rotateX(var(--rot-x)) rotateY(var(--rot-y)) scale(1.01);
+			transform: perspective(1000px) rotateX(var(--rot-x)) rotateY(var(--rot-y)) scale(1.02); // NOTE: learn from this
 			border-color: var(--border-hover);
 		}
 	}

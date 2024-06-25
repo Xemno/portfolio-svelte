@@ -1,8 +1,13 @@
+import type { Item, NavItem, Skill } from '$lib/types';
+
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import type { Item, Skill } from '$lib/types';
+import { links, description, lastName, name, title, skills } from '@data/home';
+import { items as navItems } from '@data/navbar';
 
 dayjs.extend(duration);
+
+export type ItemOrSkill = Item | Skill;
 
 export const countMonths = (from: Date, to: Date = new Date()): number => {
 	let firstYear = 0;
@@ -83,7 +88,26 @@ export const isBlank = (str: string): boolean => {
 	return str.trim().length === 0;
 };
 
-type ItemOrSkill = Item | Skill;
+export function routeToName(route: string): NavItem {
+	let navItem: NavItem = { idx: 0, id: name + ' ' + lastName }; // default is home
+
+	route = route.replaceAll('/', '');
+
+	Array.from(navItems).forEach(function (item, idx) {
+		const it = item.to.replaceAll('/', '');
+		if (route === it) {
+			navItem = { idx: idx + 1, id: item.title };
+			return;
+		}
+	});
+
+	// search page
+	if (route === 'search') {
+		navItem = { idx: navItems.length + 1, id: "Search" };
+	}
+
+	return navItem;
+}
 
 
 export function filterItemsByQuery<T extends ItemOrSkill>(
