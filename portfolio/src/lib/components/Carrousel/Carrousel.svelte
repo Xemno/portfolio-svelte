@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { Skill } from '$lib/types';
+
+	import { onMount } from 'svelte';
+	import { base } from '$app/paths';
 	import { getAssetURL } from '$lib/data/assets';
 	import UIcon from '../Icon/UIcon.svelte';
-	import { base } from '$app/paths';
-
 	import CardLogo from '$lib/components/Card/CardLogo.svelte';
 	import Chip from '$lib/components/Chip/Chip.svelte';
-
 
 	export let items: Array<Skill> = [];
 	const delay = 2500;
@@ -91,7 +90,7 @@
 				<span class="text-center m-t-20px">{item.name}</span>
 			</div> -->
 
-			<Chip href={`${base}/projects/${item.slug}`} >
+			<Chip href={`${base}/projects/${item.slug}`}>
 				<CardLogo
 					src={getAssetURL(item.logo)}
 					alt={item.name}
@@ -101,7 +100,6 @@
 				/>
 				<span class="col-center text-center m-t-20px">{item.name}</span>
 			</Chip>
-
 		{/each}
 	</div>
 
