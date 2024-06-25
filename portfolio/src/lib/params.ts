@@ -2,6 +2,9 @@ import MY_EXPERIENCES from './experiences.params';
 import MY_PROJECTS from './projects.params';
 import MY_SKILLS from './skills.params';
 import { MY_EDUCATIONS } from './educations.params';
+import { Icons } from './utils';
+import descMainPage from './md/descMainPage.md?raw';
+import type { NavItem } from '$lib/types';
 import {
 	Platform,
 	type HomePageParams,
@@ -12,12 +15,9 @@ import {
 	type SearchPageParams,
 	type EducationPageParams
 } from './types';
-import { Icons } from './utils';
-import descMainPage from './md/descMainPage.md?raw';
-import type { NavItem } from '$lib/types';
+
 
 export const TITLE_SUFFIX = 'Portfolio';
-
 export const NavBar = {
 	home: 'Qais El Okaili',
 	projects: 'Projects',
@@ -39,26 +39,25 @@ export const navItems = [
 ] as const;
 
 export function routeToName(route: string): NavItem {
-	let navItem : NavItem = {idx: 0, id: HOME.name + ' ' + HOME.lastName}; // default is home
-	
+	let navItem: NavItem = { idx: 0, id: HOME.name + ' ' + HOME.lastName }; // default is home
+
 	route = route.replaceAll('/', '');
 
 	Array.from(navItems).forEach(function (item, idx) {
 		const it = item.to.replaceAll('/', '');
 		if (route === it) {
-			navItem = {idx: idx + 1, id: item.title};
+			navItem = { idx: idx + 1, id: item.title };
 			return;
 		}
 	});
 
 	// search page
 	if (route === 'search') {
-		navItem = {idx: navItems.length + 1, id: "Search"};
+		navItem = { idx: navItems.length + 1, id: "Search" };
 	}
 
-	console.log('::', navItem, ' - ', route);
-	
-	
+	// console.log('::', navItem, ' - ', route);
+
 	return navItem;
 }
 

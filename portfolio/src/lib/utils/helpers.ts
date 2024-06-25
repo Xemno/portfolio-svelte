@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import type { Item, Skill } from '$lib/types';
 
 dayjs.extend(duration);
 
@@ -51,7 +52,7 @@ export function getTimeDiff(date1: Date, date2 = new Date(Date.now() + 1000 * 60
 	let d = 0;
 	let tStr = 'day';
 	let m = 0;
-	let x = 'month'
+	let x = 'month';
 
 	if (duration.as('days') <= 7) {
 		tStr = 'day';
@@ -71,7 +72,7 @@ export function getTimeDiff(date1: Date, date2 = new Date(Date.now() + 1000 * 60
 	d = Math.trunc(d);
 
 	return `${Math.trunc(d)} ${tStr}${d > 1 ? 's' : ''} 
-			${m > 0 ? Math.trunc(m) : '' } ${m > 0 ? x : ''}${m > 1 ? 's' : ''}`;
+			${m > 0 ? Math.trunc(m) : ''} ${m > 0 ? x : ''}${m > 1 ? 's' : ''}`;
 }
 
 export const inInterval = (min: number, value: number, max: number): boolean => {
@@ -81,3 +82,44 @@ export const inInterval = (min: number, value: number, max: number): boolean => 
 export const isBlank = (str: string): boolean => {
 	return str.trim().length === 0;
 };
+
+type ItemOrSkill = Item | Skill;
+
+
+export function filterItemsByQuery<T extends ItemOrSkill>(
+	items: Array<T>,
+	query: string
+): Array<T> {
+	const ignoredProperties = ['logo', 'links', 'color', 'screenshots'];
+	query = query.toLowerCase();
+
+	return items.filter((item) => doesQueryExistInItemOrAttributes(item, query, ignoredProperties));
+}
+
+function doesQueryExistInItemOrAttributes(
+	item: any,
+	query: string,
+	ignoredProperties: string[] = []
+): boolean {
+	if (Array.isArray(item)) {
+		return item.some((subItem) => doesQueryExistInItemOrAttributes(subItem, query));
+	} else if (typeof item === 'object' && item !== null) {
+		if (item instanceof Date) {
+			const dateFormats = [
+				item.toString().toLowerCase(), 																			// Full date string
+				item.toLocaleDateString('default', { month: 'long', year: 'numeric' }).toLowerCase(), 					// "January 2023"
+				item.toLocaleDateString('default', { day: 'numeric', month: 'long', year: 'numeric' }).toLowerCase(), 	// "15 January 2023"
+				item.toLocaleDateString('en-US').toLowerCase(), 														// "1/15/2023"
+				item.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toLowerCase() 	// "Jan 15, 2023"
+			];
+			return dateFormats.some((dateStr) => dateStr.includes(query));
+		} else {
+			return Object.keys(item).some(
+				(key) =>
+					!ignoredProperties.includes(key) && doesQueryExistInItemOrAttributes(item[key], query)
+			);
+		}
+	} else {
+		return item.toString().toLowerCase().includes(query);
+	}
+}
