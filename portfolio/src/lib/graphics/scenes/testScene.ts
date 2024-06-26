@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 
-import shaderVert from '$lib/graphics/shaders/ImageBlendEffect/blendVert.glsl'
-import shaderFrag from '$lib/graphics/shaders/ImageBlendEffect/blendFrag.glsl'
+import shaderVert from '$lib/graphics/shaders/ImageBlendEffect/blendVert.glsl';
+import shaderFrag from '$lib/graphics/shaders/ImageBlendEffect/blendFrag.glsl';
 
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise"
+import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise";
 
 
 const MOUSE_WHEEL_EVENT = "wheel";
@@ -72,15 +72,15 @@ class ScrollPos {
 			let delta = this.lastDelta - event.targetTouches[0].clientY;
 			this.accelerate(Math.sign(delta) * this.touchSpeed);
 			this.lastDelta = event.targetTouches[0].clientY;
-		})
+		});
 
 		window.addEventListener(TOUCH_END, event => {
 			this.lastDelta = 0;
-		})
+		});
 
 		window.addEventListener(MOUSE_DOWN, event => {
 			this.mouseDown = true;
-		})
+		});
 
 		window.addEventListener(MOUSE_MOVE, event => {
 			if (this.mouseDown) {
@@ -88,12 +88,12 @@ class ScrollPos {
 				this.accelerate(Math.sign(delta) * this.touchSpeed * 0.4);
 				this.lastDelta = event.clientY;
 			}
-		})
+		});
 
 		window.addEventListener(MOUSE_UP, event => {
 			this.lastDelta = 0;
 			this.mouseDown = false;
-		})
+		});
 
 	}
 
@@ -124,7 +124,7 @@ class ScrollPos {
 		}
 	}
 	private project(steps = 1) {
-		if (steps === 1) return this.scrollPos + this.velocity * this.dampen
+		if (steps === 1) return this.scrollPos + this.velocity * this.dampen;
 		var scrollPos = this.scrollPos;
 		var velocity = this.velocity;
 
@@ -171,7 +171,7 @@ export default class TestScene {
 
 
 
-		console.log("Constructor called.")
+		console.log("Constructor called.");
 
 		// var myCanvas = document.getElementById("myCanvas");
 		canvas.width = IMAGE_SIZE;
@@ -190,7 +190,7 @@ export default class TestScene {
 		);
 		this.camera.position.set(0, 0, 10);
 
-		
+
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: canvas });
 
 		this.ctx = canvas.getContext("2d");
@@ -209,12 +209,12 @@ export default class TestScene {
 
 	private init(): void {
 
-		console.log("init() called.")
+		console.log("init() called.");
 
 
 		this.loadImages().then((images) => {
 			document.getElementById("loading")?.setAttribute('style', "display: none;");
-			console.log("'loading' attribute set for each image.")
+			console.log("'loading' attribute set for each image.");
 
 			this.initWithImageTextures(images);
 			this.ready = true;
@@ -225,13 +225,13 @@ export default class TestScene {
 
 	private initWithImageTextures(textures: any) {
 
-		console.log("initWithImageTextures() called.")
-		console.log("textures:", textures)
+		console.log("initWithImageTextures() called.");
+		console.log("textures:", textures);
 
 		this.textures = textures;
 
 		this.geometry = new THREE.PlaneGeometry(4.75, 7, 4, 4);
-		
+
 		this.material = new THREE.ShaderMaterial({
 			// NOTE: uniforms to pass on to shader
 			uniforms: {
@@ -243,10 +243,10 @@ export default class TestScene {
 			vertexShader: shaderVert,
 			fragmentShader: shaderFrag,
 		});
-		
+
 		// plane mesh
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
-		
+
 
 		this.scene.add(this.mesh);
 
@@ -297,7 +297,7 @@ export default class TestScene {
 	}
 
 	private render(): void {
-		this.renderer.clear()
+		this.renderer.clear();
 		this.renderer.render(this.scene, this.camera);
 	}
 
@@ -308,16 +308,16 @@ export default class TestScene {
 				case 38:
 					// UP
 					this.mouseWheel.acceleration -= KEYBOARD_ACCELERATION;
-					this.mouseWheel.update()
+					this.mouseWheel.update();
 					break;
 				case 34:
 				case 40:
 					// DOWN
 					this.mouseWheel.acceleration += KEYBOARD_ACCELERATION;
-					this.mouseWheel.update()
+					this.mouseWheel.update();
 					break;
 			}
-		})
+		});
 
 	}
 
@@ -330,13 +330,13 @@ export default class TestScene {
 					let img = document.createElement("img");
 					img.crossOrigin = "anonymous";
 					img.src = `${root}/${files[i]}.${ext}`;
-					console.log(img.src)
+					console.log(img.src);
 					img.onload = image => {
 						return resolve(image.target);
 					};
 				})
-				// .then(this.resizeImage)
-				.then(this.makeThreeTexture)
+					// .then(this.resizeImage)
+					.then(this.makeThreeTexture)
 			);
 		}
 		return Promise.all(promises);
@@ -347,12 +347,12 @@ export default class TestScene {
 		let { width, height } = image;
 		let newWidth = size / width;
 		let newHeight = size / height;
-		
+
 		if (this.ctx == null) {
-			console.log("this.ctx is null in resizeImage().")
+			console.log("this.ctx is null in resizeImage().");
 			return;
 		}
-		
+
 		this.ctx.drawImage(image, 0, 0, width, height, 0, 0, size, size);
 		return this.ctx.getImageData(0, 0, size, size);
 	}
@@ -360,7 +360,7 @@ export default class TestScene {
 	private makeThreeTexture(image: any) {
 		let tex = new THREE.Texture(image);
 		tex.needsUpdate = true;
-		return tex
+		return tex;
 	}
 
 	private updateTexture(pos: number) {
@@ -368,11 +368,11 @@ export default class TestScene {
 		var tex2 = this.textures[0];
 
 		if (tex2 != this.textures[Math.floor(pos / scrollPerImage)]) {
-			tex2 = this.textures[Math.floor(pos / scrollPerImage)]
+			tex2 = this.textures[Math.floor(pos / scrollPerImage)];
 			this.material.uniforms.tex2.value = tex2;
 		}
 		if (tex1 != this.textures[Math.floor(pos / scrollPerImage) + 1]) {
-			tex1 = this.textures[Math.floor(pos / scrollPerImage) + 1]
+			tex1 = this.textures[Math.floor(pos / scrollPerImage) + 1];
 			this.material.uniforms.tex1.value = tex1;
 		}
 	}
