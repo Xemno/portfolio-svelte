@@ -7,6 +7,10 @@ import { randomPointsInBufferGeometry } from '../utils/VectorUtils';
 import type { NavItem } from '$lib/types';
 import * as TWEEN from '@tweenjs/tween.js';
 
+import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
+import type { EasingFunction } from 'svelte/transition';
+
+
 interface IVertices {
 	[index: string]: {
 		x: number;
@@ -89,6 +93,11 @@ export class TextCloud implements IRenderable {
 			scene.add(this.particleSystem);
 
 			this.ready = true;
+
+			// play initial animation
+			if (initParams.idx == 0) {
+				this.startEntryAnimation(initParams);
+			}
 		});
 	}
 
@@ -170,41 +179,67 @@ export class TextCloud implements IRenderable {
 		return pos;
 	}
 
-	private morphTo(item: NavItem) {
-		const toPositionVectora: Array<THREE.Vector3> | null = this.getParticlePositions(item);
+	private startEntryAnimation(navItem: NavItem) {
+		// if Home nav
+		const sphereGeom = new THREE.SphereGeometry(16, 16, 16);
+		const sphere = new THREE.Mesh(sphereGeom);
+		sphere.position.x = 100;
+		sphere.position.setY(-100);
 
-		if (toPositionVectora == null) {
-			console.log('Error in morpTo, toPositionVectora == null.');
+		const sphereSampler = new MeshSurfaceSampler(sphere)
+			.setWeightAttribute('color')
+			.build();
+
+		let sphereParticlesPos: Array<THREE.Vector3> = new Array<THREE.Vector3>();
+		for (let i = 0; i < particleCount; ++i) {
+			const position = new THREE.Vector3();
+			sphereSampler.sample(position);
+			sphereParticlesPos.push(position);
+		}
+
+		const toPositionVectors: Array<THREE.Vector3> | null = this.getParticlePositions(navItem);
+
+		this.morphParticlesFromTo(sphereParticlesPos, toPositionVectors!, 2000, TWEEN.Easing.Cubic.Out);
+	}
+
+	private morphTo(navItem: NavItem) {
+		const toPositionVectors: Array<THREE.Vector3> | null = this.getParticlePositions(navItem);
+		this.morphParticlesTo(toPositionVectors!, 1000, TWEEN.Easing.Quartic.Out);
+	}
+
+	private morphParticlesFromTo(fromPosArray: Array<THREE.Vector3>, toPosArray: Array<THREE.Vector3>, time: number, easing: EasingFunction): void {
+		this.currParticlesPos = fromPosArray;
+		this.morphParticlesTo(toPosArray!, time, easing);
+	}
+
+	private morphParticlesTo(toPosArray: Array<THREE.Vector3>, time: number, easing: EasingFunction): void {
+		if (toPosArray == null) {
+			console.log('Error in morphParticles, toPosArray == null.');
 			return;
 		}
 		if (this.currParticlesPos == null) {
-			console.log('Error in morphTo, currParticlesPos == null.');
+			console.log('Error in morphParticles, currParticlesPos == null.');
 			return;
 		}
 
-		// TWEEN.getAll().forEach((tween) => {
-		// 	tween.stop();
-		// });
 		TWEEN.removeAll();
 
 		for (let i = 0; i < particleCount; ++i) {
 			let currPos: THREE.Vector3 = this.currParticlesPos[i];
-			let toPos: THREE.Vector3 = toPositionVectora[i];
+			let toPos: THREE.Vector3 = toPosArray[i];
 
 			const tween = new TWEEN.Tween(currPos)
-				.to(toPos, 1000)
-				.easing(TWEEN.Easing.Quartic.Out)
+				.to(toPos, time)
+				.easing(easing)
 				.onUpdate((pos) => {
 					let matrix: THREE.Matrix4 = new THREE.Matrix4();
 					matrix.makeTranslation(new THREE.Vector3(pos.x, pos.y, pos.z));
 
 					this.particleSystem.setMatrixAt(i, matrix);
-					this.particleSystem.instanceMatrix.needsUpdate = true;					
+					this.particleSystem.instanceMatrix.needsUpdate = true;
 				});
 			tween.start();
-
 		}
-
 	}
 
 }

@@ -7,6 +7,13 @@ import type IRenderable from '../renderables/IRenderable';
 import type { NavItem } from '$lib/types';
 import { items as navItems } from '@data/navbar';
 
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass.js';
+
+
 
 let conf = {
 	fov: 75,
@@ -43,6 +50,9 @@ export default class MainScene {
 	private windowScreenWidth: number = 0;
 	private windowScreenHeight: number = 0;
 
+	private composer!: EffectComposer;
+	private afterimagePass!: AfterimagePass;
+
 	private renderables: Array<IRenderable> = new Array<IRenderable>();
 
 	constructor(canvas: HTMLCanvasElement, initialText: NavItem) {
@@ -53,10 +63,42 @@ export default class MainScene {
 		// this.camera.rotation.x += Math.PI/3;
 
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: canvas });
+		this.renderer.setPixelRatio(window.devicePixelRatio);
+		// this.renderer.toneMapping = THREE.ReinhardToneMapping;
 		// this.renderer.setPixelRatio(window.devicePixelRatio);
 
+
+
 		this.clock = new THREE.Clock();
-		this.controls = new OrbitControls(this.camera, this.renderer.domElement);;
+		this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+
+		// TODO: https://github.com/mrdoob/three.js/blob/master/examples/webgl_postprocessing_unreal_bloom_selective.html
+		// TODO: selective bloom only on the particles
+		const params = {
+			threshold: 0,
+			strength: 1,
+			radius: 0.5,
+			exposure: 1
+		};
+
+		// NOTE: Bloom Pass
+		let renderScene = new RenderPass(this.scene, this.camera);
+		// const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+		// bloomPass.threshold = params.threshold;
+		// bloomPass.strength = params.strength;
+		// bloomPass.radius = params.radius;
+
+		this.composer = new EffectComposer(this.renderer);
+		this.composer.addPass(renderScene);
+		this.composer.setSize(window.innerWidth, window.innerHeight);
+		// this.composer.addPass(bloomPass); // NOTE: uncomment to add
+
+		// NOTE: After Image Pass
+		this.afterimagePass = new AfterimagePass(0.8);
+		this.composer.addPass(this.afterimagePass);
+		const outputPass = new OutputPass();
+		this.composer.addPass(outputPass);
+
 
 		this.initScene(initialText);
 	}
@@ -89,11 +131,15 @@ export default class MainScene {
 		console.log("themeCallback: " + val);
 		if (val) {
 			// dark mode
+			this.renderer.setClearColor(NAMED_COLORS.black, 1);
+
 			this.scene.fog!.color = new THREE.Color(NAMED_COLORS.diserria);
 			this.simplexPlane.setEmissive(NAMED_COLORS.black);
 
 		} else {
 			// white mode
+			this.renderer.setClearColor(NAMED_COLORS.white, 1);
+
 			this.scene.fog!.color = new THREE.Color(NAMED_COLORS.locust); // 0xffc857 0xa3b18a
 			this.simplexPlane.setEmissive(NAMED_COLORS.westar); //  0xf7ede2 0xf2e9e4 0xd6ccc2  0xd5bdaf
 		}
@@ -126,6 +172,7 @@ export default class MainScene {
 		this.controls.update(delta);
 
 		this.render();
+		this.composer.render();
 	}
 
 	private render(): void {
@@ -146,6 +193,7 @@ export default class MainScene {
 			console.log('width: ' + this.windowScreenWidth + ' height: ' + this.windowScreenHeight);
 
 			renderer.setSize(this.windowScreenWidth, this.windowScreenHeight);
+			this.composer.setSize(this.windowScreenWidth, this.windowScreenHeight);
 			camera.aspect = this.windowScreenWidth / this.windowScreenHeight;
 			camera.updateProjectionMatrix();
 			const wsize = this.getRendererSize(this.camera);
