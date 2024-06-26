@@ -102,15 +102,27 @@ export class TextCloud implements IRenderable {
 	}
 
 	private createParticleText(font: Font, text: string, idx: number): Array<THREE.Vector3> {
-		let geometry = new TextGeometry(text, {
+		const geometry = new TextGeometry(text, {
 			font: font,
-			size: window.innerWidth * 0.003,
+			size: window.innerWidth * 0.003, // TODO: window.innerWidth different for mobile and window
 			height: 1,
 			curveSegments: 10,
 		});
 		geometry.center();
 
-		return randomPointsInBufferGeometry(geometry, particleCount); // Coordinates of each particle
+		const textMesh = new THREE.Mesh(geometry);
+		const sampler = new MeshSurfaceSampler(textMesh)
+			.setWeightAttribute('color')
+			.build();
+
+		const particles: Array<THREE.Vector3> = new Array<THREE.Vector3>();
+		for (let i = 0; i < particleCount; ++i) {
+			const position = new THREE.Vector3;
+			sampler.sample(position);
+			particles.push(position);
+		}
+
+		return particles; //randomPointsInBufferGeometry(geometry, particleCount); // Coordinates of each particle
 	}
 
 	private initParticleSystem(font: Font, initParams: NavItem) {
