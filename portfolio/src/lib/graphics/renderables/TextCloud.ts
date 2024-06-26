@@ -95,9 +95,7 @@ export class TextCloud implements IRenderable {
 			this.ready = true;
 
 			// play initial animation
-			if (initParams.idx == 0) {
-				this.startEntryAnimation(initParams);
-			}
+			this.startEntryAnimation(initParams);
 		});
 	}
 
