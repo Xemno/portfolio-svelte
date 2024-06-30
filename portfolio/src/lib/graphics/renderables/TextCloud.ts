@@ -28,11 +28,14 @@ interface Item {
 type GeometryItems = Array<Item>;
 
 // Options
-const particleCount = 5000;
+const particleCount = 10000;
 const typeface = '/src/lib/graphics/fonts/optimer_bold.typeface.json';
 
 
 export class TextCloud implements IRenderable {
+
+	private clock = new THREE.Clock();
+
 	private lookAt?: THREE.Vector3;
 
 	private fontLoader = new FontLoader();
@@ -41,14 +44,38 @@ export class TextCloud implements IRenderable {
 
 	private particleSystem!: THREE.InstancedMesh;
 	// Instanced geometry
-	private particleGeometry: THREE.BufferGeometry = new THREE.SphereGeometry(0.15);
+	private particleGeometry: THREE.BufferGeometry = new THREE.CircleGeometry(0.15, 64, 64);
 
 	// Each entry is a text cloud of positions - used to set currParticles' position attribute
 	private particlesPositions: Array<Array<THREE.Vector3>> = new Array<Array<THREE.Vector3>>();
 	private currParticlesPos: Array<THREE.Vector3> | null = null;
 
-	private particleMaterial = new THREE.MeshNormalMaterial({ transparent: true });
+	// private particleMaterial = new THREE.MeshNormalMaterial({ transparent: true });
+	private material = new THREE.MeshStandardMaterial({
+		color: 0xffaf00,
+		alphaHash: true,
+		opacity: 0.7
+	});
 
+	// Define the shader uniforms
+	// private uniforms = {
+	// 	u_time: {
+	// 		type: "f",
+	// 		value: 0.0
+	// 	},
+	// 	u_resolution: {
+	// 		type: "v2",
+	// 		value: new THREE.Vector2(window.innerWidth, window.innerHeight)
+	// 			.multiplyScalar(window.devicePixelRatio)
+	// 	},
+	// 	u_mouse: {
+	// 		type: "v2",
+	// 		value: new THREE.Vector2(0.7 * window.innerWidth, window.innerHeight)
+	// 			.multiplyScalar(window.devicePixelRatio)
+	// 	}
+	// };
+
+	private resolution: THREE.Vector2;
 	// private particleGeometry: THREE.BufferGeometry = new THREE.TorusGeometry(0.1, 0.05, 16, 50);
 
 	private currNav: NavItem = { idx: 0, id: '' }; // index into particlesGeometries array
@@ -56,7 +83,7 @@ export class TextCloud implements IRenderable {
 	// private tween!: TWEEN.Tween<THREE.TypedArray>;;
 	// private activeTweens: Array<TWEEN.Tween<Array<THREE.Vector3>>> = new Array();
 
-	constructor(scene: THREE.Scene, navItems: Array<NavItem>, initParams: NavItem, pos?: THREE.Vector3, lookAt?: THREE.Vector3) {
+	constructor(scene: THREE.Scene, navItems: Array<NavItem>, initParams: NavItem, resolution?: THREE.Vector2, pos?: THREE.Vector3, lookAt?: THREE.Vector3) {
 		// TODO: wip - properly position this element based on div/h1 element
 		// let mainTitleText: (HTMLElement | null) = document.getElementById("main-title");
 		// if (mainTitleText != null) {
@@ -64,6 +91,7 @@ export class TextCloud implements IRenderable {
 		// 	console.log('mainTitleText: ', mainTitleText);
 		// 	console.log('top: ', top, ' bottom: ', bottom);
 		// }
+		this.resolution = new THREE.Vector2(resolution?.x, resolution?.y);
 
 		// load font and execute onLoad callback
 		this.fontLoader.load(typeface, (font) => {
@@ -132,7 +160,7 @@ export class TextCloud implements IRenderable {
 		}
 
 		// initialize particle system
-		this.particleSystem = new THREE.InstancedMesh(this.particleGeometry, this.particleMaterial, particleCount);
+		this.particleSystem = new THREE.InstancedMesh(this.particleGeometry, this.material, particleCount);
 		this.particleSystem.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
 		this.updateInstanceMatrix();
 
@@ -162,6 +190,8 @@ export class TextCloud implements IRenderable {
 
 		const result = TWEEN.update();
 		// this.tween.update(deltaTime);
+
+		// this.uniforms.u_time.value = this.clock.getElapsedTime();
 	}
 
 	public onNavigationChange(item: NavItem) {
@@ -170,9 +200,34 @@ export class TextCloud implements IRenderable {
 		this.transitionTo(item);
 	}
 
+	public onWindowResize() {
+		// Update the resolution uniform
+		// this.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight).multiplyScalar(window.devicePixelRatio);
+	}
+
+	// Updates the uniforms when the mouse moves
+	public onMouseMove(event: MouseEvent) {
+		// Update the mouse uniform
+		// this.uniforms.u_mouse.value.set(event.pageX, window.innerHeight - event.pageY).multiplyScalar(window.devicePixelRatio);
+	}
+
+	// Updates the uniforms when the touch moves
+	public onTouchMove(event: TouchEvent) {
+		// Update the mouse uniform
+		// this.uniforms.u_mouse.value.set(event.touches[0].pageX, window.innerHeight - event.touches[0].pageY).multiplyScalar(window.devicePixelRatio);
+	}
+
 	public transitionTo(item: NavItem) {
 		this.morphTo(item);
 		this.currNav = item;
+	}
+
+	public getPosition(): THREE.Vector3 {
+		return this.particleSystem.position;
+	}
+
+	public getParticleSystem() {
+		return this.particleSystem;
 	}
 
 	private getParticlePositions(item: NavItem): Array<THREE.Vector3> | null {

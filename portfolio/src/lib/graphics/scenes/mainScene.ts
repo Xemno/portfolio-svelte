@@ -1,18 +1,19 @@
+import type IRenderable from '../renderables/IRenderable';
+import type { NavItem } from '$lib/types';
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { NAMED_COLORS } from '$lib/utils/colors';
 import { SimplexPlane } from "../renderables/SimplexPlane";
 import { TextCloud } from '../renderables/TextCloud';
-import type IRenderable from '../renderables/IRenderable';
-import type { NavItem } from '$lib/types';
 import { items as navItems } from '@data/navbar';
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
-import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass.js';
-
+import { TAARenderPass } from 'three/examples/jsm/postprocessing/TAARenderPass.js';
+import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 
 
 let conf = {
@@ -35,14 +36,15 @@ export default class MainScene {
 	private renderer: THREE.WebGLRenderer;
 	private clock: THREE.Clock;
 
-	private controls: OrbitControls;
+	// private controls: OrbitControls;
 	private simplexPlane!: SimplexPlane;
 	private textCloud!: TextCloud;
 
-	private mouseScreenPos = new THREE.Vector2();
-	private mouseWorldPosition = new THREE.Vector3();
+	private normalizedMouseScreenPos = new THREE.Vector2();
+	private normalizedTouchScreenPos = new THREE.Vector2();
+	// private mouseWorldPosition = new THREE.Vector3();
 	private mousePlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-	private raycaster = new THREE.Raycaster();
+	// private raycaster = new THREE.Raycaster();
 
 	private animFrameId: number = -1;
 	private renderWidth: number = 0;
@@ -51,7 +53,15 @@ export default class MainScene {
 	private windowScreenHeight: number = 0;
 
 	private composer!: EffectComposer;
-	private afterimagePass!: AfterimagePass;
+
+
+	// private lightMesh!: THREE.Mesh;
+
+	// private shaderMaterial!: THREE.ShaderMaterial;
+	// private uniforms = {
+	// 	u_time: { type: "f", value: 1.0 },
+	// 	u_resolution: { type: "v2", value: new THREE.Vector2() },
+	// };
 
 	private renderables: Array<IRenderable> = new Array<IRenderable>();
 
@@ -66,37 +76,47 @@ export default class MainScene {
 		this.renderer.setPixelRatio(window.devicePixelRatio);
 		// this.renderer.toneMapping = THREE.ReinhardToneMapping;
 		// this.renderer.setPixelRatio(window.devicePixelRatio);
+		this.renderer.toneMapping = THREE.CineonToneMapping; // TODO: enable for dark mode
+		this.renderer.toneMappingExposure = 0.75;
+
+		// this.renderer.toneMapping = THREE.ACESFilmicToneMapping; // TODO: enable for white mode
+		// this.renderer.toneMappingExposure = 0.75;
 
 
 
 		this.clock = new THREE.Clock();
-		this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+		// this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+		// this.controls.maxPolarAngle = Math.PI / 2.0;
 
 		// TODO: https://github.com/mrdoob/three.js/blob/master/examples/webgl_postprocessing_unreal_bloom_selective.html
 		// TODO: selective bloom only on the particles
 		const params = {
-			threshold: 0,
-			strength: 1,
-			radius: 0.5,
+			threshold: 10,
+			strength: 0.05,
+			radius: 0.01,
 			exposure: 1
 		};
 
 		// NOTE: Bloom Pass
-		let renderScene = new RenderPass(this.scene, this.camera);
-		// const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-		// bloomPass.threshold = params.threshold;
-		// bloomPass.strength = params.strength;
-		// bloomPass.radius = params.radius;
+		let renderpass = new RenderPass(this.scene, this.camera);
+		renderpass.clearAlpha = 0;
+
+		const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+		bloomPass.threshold = params.threshold;
+		bloomPass.strength = params.strength;
+		bloomPass.radius = params.radius;
+
+
+		const taaRenderPass = new TAARenderPass(this.scene, this.camera);
+		const afterimagePass = new AfterimagePass(0.5);
+		const outputPass = new OutputPass();
 
 		this.composer = new EffectComposer(this.renderer);
-		this.composer.addPass(renderScene);
 		this.composer.setSize(window.innerWidth, window.innerHeight);
-		// this.composer.addPass(bloomPass); // NOTE: uncomment to add
-
-		// NOTE: After Image Pass
-		this.afterimagePass = new AfterimagePass(0.8);
-		this.composer.addPass(this.afterimagePass);
-		const outputPass = new OutputPass();
+		this.composer.addPass(renderpass);
+		this.composer.addPass(taaRenderPass);
+		this.composer.addPass(bloomPass); // TODO: selective bloom only on the particles
+		this.composer.addPass(afterimagePass); // TODO: selective only on the particles, causes flickering on edges of SimplexPlane
 		this.composer.addPass(outputPass);
 
 
@@ -119,15 +139,31 @@ export default class MainScene {
 			texts.push({ idx: idx + 1, id: item.title });
 		});
 		texts.push({ idx: 7, id: 'Search' }); // last item
-		this.textCloud = new TextCloud(this.scene, texts, initialText);
+		this.textCloud = new TextCloud(this.scene, texts, initialText, new THREE.Vector2(this.renderer.domElement.width, this.renderer.domElement.height));
 
+		const lightTargetObj = new THREE.Object3D();
+		lightTargetObj.position.y = 150; // set above TextCloud
+		this.scene.add(lightTargetObj);
+
+		const lightMesh = new THREE.Mesh(
+			new THREE.SphereGeometry(1, 8, 8),
+			new THREE.MeshBasicMaterial({ color: 0xffffff })
+		);
+		const directionalLight = new THREE.DirectionalLight(THREE.Color.NAMES.whitesmoke, 300);
+		directionalLight.target = lightTargetObj; // NOTE: can't rotate, have to set target obj
+
+		lightMesh.add(directionalLight);
+		lightMesh.position.y = 22;
+		lightMesh.position.z = 50;
+
+		this.scene.add(lightMesh);
 
 		// init renderables to update
 		this.renderables.push(this.textCloud);
 		this.renderables.push(this.simplexPlane);
 	}
 
-	public themeCallback(val: boolean) {
+	public themeCallback(val: boolean) { // TODO: rename to onThemeChange
 		console.log("themeCallback: " + val);
 		if (val) {
 			// dark mode
@@ -151,28 +187,36 @@ export default class MainScene {
 	}
 
 	public start(): void {
-		this.update(0);
+		this.update();
 	}
 
 	public stop(): void {
 		cancelAnimationFrame(this.animFrameId);
 	}
 
-	private update(time: number): void {
+	private update(): void {
 		this.animFrameId = requestAnimationFrame(this.update.bind(this));
 		const delta = this.clock.getDelta();
-		const time2 = this.clock.getElapsedTime() * 10;
-		// console.log('time: ', time, '  - ', time2);
-
+		const time = this.clock.getElapsedTime();
 
 		this.renderables.forEach((item) => {
-			item.update(delta, this.mouseScreenPos);
+			item.update(delta, this.normalizedMouseScreenPos);
 		});
-
-		this.controls.update(delta);
 
 		this.render();
 		this.composer.render();
+		// this.controls.update(delta);
+
+		this.camera.position.x = - 1.5 * Math.sin(.5 * Math.PI * this.normalizedMouseScreenPos.x);
+		this.camera.position.y = 1.0 * Math.sin(.5 * Math.PI * this.normalizedMouseScreenPos.y);
+
+		// TODO: if mobile enable touch and disable above
+		// this.camera.position.x = - 1.5 * Math.sin(.5 * Math.PI * this.normalizedTouchScreenPos.x);
+		// this.camera.position.y = 1.0 * Math.sin(.5 * Math.PI * this.normalizedTouchScreenPos.y);
+
+		// update uniforms
+		// this.uniforms['u_time'].value = performance.now() / 1000;
+		// this.uniforms['u_resolution'].value = new THREE.Vector2(this.renderer.domElement.width, this.renderer.domElement.height);
 	}
 
 	private render(): void {
@@ -194,11 +238,17 @@ export default class MainScene {
 
 			renderer.setSize(this.windowScreenWidth, this.windowScreenHeight);
 			this.composer.setSize(this.windowScreenWidth, this.windowScreenHeight);
+
 			camera.aspect = this.windowScreenWidth / this.windowScreenHeight;
 			camera.updateProjectionMatrix();
 			const wsize = this.getRendererSize(this.camera);
 			this.renderWidth = wsize[0];
 			this.renderHeight = wsize[1];
+
+
+			if (this.textCloud != null) {
+				this.textCloud.onWindowResize();
+			}
 		}
 		// this.camera.aspect = window.innerWidth / window.innerHeight;
 		// this.camera.updateProjectionMatrix();  
@@ -206,19 +256,28 @@ export default class MainScene {
 	}
 
 	private addMouseInputSupport(): void {
-		document.addEventListener('mousemove', e => {
-			const v = new THREE.Vector3(); // TODO:
-			this.camera.getWorldDirection(v); // TODO:
-			v.normalize(); // TODO:
-			this.mousePlane.normal = v;
+		document.addEventListener('mousemove', event => {
+			// const v = new THREE.Vector3(); // TODO:
+			// this.camera.getWorldDirection(v); // TODO:
+			// v.normalize(); // TODO:
+			// this.mousePlane.normal = v;
 
-			this.mouseScreenPos.x = (e.clientX / this.windowScreenWidth) * 2 - 1;
-			this.mouseScreenPos.y = - (e.clientY / this.windowScreenHeight) * 2 + 1;
-
-			this.raycaster.setFromCamera(this.mouseScreenPos, this.camera);
-			this.raycaster.ray.intersectPlane(this.mousePlane, this.mouseWorldPosition); // TODO:mouseWorldPosition
+			// this.raycaster.setFromCamera(this.normalizedMouseScreenPos, this.camera);
+			// this.raycaster.ray.intersectPlane(this.mousePlane, this.mouseWorldPosition); // TODO:mouseWorldPosition
 			// console.log( this.raycaster.ray ); 
 			// console.log( this.mouseWorldPosition );
+
+			this.normalizedMouseScreenPos.x = (event.clientX / this.windowScreenWidth) * 2 - 1;
+			this.normalizedMouseScreenPos.y = - (event.clientY / this.windowScreenHeight) * 2 + 1;
+
+			this.textCloud.onMouseMove(event);
+		});
+
+		document.addEventListener('touchmove', event => {
+			this.normalizedTouchScreenPos.x = (event.changedTouches[0].clientX / this.windowScreenWidth) * 2 - 1;
+			this.normalizedTouchScreenPos.y = - (event.changedTouches[0].clientY / this.windowScreenHeight) * 2 + 1;
+
+			this.textCloud.onTouchMove(event);
 		});
 	}
 
