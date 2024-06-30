@@ -40,7 +40,6 @@ export const NAMED_COLORS = {
 	darkseagreen: '#8FBC8F',
 	darkslateblue: '#483D8B',
 	darkslategray: '#2F4F4F',
-	darkslategrey: '#2F4F4F',
 	darkturquoise: '#00CED1',
 	darkviolet: '#9400D3',
 	deeppink: '#FF1493',
@@ -148,7 +147,8 @@ export const NAMED_COLORS = {
 	white: '#FFFFFF',
 	whitesmoke: '#F5F5F5',
 	yellow: '#FFFF00',
-	yellowgreen: '#9ACD32'
+	yellowgreen: '#9ACD32',
+	yellowsea: '#FFAF00'
 } as const;
 
 export type NamedColor = keyof typeof NAMED_COLORS;

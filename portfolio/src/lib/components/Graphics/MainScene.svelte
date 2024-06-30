@@ -12,7 +12,7 @@
 
 	onMount(() => {
 		scene = new MainScene(canvas, routeToName($page.url.pathname));
-		theme.subscribe((v) => scene.themeCallback(v));
+		theme.subscribe((v) => scene.onThemeChange(v));
 		page.subscribe((v) => scene.onNavigationChange(routeToName(v.url.pathname)));
 		scene.start();
 
