@@ -1,4 +1,5 @@
 export default interface IRenderable {
 	update(deltaTime: number, mouseScreenPos: THREE.Vector2 | void): void;
-	// TODO: onNavigationChange
+	onThemeChange(val: boolean): void;
+	onWindowResize(width: number, height: number): void;
 }

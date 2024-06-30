@@ -198,6 +198,22 @@ export class TextCloud implements IRenderable {
 		this.transitionTo(item);
 	}
 
+	public onThemeChange(val: boolean) { // TODO: rename to onThemeChange
+		console.log("themeCallback: " + val);
+		if (val) {
+			// dark mode
+			this.material.color = new THREE.Color(NAMED_COLORS.yellowsea);
+			this.material.opacity = 0.7;
+			this.material.alphaHash = true;
+
+		} else {
+			// white mode
+			this.material.color = new THREE.Color(NAMED_COLORS.dimgray);
+			this.material.opacity = 0.8;
+			this.material.alphaHash = true;
+		}
+	}
+
 	public onWindowResize() {
 		// Update the resolution uniform
 		// this.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight).multiplyScalar(window.devicePixelRatio);
@@ -215,21 +231,6 @@ export class TextCloud implements IRenderable {
 		// this.uniforms.u_mouse.value.set(event.touches[0].pageX, window.innerHeight - event.touches[0].pageY).multiplyScalar(window.devicePixelRatio);
 	}
 
-	public onThemeChange(val: boolean) { // TODO: rename to onThemeChange
-		console.log("themeCallback: " + val);
-		if (val) {
-			// dark mode
-			this.material.color = new THREE.Color(NAMED_COLORS.yellowsea);
-			this.material.opacity = 0.7;
-			this.material.alphaHash = true;
-
-		} else {
-			// white mode
-			this.material.color = new THREE.Color(NAMED_COLORS.dimgray);
-			this.material.opacity = 0.8;
-			this.material.alphaHash = true;
-		}
-	}
 
 	public transitionTo(item: NavItem) {
 		this.morphTo(item);

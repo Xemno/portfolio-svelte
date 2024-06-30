@@ -178,8 +178,9 @@ export default class MainScene {
 			this.directionalLight.intensity = 10;
 		}
 
-		this.simplexPlane.onThemeChange(val);
-		this.textCloud.onThemeChange(val);
+		this.renderables.forEach((item) => {
+			item.onThemeChange(val);
+		});
 	}
 
 	public onNavigationChange(item: NavItem) {
@@ -232,7 +233,7 @@ export default class MainScene {
 
 	private onWindowResize(camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer): void {
 		this.windowScreenWidth = window.innerWidth;
-		this.windowScreenHeight = window.innerHeight;
+		this.windowScreenHeight = window.innerHeight;		
 
 		if (renderer && camera) {
 			console.log('width: ' + this.windowScreenWidth + ' height: ' + this.windowScreenHeight);
@@ -246,10 +247,9 @@ export default class MainScene {
 			this.renderWidth = wsize[0];
 			this.renderHeight = wsize[1];
 
-
-			if (this.textCloud != null) {
-				this.textCloud.onWindowResize();
-			}
+			this.renderables.forEach((item) => {
+				item.onWindowResize(this.windowScreenWidth, this.windowScreenHeight);
+			});
 		}
 		// this.camera.aspect = window.innerWidth / window.innerHeight;
 		// this.camera.updateProjectionMatrix();  
