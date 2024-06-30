@@ -1,8 +1,7 @@
 import * as THREE from 'three';
-import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise"
+import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise";
 import type IRenderable from './IRenderable';
-import { type Color } from '$lib/utils/colors';
-
+import { NAMED_COLORS, type Color } from '$lib/utils/colors';
 
 let conf = {
 	xyCoef: 50,
@@ -15,12 +14,17 @@ export class SimplexPlane implements IRenderable {
 	private geometry: THREE.PlaneGeometry;
 	private material: THREE.MeshLambertMaterial;
 
+	private resolution: THREE.Vector2;
+
 	private elapsedTime: number = 0;
 
-	constructor(width?: number, height?: number, widthSegments?: number, heightSegments?: number) {
+	constructor(width?: number, height?: number, widthSegments?: number, heightSegments?: number, resolution?: THREE.Vector2) {
 		this.geometry = new THREE.PlaneGeometry(width, height, widthSegments, heightSegments);
 		this.simplexNoise = new SimplexNoise();
 		this.material = new THREE.MeshLambertMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+
+		this.resolution = new THREE.Vector2(resolution?.x, resolution?.y);
+
 		// this.material = new THREE.MeshLambertMaterial({ color: 0xffffff, side: THREE.DoubleSide, wireframe: true }); // NOTE: enable wireframe
 		this.plane = new THREE.Mesh(this.geometry, this.material);
 		this.plane.rotation.x = -Math.PI / 2 - 0.15;
@@ -31,7 +35,6 @@ export class SimplexPlane implements IRenderable {
 	public update(deltaTime: number, mouseScreenPos: THREE.Vector2) {
 
 		let pArray = this.plane.geometry.attributes.position.array;
-
 
 		let deltaVelocity = (mouseScreenPos.x + mouseScreenPos.y);
 		// console.log('deltaVelocity: ', pArray);
@@ -54,6 +57,21 @@ export class SimplexPlane implements IRenderable {
 		// if needed:
 		// this.plane.geometry.computeBoundingBox();
 		// this.plane.geometry.computeBoundingSphere();
+
+		// this.uniforms[ 'u_time' ].value = performance.now() / 1000;
+		// this.uniforms[ 'u_resolution' ].value = this.resolution;
+	}
+
+	public onThemeChange(val: boolean) { // TODO: rename to onThemeChange
+		console.log("themeCallback: " + val);
+		if (val) {
+			// dark mode
+			this.material.emissive.set(new THREE.Color(NAMED_COLORS.black));
+
+		} else {
+			// white mode
+			this.material.emissive.set(new THREE.Color(NAMED_COLORS.papayawhip));
+		}
 	}
 
 	public setEmissive(color: Color) {

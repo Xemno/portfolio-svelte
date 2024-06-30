@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type IRenderable from './IRenderable';
-import { type Color } from '$lib/utils/colors';
+import { NAMED_COLORS, type Color } from '$lib/utils/colors';
 import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { randomPointsInBufferGeometry } from '../utils/VectorUtils';
@@ -109,9 +109,7 @@ export class TextCloud implements IRenderable {
 
 			console.log(this.particlesPositions);
 
-
 			this.initParticleSystem(font, initParams);
-
 
 			if (lookAt != null) {
 				this.particleSystem.lookAt(lookAt);
@@ -120,10 +118,10 @@ export class TextCloud implements IRenderable {
 
 			scene.add(this.particleSystem);
 
-			this.ready = true;
-
 			// play initial animation
 			this.startEntryAnimation(initParams);
+
+			this.ready = true;
 		});
 	}
 
@@ -215,6 +213,22 @@ export class TextCloud implements IRenderable {
 	public onTouchMove(event: TouchEvent) {
 		// Update the mouse uniform
 		// this.uniforms.u_mouse.value.set(event.touches[0].pageX, window.innerHeight - event.touches[0].pageY).multiplyScalar(window.devicePixelRatio);
+	}
+
+	public onThemeChange(val: boolean) { // TODO: rename to onThemeChange
+		console.log("themeCallback: " + val);
+		if (val) {
+			// dark mode
+			this.material.color = new THREE.Color(NAMED_COLORS.yellowsea);
+			this.material.opacity = 0.7;
+			this.material.alphaHash = true;
+
+		} else {
+			// white mode
+			this.material.color = new THREE.Color(NAMED_COLORS.dimgray);
+			this.material.opacity = 0.8;
+			this.material.alphaHash = true;
+		}
 	}
 
 	public transitionTo(item: NavItem) {

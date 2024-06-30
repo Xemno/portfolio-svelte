@@ -54,6 +54,8 @@ export default class MainScene {
 
 	private composer!: EffectComposer;
 
+	private directionalLight!: THREE.DirectionalLight;
+
 
 	// private lightMesh!: THREE.Mesh;
 
@@ -74,15 +76,6 @@ export default class MainScene {
 
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: canvas });
 		this.renderer.setPixelRatio(window.devicePixelRatio);
-		// this.renderer.toneMapping = THREE.ReinhardToneMapping;
-		// this.renderer.setPixelRatio(window.devicePixelRatio);
-		this.renderer.toneMapping = THREE.CineonToneMapping; // TODO: enable for dark mode
-		this.renderer.toneMappingExposure = 0.75;
-
-		// this.renderer.toneMapping = THREE.ACESFilmicToneMapping; // TODO: enable for white mode
-		// this.renderer.toneMappingExposure = 0.75;
-
-
 
 		this.clock = new THREE.Clock();
 		// this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -116,7 +109,8 @@ export default class MainScene {
 		this.composer.addPass(renderpass);
 		this.composer.addPass(taaRenderPass);
 		this.composer.addPass(bloomPass); // TODO: selective bloom only on the particles
-		this.composer.addPass(afterimagePass); // TODO: selective only on the particles, causes flickering on edges of SimplexPlane
+		// TODO: afterimagePass causes white background to be black, thus, have to apply it selective on the
+		// this.composer.addPass(afterimagePass); // TODO: selective only on the particles, causes flickering on edges of SimplexPlane
 		this.composer.addPass(outputPass);
 
 
@@ -149,10 +143,10 @@ export default class MainScene {
 			new THREE.SphereGeometry(1, 8, 8),
 			new THREE.MeshBasicMaterial({ color: 0xffffff })
 		);
-		const directionalLight = new THREE.DirectionalLight(THREE.Color.NAMES.whitesmoke, 300);
-		directionalLight.target = lightTargetObj; // NOTE: can't rotate, have to set target obj
+		this.directionalLight = new THREE.DirectionalLight(THREE.Color.NAMES.whitesmoke, 300);
+		this.directionalLight.target = lightTargetObj; // NOTE: can't rotate, have to set target obj
 
-		lightMesh.add(directionalLight);
+		lightMesh.add(this.directionalLight);
 		lightMesh.position.y = 22;
 		lightMesh.position.z = 50;
 
@@ -163,22 +157,29 @@ export default class MainScene {
 		this.renderables.push(this.simplexPlane);
 	}
 
-	public themeCallback(val: boolean) { // TODO: rename to onThemeChange
+	public onThemeChange(val: boolean) { // TODO: rename to onThemeChange
 		console.log("themeCallback: " + val);
 		if (val) {
 			// dark mode
+			this.renderer.toneMapping = THREE.CineonToneMapping;
+			this.renderer.toneMappingExposure = 0.75;
 			this.renderer.setClearColor(NAMED_COLORS.black, 1);
 
-			this.scene.fog!.color = new THREE.Color(NAMED_COLORS.diserria);
-			this.simplexPlane.setEmissive(NAMED_COLORS.black);
+			this.scene.fog = new THREE.FogExp2(NAMED_COLORS.diserria, 0.004);
+			this.directionalLight.intensity = 300;
 
 		} else {
 			// white mode
+			this.renderer.toneMapping = THREE.LinearToneMapping;
+			this.renderer.toneMappingExposure = 0.75;
 			this.renderer.setClearColor(NAMED_COLORS.white, 1);
 
-			this.scene.fog!.color = new THREE.Color(NAMED_COLORS.locust); // 0xffc857 0xa3b18a
-			this.simplexPlane.setEmissive(NAMED_COLORS.westar); //  0xf7ede2 0xf2e9e4 0xd6ccc2  0xd5bdaf
+			this.scene.fog = new THREE.FogExp2(NAMED_COLORS.tan, 0.006);
+			this.directionalLight.intensity = 10;
 		}
+
+		this.simplexPlane.onThemeChange(val);
+		this.textCloud.onThemeChange(val);
 	}
 
 	public onNavigationChange(item: NavItem) {
