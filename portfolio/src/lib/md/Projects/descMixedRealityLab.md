@@ -6,7 +6,6 @@ In this project we explore the synergies between mixed reality and robotics.
 
 We used the [HoloLens 2](https://www.microsoft.com/en-us/hololens) and the [ABB YuMi](https://new.abb.com/products/robotics/robots/collaborative-robots/yumi/dual-arm) robot to develop a novel interactive application to manipulate the robot from afar.
 
-
 <p align="center" >
   <img style="overflow:hidden; width: 100%;" src="../images/holo_yumi.png" alt="Satellite Image of a Chicago road"/>
 </p>

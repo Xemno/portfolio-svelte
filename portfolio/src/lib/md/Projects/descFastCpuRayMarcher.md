@@ -11,6 +11,7 @@ Finally, we suggest the use of multithreading to extend our implementation for r
 ### Baseline scene
 
 This scene was renderd using our engine, which we used as a baseline for various measurements.
+
 <p align="center" >
   <img style="overflow:hidden; width: 100%;" src="../images/scene0.png" alt="Satellite Image of a Chicago road"/>
 </p>
@@ -18,6 +19,7 @@ This scene was renderd using our engine, which we used as a baseline for various
 ### Mandelbulb
 
 Rendering implicit surfaces using geometric distances allows to more easily render fractals, as can be seen here the Mandelbulb fractal.
+
 <p align="center" >
   <img style="overflow:hidden; width: 100%;" src="../images/mandelbulb.png" alt="Satellite Image of a Chicago road"/>
 </p>
@@ -25,6 +27,7 @@ Rendering implicit surfaces using geometric distances allows to more easily rend
 ### Inception
 
 An example rendering of our program of the infinite cube repetition with reflective material.
+
 <p align="center" >
   <img style="overflow:hidden; width: 100%;" src="../images/inception_0.png" alt="Satellite Image of a Chicago road"/>
 </p>

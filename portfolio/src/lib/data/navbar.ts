@@ -1,4 +1,3 @@
-
 export const NavBar = {
 	home: 'Qais El Okaili',
 	projects: 'Projects',

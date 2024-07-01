@@ -22,7 +22,7 @@ export const items: Array<Experience> = [
 		color: 'coral',
 		links: [],
 		logo: Assets.Unknown,
-		bannerImage: Assets.Unknown,
+		bannerImage: Assets.Unknown
 	},
 	{
 		slug: 'urban-games',
@@ -38,6 +38,6 @@ export const items: Array<Experience> = [
 		color: 'darkseagreen',
 		links: [],
 		logo: Assets.Unknown,
-		bannerImage: Assets.Unknown,
+		bannerImage: Assets.Unknown
 	}
 ];

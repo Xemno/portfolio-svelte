@@ -9,4 +9,3 @@
 	<TestScene bind:this={testSceneComp} />
 	<div class="content container"><slot /></div>
 </div>
-

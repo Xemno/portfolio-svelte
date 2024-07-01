@@ -1,4 +1,4 @@
-import {inInterval, isBlank} from './helpers'
+import { inInterval, isBlank } from './helpers';
 
 // Credit: https://github.com/RiadhAdrani/color-utils
 
@@ -169,7 +169,6 @@ export const convertNamedToHexColor = (name: NamedColor): HexColor => {
 
 // ----------------------------------------------------------------------
 
-
 export type ColorType = 'hex' | 'hsl' | 'rgb';
 
 export type Palette = {
@@ -258,7 +257,7 @@ export function extractDataFromHSL(color: string): number[] {
 			.replace('/', '')
 			.replace('  ', ' ')
 			.split(' ')
-			.map(i => parseFloat(i.trim()));
+			.map((i) => parseFloat(i.trim()));
 	}
 
 	if (isHslForm(color)) {
@@ -268,7 +267,7 @@ export function extractDataFromHSL(color: string): number[] {
 			.replace('deg', '')
 			.replace('/', '')
 			.split(' ')
-			.map(i => parseFloat(i.trim()));
+			.map((i) => parseFloat(i.trim()));
 	}
 
 	throw '[Utils] Unexpected Input: (color) is not of a HSL/HSLA form.';
@@ -587,14 +586,14 @@ export function extractDataFromRGB(color: string): number[] {
 		return color
 			.slice(5, -1)
 			.split(',')
-			.map(i => parseFloat(i.trim()));
+			.map((i) => parseFloat(i.trim()));
 	}
 
 	if (isRgbForm(color)) {
 		return color
 			.slice(4, -1)
 			.split(',')
-			.map(i => parseFloat(i.trim()));
+			.map((i) => parseFloat(i.trim()));
 	}
 
 	throw '[Utils] Unexpected Input: (color) is not of a RGB/RGBA form.';
@@ -708,7 +707,7 @@ export function generateColorTonalPalette(color: string, type?: ColorType): Pale
 
 	const colorPalette = {} as Palette;
 
-	palette.forEach(tone => {
+	palette.forEach((tone) => {
 		const colorTone = hsla(h, s, tone, a ?? 1);
 
 		colorPalette[tone as keyof Palette] = convertColor(colorTone, t);

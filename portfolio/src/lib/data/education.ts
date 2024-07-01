@@ -14,8 +14,17 @@ export const items: Array<Education> = [
 		period: { from: new Date(2019, 5, 1), to: new Date(2021, 3, 1) },
 		shortDescription: 'asd3',
 		slug: 'education-item-1',
-		subjects: ['Computer Vision', 'Distributed Algorithms', 'Computer Graphics', 'Machine Learning', 'Probabilistic AI', 'Shape Modeling & Geometry Processing', 'Advanced Systems Lab', 'Computational Intelligence Lab'],
-		color: 'coral',
+		subjects: [
+			'Computer Vision',
+			'Distributed Algorithms',
+			'Computer Graphics',
+			'Machine Learning',
+			'Probabilistic AI',
+			'Shape Modeling & Geometry Processing',
+			'Advanced Systems Lab',
+			'Computational Intelligence Lab'
+		],
+		color: 'coral'
 	},
 	{
 		degree: 'Bachelor Computer Science',
@@ -24,11 +33,11 @@ export const items: Array<Education> = [
 		logo: Assets.ETH2,
 		name: '',
 		organization: 'ETH Zurich',
-		period: { from: new Date(2014, 8, 1), to: new Date(2019, 5, 1)},
+		period: { from: new Date(2014, 8, 1), to: new Date(2019, 5, 1) },
 		shortDescription: '',
 		slug: 'education-item-2',
 		subjects: ['Algorithms & Data structures', 'Machine Learning'],
-		color: 'coral',
+		color: 'coral'
 	},
 	{
 		degree: 'Electronics Technician',
@@ -40,7 +49,15 @@ export const items: Array<Education> = [
 		period: { from: new Date(2008, 0, 1), to: new Date(2012, 0, 1) },
 		shortDescription: '',
 		slug: 'education-item-3',
-		subjects: ['Assembly', 'C', 'Electronics', 'Physics', 'Altium Designer', 'PCB and electronic design', 'Micorcontrollers' ],
-		color: 'coral',
+		subjects: [
+			'Assembly',
+			'C',
+			'Electronics',
+			'Physics',
+			'Altium Designer',
+			'PCB and electronic design',
+			'Micorcontrollers'
+		],
+		color: 'coral'
 	}
 ];

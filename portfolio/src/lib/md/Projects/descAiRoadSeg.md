@@ -10,6 +10,7 @@ It was done as a team of four where the goal was to find a novel solution to the
 ## Image Data
 
 Our data consisted of road images and their segmented labels. An example road and the corresponding label is shown here:
+
 <!-- ![alt text](../images/chicago108.png "Satellite Image of a Chicago road") ![alt text](../images/label108.png "Corresponding segmented label") -->
 
 <p align="center">

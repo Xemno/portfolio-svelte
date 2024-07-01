@@ -1,7 +1,10 @@
 import * as THREE from 'three';
 
-
-export function toScreenPosition(obj: THREE.Object3D, camera: THREE.Camera, renderer: THREE.WebGLRenderer): THREE.Vector2 {
+export function toScreenPosition(
+	obj: THREE.Object3D,
+	camera: THREE.Camera,
+	renderer: THREE.WebGLRenderer
+): THREE.Vector2 {
 	let vector = new THREE.Vector3();
 
 	// TODO: need to update this when resize window
@@ -12,14 +15,16 @@ export function toScreenPosition(obj: THREE.Object3D, camera: THREE.Camera, rend
 	vector.setFromMatrixPosition(obj.matrixWorld);
 	vector.project(camera);
 
-	vector.x = (vector.x * widthHalf) + widthHalf;
-	vector.y = - (vector.y * heightHalf) + heightHalf;
+	vector.x = vector.x * widthHalf + widthHalf;
+	vector.y = -(vector.y * heightHalf) + heightHalf;
 
 	return new THREE.Vector2(vector.x, vector.y);
-};
+}
 
-export function randomPointsInBufferGeometry(geometry: THREE.BufferGeometry, n: number): Array<THREE.Vector3> {
-
+export function randomPointsInBufferGeometry(
+	geometry: THREE.BufferGeometry,
+	n: number
+): Array<THREE.Vector3> {
 	let i: number;
 	let totalArea: number = 0;
 	let vertices = geometry.attributes.position.array;
@@ -35,7 +40,6 @@ export function randomPointsInBufferGeometry(geometry: THREE.BufferGeometry, n: 
 	var il = vertices.length / 9;
 
 	for (i = 0; i < il; i++) {
-
 		vA.set(vertices[i * 9 + 0], vertices[i * 9 + 1], vertices[i * 9 + 2]);
 		vB.set(vertices[i * 9 + 3], vertices[i * 9 + 4], vertices[i * 9 + 5]);
 		vC.set(vertices[i * 9 + 6], vertices[i * 9 + 7], vertices[i * 9 + 8]);
@@ -43,41 +47,29 @@ export function randomPointsInBufferGeometry(geometry: THREE.BufferGeometry, n: 
 		totalArea += triangleArea(vA, vB, vC);
 
 		cumulativeAreas.push(totalArea);
-
 	}
 
 	// binary search cumulative areas array
 	function binarySearchIndices(value: number) {
-
 		function binarySearch(start: number, end: number) {
-
 			// return closest larger index
 			// if exact number is not found
 
-			if (end < start)
-				return start;
+			if (end < start) return start;
 
 			var mid = start + Math.floor((end - start) / 2);
 
 			if (cumulativeAreas[mid] > value) {
-
 				return binarySearch(start, mid - 1);
-
 			} else if (cumulativeAreas[mid] < value) {
-
 				return binarySearch(mid + 1, end);
-
 			} else {
-
 				return mid;
-
 			}
-
 		}
 
 		let result = binarySearch(0, cumulativeAreas.length - 1);
 		return result;
-
 	}
 
 	// pick random face weighted by face area
@@ -87,7 +79,6 @@ export function randomPointsInBufferGeometry(geometry: THREE.BufferGeometry, n: 
 	let result: Array<THREE.Vector3> = [];
 
 	for (i = 0; i < n; i++) {
-
 		r = Math.random() * totalArea;
 
 		index = binarySearchIndices(r);
@@ -97,11 +88,10 @@ export function randomPointsInBufferGeometry(geometry: THREE.BufferGeometry, n: 
 		vB.set(vertices[index * 9 + 3], vertices[index * 9 + 4], vertices[index * 9 + 5]);
 		vC.set(vertices[index * 9 + 6], vertices[index * 9 + 7], vertices[index * 9 + 8]);
 		result[i] = randomPointInTriangle(vA, vB, vC);
-
 	}
 
 	return result;
-};
+}
 
 /*
  ** Private Methods
@@ -110,19 +100,20 @@ export function randomPointsInBufferGeometry(geometry: THREE.BufferGeometry, n: 
 // Get random point in triangle (via barycentric coordinates)
 // 	(uniform distribution)
 // 	http://www.cgafaq.info/wiki/Random_Point_In_Triangle
-function randomPointInTriangle(vectorA: THREE.Vector3, vectorB: THREE.Vector3, vectorC: THREE.Vector3) {
-
+function randomPointInTriangle(
+	vectorA: THREE.Vector3,
+	vectorB: THREE.Vector3,
+	vectorC: THREE.Vector3
+) {
 	let vector = new THREE.Vector3();
 	let point = new THREE.Vector3();
 
 	let a = Math.random();
 	let b = Math.random();
 
-	if ((a + b) > 1) {
-
+	if (a + b > 1) {
 		a = 1 - a;
 		b = 1 - b;
-
 	}
 
 	let c = 1 - a - b;
@@ -141,22 +132,17 @@ function randomPointInTriangle(vectorA: THREE.Vector3, vectorB: THREE.Vector3, v
 	point.add(vector);
 
 	return point;
-
-};
+}
 
 // Get triangle area (half of parallelogram)
 // http://mathworld.wolfram.com/TriangleArea.html
 function triangleArea(vectorA: THREE.Vector3, vectorB: THREE.Vector3, vectorC: THREE.Vector3) {
-
 	let vector1 = new THREE.Vector3();
 	let vector2 = new THREE.Vector3();
-
 
 	vector1.subVectors(vectorB, vectorA);
 	vector2.subVectors(vectorC, vectorA);
 	vector1.cross(vector2);
 
 	return 0.5 * vector1.length();
-
-
 }

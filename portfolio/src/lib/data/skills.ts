@@ -9,21 +9,19 @@ export const title = 'Skills';
 export type ArrayElementType<ArrayType extends readonly unknown[]> =
 	ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
-	export const items = [
+export const items = [
 	s({
 		slug: 'cpp',
 		color: 'yellow',
-		description:
-			'',
-		logo: Assets.Cpp, // TODO: add small logo and large logo 
+		description: '',
+		logo: Assets.Cpp, // TODO: add small logo and large logo
 		name: 'C++'
 	}),
 	s({
 		slug: 'c',
 		color: 'yellow',
-		description:
-			'',
-		logo: Assets.C, // TODO: add small logo and large logo 
+		description: '',
+		logo: Assets.C, // TODO: add small logo and large logo
 		name: 'C'
 	}),
 	s({
@@ -103,7 +101,6 @@ export type ArrayElementType<ArrayType extends readonly unknown[]> =
 		name: 'Unity Game Engine'
 	})
 ] as const;
-
 
 export const getSkills = (
 	...slugs: Array<StringWithAutoComplete<(typeof items)[number]['slug']>>

@@ -42,9 +42,7 @@
 		<p>{period}</p>
 	</div>
 	<div class="col sm:h-100px md:h-160px">
-		<p
-			class="text-[0.95em] text-[var(--secondary-text)] font-300 m-t-20px m-b-40px line-clamp-4"
-		>
+		<p class="text-[0.95em] text-[var(--secondary-text)] font-300 m-t-20px m-b-40px line-clamp-4">
 			{project.shortDescription}
 		</p>
 	</div>

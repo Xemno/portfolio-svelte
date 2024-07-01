@@ -19,7 +19,7 @@ export const links: Array<HomeLink> = [
 	{
 		platform: Platform.Linkedin,
 		link: 'https://www.linkedin.com/in/qais-el-okaili-442703181/'
-	},
+	}
 	// {
 	// 	platform: Platform.Email,
 	// 	link: ''

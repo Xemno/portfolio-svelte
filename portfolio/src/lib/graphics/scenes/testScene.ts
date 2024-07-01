@@ -3,28 +3,24 @@ import * as THREE from 'three';
 import shaderVert from '$lib/graphics/shaders/ImageBlendEffect/blendVert.glsl';
 import shaderFrag from '$lib/graphics/shaders/ImageBlendEffect/blendFrag.glsl';
 
-
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { SimplexNoise } from "three/examples/jsm/math/SimplexNoise";
+import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 
-
-const MOUSE_WHEEL_EVENT = "wheel";
-const TOUCH_MOVE = "touchmove";
-const TOUCH_END = "touchend";
-const MOUSE_DOWN = "mousedown";
-const MOUSE_UP = "mouseup";
-const MOUSE_MOVE = "mousemove";
+const MOUSE_WHEEL_EVENT = 'wheel';
+const TOUCH_MOVE = 'touchmove';
+const TOUCH_END = 'touchend';
+const MOUSE_DOWN = 'mousedown';
+const MOUSE_UP = 'mouseup';
+const MOUSE_MOVE = 'mousemove';
 
 const scrollPerImage = 500;
 const KEYBOARD_ACCELERATION = 25;
 
-
-const folder = "Ragnar";
+const folder = 'Ragnar';
 const root = `https://mwmwmw.github.io/files/${folder}`;
-const files = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const ext = "jpg";
+const files = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const ext = 'jpg';
 const IMAGE_SIZE = 512;
-
 
 class ScrollPos {
 	public acceleration: number;
@@ -55,34 +51,34 @@ class ScrollPos {
 		this.lastDelta = 0;
 
 		document.addEventListener(
-			"touchstart",
+			'touchstart',
 			function (event) {
 				// event.preventDefault();
 			},
 			{ passive: false }
 		);
 
-		window.addEventListener(MOUSE_WHEEL_EVENT, event => {
+		window.addEventListener(MOUSE_WHEEL_EVENT, (event) => {
 			// event.preventDefault();
 			this.accelerate(Math.sign(event.deltaY) * this.speed);
 		});
 
-		window.addEventListener(TOUCH_MOVE, event => {
+		window.addEventListener(TOUCH_MOVE, (event) => {
 			//event.preventDefault();
 			let delta = this.lastDelta - event.targetTouches[0].clientY;
 			this.accelerate(Math.sign(delta) * this.touchSpeed);
 			this.lastDelta = event.targetTouches[0].clientY;
 		});
 
-		window.addEventListener(TOUCH_END, event => {
+		window.addEventListener(TOUCH_END, (event) => {
 			this.lastDelta = 0;
 		});
 
-		window.addEventListener(MOUSE_DOWN, event => {
+		window.addEventListener(MOUSE_DOWN, (event) => {
 			this.mouseDown = true;
 		});
 
-		window.addEventListener(MOUSE_MOVE, event => {
+		window.addEventListener(MOUSE_MOVE, (event) => {
 			if (this.mouseDown) {
 				let delta = this.lastDelta - event.clientY;
 				this.accelerate(Math.sign(delta) * this.touchSpeed * 0.4);
@@ -90,11 +86,10 @@ class ScrollPos {
 			}
 		});
 
-		window.addEventListener(MOUSE_UP, event => {
+		window.addEventListener(MOUSE_UP, (event) => {
 			this.lastDelta = 0;
 			this.mouseDown = false;
 		});
-
 	}
 
 	private accelerate(amount: number) {
@@ -144,7 +139,6 @@ class ScrollPos {
 	// }
 }
 
-
 export default class TestScene {
 	private camera: THREE.PerspectiveCamera;
 	private scene: THREE.Scene;
@@ -166,20 +160,14 @@ export default class TestScene {
 
 	private ctx: CanvasRenderingContext2D | null;
 
-
 	constructor(canvas: HTMLCanvasElement) {
-
-
-
-		console.log("Constructor called.");
+		console.log('Constructor called.');
 
 		// var myCanvas = document.getElementById("myCanvas");
 		canvas.width = IMAGE_SIZE;
 		canvas.height = IMAGE_SIZE;
 
-		console.log("canvas: ", canvas);
-
-
+		console.log('canvas: ', canvas);
 
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(
@@ -190,17 +178,14 @@ export default class TestScene {
 		);
 		this.camera.position.set(0, 0, 10);
 
-
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: canvas });
 
-		this.ctx = canvas.getContext("2d");
+		this.ctx = canvas.getContext('2d');
 
 		// console.log("this.ctx:", this.ctx)
 
-
 		this.clock = new THREE.Clock();
 		this.mouseWheel = new ScrollPos();
-
 
 		this.scene.add(this.camera);
 
@@ -208,12 +193,10 @@ export default class TestScene {
 	}
 
 	private init(): void {
-
-		console.log("init() called.");
-
+		console.log('init() called.');
 
 		this.loadImages().then((images) => {
-			document.getElementById("loading")?.setAttribute('style', "display: none;");
+			document.getElementById('loading')?.setAttribute('style', 'display: none;');
 			console.log("'loading' attribute set for each image.");
 
 			this.initWithImageTextures(images);
@@ -224,9 +207,8 @@ export default class TestScene {
 	}
 
 	private initWithImageTextures(textures: any) {
-
-		console.log("initWithImageTextures() called.");
-		console.log("textures:", textures);
+		console.log('initWithImageTextures() called.');
+		console.log('textures:', textures);
 
 		this.textures = textures;
 
@@ -237,16 +219,15 @@ export default class TestScene {
 			uniforms: {
 				time: { value: 1.0 },
 				blend: { value: 0.0 },
-				tex1: { type: "t", value: textures[1] },
-				tex2: { type: "t", value: textures[0] }
+				tex1: { type: 't', value: textures[1] },
+				tex2: { type: 't', value: textures[0] }
 			},
 			vertexShader: shaderVert,
-			fragmentShader: shaderFrag,
+			fragmentShader: shaderFrag
 		});
 
 		// plane mesh
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
-
 
 		this.scene.add(this.mesh);
 
@@ -269,9 +250,10 @@ export default class TestScene {
 		const delta = this.clock.getDelta();
 		const time = this.clock.getElapsedTime() * 10;
 
-
 		this.mouseWheel.update();
-		let scrollTarget = (Math.floor((this.mouseWheel.scrollPos + scrollPerImage * 0.5) / scrollPerImage)) * scrollPerImage;
+		let scrollTarget =
+			Math.floor((this.mouseWheel.scrollPos + scrollPerImage * 0.5) / scrollPerImage) *
+			scrollPerImage;
 		this.mouseWheel.snap(scrollTarget);
 
 		let { scrollPos, velocity } = this.mouseWheel;
@@ -292,7 +274,6 @@ export default class TestScene {
 
 		// this.material.uniforms.time.value += 0.1;
 
-
 		this.render();
 	}
 
@@ -302,7 +283,7 @@ export default class TestScene {
 	}
 
 	private addMouseInputSupport() {
-		window.addEventListener("keydown", (e) => {
+		window.addEventListener('keydown', (e) => {
 			switch (e.keyCode) {
 				case 33:
 				case 38:
@@ -318,20 +299,18 @@ export default class TestScene {
 					break;
 			}
 		});
-
 	}
 
 	private loadImages() {
-
 		let promises = [];
 		for (var i = 0; i < files.length; i++) {
 			promises.push(
 				new Promise((resolve, reject) => {
-					let img = document.createElement("img");
-					img.crossOrigin = "anonymous";
+					let img = document.createElement('img');
+					img.crossOrigin = 'anonymous';
 					img.src = `${root}/${files[i]}.${ext}`;
 					console.log(img.src);
-					img.onload = image => {
+					img.onload = (image) => {
 						return resolve(image.target);
 					};
 				})
@@ -349,7 +328,7 @@ export default class TestScene {
 		let newHeight = size / height;
 
 		if (this.ctx == null) {
-			console.log("this.ctx is null in resizeImage().");
+			console.log('this.ctx is null in resizeImage().');
 			return;
 		}
 
@@ -383,5 +362,4 @@ export default class TestScene {
 		this.renderer.setPixelRatio(window.devicePixelRatio);
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
 	}
-
 }

@@ -8,7 +8,6 @@
 	export let search = '';
 	export let autoFocusSearch = false; // default no auto focus when redirecting to page
 
-
 	const dispatch = createEventDispatcher();
 
 	let mounted = false;
@@ -44,7 +43,7 @@
 <CommonPage {title}>
 	<!-- NOTE: Search bar -->
 	<div class="w-100% row">
-		<Input bind:value={search} placeholder={'Search...'} autoFocusSearch={autoFocusSearch}/>
+		<Input bind:value={search} placeholder={'Search...'} {autoFocusSearch} />
 	</div>
 
 	<!-- NOTE: Content with projects / skills / work experience cards -->

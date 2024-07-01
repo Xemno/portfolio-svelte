@@ -103,12 +103,11 @@ export function routeToName(route: string): NavItem {
 
 	// search page
 	if (route === 'search') {
-		navItem = { idx: navItems.length + 1, id: "Search" };
+		navItem = { idx: navItems.length + 1, id: 'Search' };
 	}
 
 	return navItem;
 }
-
 
 export function filterItemsByQuery<T extends ItemOrSkill>(
 	items: Array<T>,
@@ -130,11 +129,15 @@ function doesQueryExistInItemOrAttributes(
 	} else if (typeof item === 'object' && item !== null) {
 		if (item instanceof Date) {
 			const dateFormats = [
-				item.toString().toLowerCase(), 																			// Full date string
-				item.toLocaleDateString('default', { month: 'long', year: 'numeric' }).toLowerCase(), 					// "January 2023"
-				item.toLocaleDateString('default', { day: 'numeric', month: 'long', year: 'numeric' }).toLowerCase(), 	// "15 January 2023"
-				item.toLocaleDateString('en-US').toLowerCase(), 														// "1/15/2023"
-				item.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toLowerCase() 	// "Jan 15, 2023"
+				item.toString().toLowerCase(), // Full date string
+				item.toLocaleDateString('default', { month: 'long', year: 'numeric' }).toLowerCase(), // "January 2023"
+				item
+					.toLocaleDateString('default', { day: 'numeric', month: 'long', year: 'numeric' })
+					.toLowerCase(), // "15 January 2023"
+				item.toLocaleDateString('en-US').toLowerCase(), // "1/15/2023"
+				item
+					.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+					.toLowerCase() // "Jan 15, 2023"
 			];
 			return dateFormats.some((dateStr) => dateStr.includes(query));
 		} else {

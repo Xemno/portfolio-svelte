@@ -1,10 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poetsen+One&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swa');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
 	--dark-0: #000;
@@ -155,7 +154,6 @@ body {
 	--link: var(--link-dark);
 
 	--btn-search: var(--light-9);
-
 }
 
 .container {
@@ -192,7 +190,6 @@ body {
 	// font-size: 16px;
 
 	// mix-blend-mode: difference;
-
 
 	color: var(--tertiary-text);
 	overflow-y: auto !important;
@@ -302,7 +299,7 @@ body {
 	& ul {
 		margin: 0;
 		padding: 0 20px;
-		
+
 		// background-color: var(--md-bg-main);
 
 		// &:hover {
@@ -314,7 +311,6 @@ body {
 	& li {
 		padding: 5px 0px;
 		line-height: 1.75rem;
-		
 	}
 
 	& a {
@@ -342,7 +338,6 @@ body {
 		font-size: 0.9em;
 		font-family: 'Space Mono', monospace;
 
-
 		&:hover {
 			background-color: var(--secondary-hover);
 			border-color: var(--border-hover);
@@ -362,8 +357,6 @@ body {
 		border-radius: 0.75em;
 		font-family: 'Space Mono', monospace;
 
-		
-
 		strong {
 			font-style: normal;
 		}
@@ -382,7 +375,7 @@ body {
 	}
 }
 
-// navigation bar for mobile 
+// navigation bar for mobile
 .nav-bar-mobile-btn {
 	width: 36px;
 	height: 36px;
@@ -426,8 +419,8 @@ body {
 // video container
 .video-container {
 	// position:absolute;
-	width: 100%    !important;
-	height: auto   !important;
+	width: 100% !important;
+	height: auto !important;
 	overflow: hidden;
 }
 .video-container video {
@@ -436,7 +429,7 @@ body {
 }
 
 // background blur effect
-.blurred-box{
+.blurred-box {
 	position: relative;
 	width: 100%;
 	height: 100%;
@@ -444,15 +437,15 @@ body {
 	border-radius: 2px;
 	overflow: hidden;
 }
-.blurred-box:after{
+.blurred-box:after {
 	content: '';
 	width: 100%;
 	height: 100%;
-	background: inherit; 
+	background: inherit;
 	position: absolute;
 	left: 0px;
 	right: 0;
-	top: -25px;  
+	top: -25px;
 	bottom: 0;
 	box-shadow: inset 0 0 0 1000px rgba(161, 161, 161, 0.1);
 	backdrop-filter: blur(40px);

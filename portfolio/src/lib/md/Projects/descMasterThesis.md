@@ -1,4 +1,3 @@
-
 ## Data Driven Locomotion on Uneven Terrains
 
 In this master thesis, we further improved and extended an existing character animation system

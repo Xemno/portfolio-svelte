@@ -12,7 +12,6 @@ import descThisWebsite from '@md/Projects/descThisWebsite.md?raw';
 
 import { base } from '$app/paths';
 
-
 const getImagePath = (file: string) => `${base}/images/${file}`;
 
 export const title = 'Projects';
@@ -30,7 +29,7 @@ export const items: Array<Project> = [
 		bannerImage: Assets.Unknown,
 		period: {
 			from: new Date(2022, 1, 20),
-			to: new Date(2023, 1, 20),
+			to: new Date(2023, 1, 20)
 		},
 		skills: getSkills('svelte', 'ts', 'css', 'js', 'html'),
 		type: 'Website Template'
@@ -126,7 +125,7 @@ export const items: Array<Project> = [
 			from: new Date()
 		},
 		skills: getSkills('c', 'cpp'),
-		type: 'Advanced Systems Lab',
+		type: 'Advanced Systems Lab'
 		// screenshots: [
 		// 	{
 		// 		label: '1',
@@ -149,7 +148,7 @@ export const items: Array<Project> = [
 			from: new Date()
 		},
 		skills: getSkills('csharp', 'unity-engine'),
-		type: 'Computer Graphics',
+		type: 'Computer Graphics'
 		// screenshots: [
 		// 	{
 		// 		label: '1',
@@ -163,7 +162,8 @@ export const items: Array<Project> = [
 		name: 'AI Road Segmentation',
 		color: '#5e95e3',
 		description: descAiRoadSeg,
-		shortDescription: 'Road Image Segmentation Project for Computational Intelligence Lab 2019 at ETH Zurich',
+		shortDescription:
+			'Road Image Segmentation Project for Computational Intelligence Lab 2019 at ETH Zurich',
 		links: [{ to: 'https://github.com/laurinpaech/segme-net', label: 'GitHub' }],
 		logo: Assets.ETH,
 		bannerImage: getImagePath('chicago108.png'),
@@ -171,7 +171,7 @@ export const items: Array<Project> = [
 			from: new Date()
 		},
 		skills: getSkills('python'),
-		type: 'Machine Learning',
+		type: 'Machine Learning'
 		// TODO: maybe remove screenshots?
 		// screenshots: [
 		// 	{
@@ -184,5 +184,5 @@ export const items: Array<Project> = [
 		// 	},
 
 		// ]
-	},
+	}
 ];

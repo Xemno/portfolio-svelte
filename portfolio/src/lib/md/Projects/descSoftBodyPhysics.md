@@ -1,4 +1,3 @@
-
 # Physically-Based Simulation
 
 This project was part of the Physically-Based Simulation masters course at the [Computer Graphics Lab](https://cgl.ethz.ch/teaching/simulation19/home.php), ETH Zürich, Switzerland

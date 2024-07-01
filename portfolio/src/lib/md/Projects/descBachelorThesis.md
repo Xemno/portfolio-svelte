@@ -9,7 +9,7 @@ I investigated the use of conductive soft foam material to localize touch inputs
 [Tomography](https://en.wikipedia.org/wiki/Tomography) is an imaging technique by sections through the use of any kind of penetrating wave and the goal was to produce such tomographic images.
 Tomographic Reconstruction is a multidimensional inverse problem. So the challenge is to yield an estimate of a specific system from a finite number of projections/observations.
 
->An inverse problem is the process of calculating from a set of observations the causal factors that produced them: for example, calculating an image in X-ray computed tomography, source reconstruction in acoustics, or calculating the density of the Earth from measurements of its gravity field. It is called an inverse problem because it starts with the results and then calculates the causes. This is the inverse of a forward problem, which starts with the causes and then calculates the results.
+> An inverse problem is the process of calculating from a set of observations the causal factors that produced them: for example, calculating an image in X-ray computed tomography, source reconstruction in acoustics, or calculating the density of the Earth from measurements of its gravity field. It is called an inverse problem because it starts with the results and then calculates the causes. This is the inverse of a forward problem, which starts with the causes and then calculates the results.
 
 ## Electrical Impedance/Resistivity Tomography
 
@@ -19,7 +19,6 @@ Tomographic Reconstruction is a multidimensional inverse problem. So the challen
 - Reactance => amplitude and phase changes of sinusoidal alternating currents
 - Penetrating wave: sinusoidal alternating currents
 - Assumption: Constant current
-
 
 ## System Overview
 
@@ -38,7 +37,6 @@ AD5930 produces a current output. Thus, resulting in no issues with the voltage 
 Input current to AD8220 is negligible because of very high input impedance. Thus, we can set the output voltage of the AD5930 with resistors.
 Here with 200 Ohm and 3mA the output voltage is set to 0.6V
 
-
 <p align="center" >
   <img style="overflow:hidden; width: 55%;" src="../images/signal_gen.png" alt="Satellite Image of a Chicago road"/>
 </p>
@@ -48,26 +46,21 @@ Here with 200 Ohm and 3mA the output voltage is set to 0.6V
 The VCCS accepts an input voltage and produces a constant output current, which is important for our impedance measurements.
 As a VCCS a [Howland Current Pump](https://www.allaboutcircuits.com/technical-articles/the-howland-current-pump/) was used to produce a constant current.
 
-
 <p align="center" >
   <img style="overflow:hidden; width: 55%;" src="../images/signal_gen.png" alt="Satellite Image of a Chicago road"/>
 </p>
 
 #### Simulating error currents
 
-
 1k to 100k OHMs stepsize is 5k, resulting in 20 traces. R_S is 20k Ohm and V_in is 0.6V peak to peak.
-
 
 <p align="center" >
   <img style="overflow:hidden; width: 65%;" src="../images/error_currents.png" alt="Satellite Image of a Chicago road"/>
 </p>
 
-
 ## Measurement Scheme
 
 The system applys is an adjacent pattern measurement scheme. In the adjacent method the measurement pattern consists of differential measurements between all adjacent electrodes except the injecting electrodes. This is then done for all adjacent electrodes as injecting electrodes resulting in 40 measurements. This results in 5 measurements per adjacent pair, which for 8 electrode pair results in a measurement matrix M of 40 entries.
-
 
 <p align="center" >
   <img style="overflow:hidden; width: 75%;" src="../images/measure_scheme.png" alt="Satellite Image of a Chicago road"/>
@@ -82,9 +75,7 @@ Required for curent injection & voltage measurements
 Introduces additional input and output capacitance
 And more non-ideal properties
 
-
 ### Differential Voltage Measurement
-
 
 <p align="center" >
   <img style="overflow:hidden; width: 45%;" src="../images/diff_measure.png" alt="Satellite Image of a Chicago road"/>
