@@ -4,7 +4,7 @@ import type { NavItem } from '$lib/types';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { NAMED_COLORS } from '$lib/utils/colors';
-import { SimplexPlane } from "../renderables/SimplexPlane";
+import { SimplexPlane } from '../renderables/SimplexPlane';
 import { TextCloud } from '../renderables/TextCloud';
 import { items as navItems } from '@data/navbar';
 
@@ -15,17 +15,16 @@ import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass
 import { TAARenderPass } from 'three/examples/jsm/postprocessing/TAARenderPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 
-
 let conf = {
 	fov: 75,
 	cameraZ: 75,
 	lightIntensity: 500.0,
 	ambientColor: 0x000000,
-	Color: 0x0E09DC,
+	Color: 0x0e09dc,
 	light1Color: 0xa5f411,
-	light2Color: 0xfCE1E1,
-	light3Color: 0x18C02C,
-	light4Color: 0xee3bcf,
+	light2Color: 0xfce1e1,
+	light3Color: 0x18c02c,
+	light4Color: 0xee3bcf
 };
 
 type Pair = [number, number];
@@ -56,6 +55,7 @@ export default class MainScene {
 
 	private directionalLight!: THREE.DirectionalLight;
 
+	private isMobile: boolean;
 
 	// private lightMesh!: THREE.Mesh;
 
@@ -67,12 +67,13 @@ export default class MainScene {
 
 	private renderables: Array<IRenderable> = new Array<IRenderable>();
 
-	constructor(canvas: HTMLCanvasElement, initialText: NavItem) {
+	constructor(canvas: HTMLCanvasElement, initialText: NavItem, isMobile: boolean) {
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(conf.fov, window.innerWidth / window.innerHeight, 0.1, 1000);
 		this.camera.position.z = conf.cameraZ;
 		// this.camera.position.z = 100;
 		// this.camera.rotation.x += Math.PI/3;
+		this.isMobile = isMobile;
 
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: canvas });
 		this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -99,7 +100,6 @@ export default class MainScene {
 		bloomPass.strength = params.strength;
 		bloomPass.radius = params.radius;
 
-
 		const taaRenderPass = new TAARenderPass(this.scene, this.camera);
 		const afterimagePass = new AfterimagePass(0.5);
 		const outputPass = new OutputPass();
@@ -113,7 +113,6 @@ export default class MainScene {
 		// this.composer.addPass(afterimagePass); // TODO: selective only on the particles, causes flickering on edges of SimplexPlane
 		this.composer.addPass(outputPass);
 
-
 		this.initScene(initialText);
 	}
 
@@ -121,9 +120,14 @@ export default class MainScene {
 		this.addResizeSupport();
 		this.addMouseInputSupport();
 
-		this.scene.fog = new THREE.FogExp2(0xfff00f, 0.004); // TODO: fog color
+		// this.scene.fog = new THREE.FogExp2(0xfff00f, 0.004); // TODO: fog color
 
-		this.simplexPlane = new SimplexPlane(this.renderWidth * 2, this.renderHeight * 2, this.renderWidth / 2, this.renderHeight / 2);
+		this.simplexPlane = new SimplexPlane(
+			this.renderWidth * 2,
+			this.renderHeight * 2,
+			this.renderWidth / 2,
+			this.renderHeight / 2
+		);
 		this.scene.add(this.simplexPlane.getPlane());
 
 		// initialies TextCloud
@@ -133,17 +137,24 @@ export default class MainScene {
 			texts.push({ idx: idx + 1, id: item.title });
 		});
 		texts.push({ idx: 7, id: 'Search' }); // last item
-		this.textCloud = new TextCloud(this.scene, texts, initialText, new THREE.Vector2(this.renderer.domElement.width, this.renderer.domElement.height));
+		this.textCloud = new TextCloud(
+			this.scene,
+			texts,
+			initialText,
+			this.isMobile,
+			new THREE.Vector2(this.renderer.domElement.width, this.renderer.domElement.height)
+		);
 
 		const lightTargetObj = new THREE.Object3D();
 		lightTargetObj.position.y = 150; // set above TextCloud
 		this.scene.add(lightTargetObj);
+		// this.camera.lookAt(new THREE.Vector3(0,10,0));
 
 		const lightMesh = new THREE.Mesh(
 			new THREE.SphereGeometry(1, 8, 8),
 			new THREE.MeshBasicMaterial({ color: 0xffffff })
 		);
-		this.directionalLight = new THREE.DirectionalLight(THREE.Color.NAMES.whitesmoke, 300);
+		this.directionalLight = new THREE.DirectionalLight(THREE.Color.NAMES.wheat, 300);
 		this.directionalLight.target = lightTargetObj; // NOTE: can't rotate, have to set target obj
 
 		lightMesh.add(this.directionalLight);
@@ -157,8 +168,8 @@ export default class MainScene {
 		this.renderables.push(this.simplexPlane);
 	}
 
-	public onThemeChange(val: boolean) { // TODO: rename to onThemeChange
-		console.log("themeCallback: " + val);
+	public onThemeChange(val: boolean) {
+		console.log('themeCallback: ' + val);
 		if (val) {
 			// dark mode
 			this.renderer.toneMapping = THREE.CineonToneMapping;
@@ -167,7 +178,6 @@ export default class MainScene {
 
 			this.scene.fog = new THREE.FogExp2(NAMED_COLORS.diserria, 0.004);
 			this.directionalLight.intensity = 300;
-
 		} else {
 			// white mode
 			this.renderer.toneMapping = THREE.LinearToneMapping;
@@ -184,7 +194,7 @@ export default class MainScene {
 	}
 
 	public onNavigationChange(item: NavItem) {
-		// console.log('::: ', item);
+		console.log('scene onNavChange', item);
 		this.textCloud.onNavigationChange(item);
 	}
 
@@ -194,6 +204,16 @@ export default class MainScene {
 
 	public stop(): void {
 		cancelAnimationFrame(this.animFrameId);
+		this.scene.clear();
+		this.renderer.renderLists.dispose();
+		this.renderer.dispose();
+
+		// TODO: https://threejs.org/docs/index.html#manual/en/introduction/How-to-dispose-of-objects
+
+		// TODO: https://stackoverflow.com/questions/20997669/memory-leak-in-three-js
+		// TODO: https://stackoverflow.com/questions/12945092/memory-leak-with-three-js-and-many-shapes?rq=1
+		// TODO: https://github.com/mrdoob/three.js/blob/master/examples/webgl_test_memory.html
+		// TODO: https://github.com/mrdoob/three.js/blob/master/examples/webgl_test_memory2.html
 	}
 
 	private update(): void {
@@ -209,8 +229,8 @@ export default class MainScene {
 		this.composer.render();
 		// this.controls.update(delta);
 
-		this.camera.position.x = - 1.5 * Math.sin(.5 * Math.PI * this.normalizedMouseScreenPos.x);
-		this.camera.position.y = 1.0 * Math.sin(.5 * Math.PI * this.normalizedMouseScreenPos.y);
+		this.camera.position.x = -1.5 * Math.sin(0.5 * Math.PI * this.normalizedMouseScreenPos.x);
+		this.camera.position.y = 1.0 * Math.sin(0.5 * Math.PI * this.normalizedMouseScreenPos.y);
 
 		// TODO: if mobile enable touch and disable above
 		// this.camera.position.x = - 1.5 * Math.sin(.5 * Math.PI * this.normalizedTouchScreenPos.x);
@@ -228,12 +248,18 @@ export default class MainScene {
 
 	private addResizeSupport(): void {
 		this.onWindowResize(this.camera, this.renderer); // initial call to set renderHeight and renderWidth
-		window.addEventListener('resize', () => { this.onWindowResize(this.camera, this.renderer); }, false);
+		window.addEventListener(
+			'resize',
+			() => {
+				this.onWindowResize(this.camera, this.renderer);
+			},
+			false
+		);
 	}
 
 	private onWindowResize(camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer): void {
 		this.windowScreenWidth = window.innerWidth;
-		this.windowScreenHeight = window.innerHeight;		
+		this.windowScreenHeight = window.innerHeight;
 
 		if (renderer && camera) {
 			console.log('width: ' + this.windowScreenWidth + ' height: ' + this.windowScreenHeight);
@@ -244,20 +270,26 @@ export default class MainScene {
 			camera.aspect = this.windowScreenWidth / this.windowScreenHeight;
 			camera.updateProjectionMatrix();
 			const wsize = this.getRendererSize(this.camera);
+
 			this.renderWidth = wsize[0];
 			this.renderHeight = wsize[1];
+			console.log('renderWidth: ', this.renderWidth, '  -  renderHeight: ', this.renderHeight);
+
 
 			this.renderables.forEach((item) => {
 				item.onWindowResize(this.windowScreenWidth, this.windowScreenHeight);
 			});
+
+			console.log('camera: ', camera.aspect);
+
 		}
 		// this.camera.aspect = window.innerWidth / window.innerHeight;
-		// this.camera.updateProjectionMatrix();  
+		// this.camera.updateProjectionMatrix();
 		// this.renderer.setSize( window.innerWidth, window.innerHeight );
 	}
 
 	private addMouseInputSupport(): void {
-		document.addEventListener('mousemove', event => {
+		document.addEventListener('mousemove', (event) => {
 			// const v = new THREE.Vector3(); // TODO:
 			// this.camera.getWorldDirection(v); // TODO:
 			// v.normalize(); // TODO:
@@ -265,18 +297,18 @@ export default class MainScene {
 
 			// this.raycaster.setFromCamera(this.normalizedMouseScreenPos, this.camera);
 			// this.raycaster.ray.intersectPlane(this.mousePlane, this.mouseWorldPosition); // TODO:mouseWorldPosition
-			// console.log( this.raycaster.ray ); 
+			// console.log( this.raycaster.ray );
 			// console.log( this.mouseWorldPosition );
 
 			this.normalizedMouseScreenPos.x = (event.clientX / this.windowScreenWidth) * 2 - 1;
-			this.normalizedMouseScreenPos.y = - (event.clientY / this.windowScreenHeight) * 2 + 1;
+			this.normalizedMouseScreenPos.y = -(event.clientY / this.windowScreenHeight) * 2 + 1;
 
 			this.textCloud.onMouseMove(event);
 		});
 
-		document.addEventListener('touchmove', event => {
+		document.addEventListener('touchmove', (event) => {
 			this.normalizedTouchScreenPos.x = (event.changedTouches[0].clientX / this.windowScreenWidth) * 2 - 1;
-			this.normalizedTouchScreenPos.y = - (event.changedTouches[0].clientY / this.windowScreenHeight) * 2 + 1;
+			this.normalizedTouchScreenPos.y = -(event.changedTouches[0].clientY / this.windowScreenHeight) * 2 + 1;
 
 			this.textCloud.onTouchMove(event);
 		});
@@ -284,7 +316,7 @@ export default class MainScene {
 
 	private getRendererSize(camera: THREE.PerspectiveCamera): Pair {
 		const cam = new THREE.PerspectiveCamera(camera.fov, camera.aspect);
-		const vFOV = cam.fov * Math.PI / 180;
+		const vFOV = (cam.fov * Math.PI) / 180;
 		const height = 2 * Math.tan(vFOV / 2) * Math.abs(conf.cameraZ);
 		const width = height * cam.aspect;
 		return [width, height];

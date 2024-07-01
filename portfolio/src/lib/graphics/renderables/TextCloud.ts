@@ -20,27 +20,27 @@ interface IVertices {
 }
 
 interface Item {
-	idx: number,
-	geometry: TextGeometry,
-	particles: THREE.BufferGeometry,
+	idx: number;
+	geometry: TextGeometry;
+	particles: THREE.BufferGeometry;
 	points: Array<THREE.Vector3>;
-};
+}
 type GeometryItems = Array<Item>;
 
 // Options
-const particleCount = 10000;
-const typeface = '/src/lib/graphics/fonts/optimer_bold.typeface.json';
+const particleCount = 5000;
+const typefaceRegular = '/src/lib/graphics/fonts/optimer_bold.typeface.json';
+const typefaceMobile = '/src/lib/graphics/fonts/optimer_regular.typeface.json';
 
 
 export class TextCloud implements IRenderable {
-
 	private clock = new THREE.Clock();
 
 	private lookAt?: THREE.Vector3;
 
 	private fontLoader = new FontLoader();
+	private font!: Font;
 	private ready: boolean = false;
-
 
 	private particleSystem!: THREE.InstancedMesh;
 	// Instanced geometry
@@ -49,6 +49,8 @@ export class TextCloud implements IRenderable {
 	// Each entry is a text cloud of positions - used to set currParticles' position attribute
 	private particlesPositions: Array<Array<THREE.Vector3>> = new Array<Array<THREE.Vector3>>();
 	private currParticlesPos: Array<THREE.Vector3> | null = null;
+
+	private isMobile: boolean;
 
 	// private particleMaterial = new THREE.MeshNormalMaterial({ transparent: true });
 	private material = new THREE.MeshStandardMaterial({
@@ -83,7 +85,15 @@ export class TextCloud implements IRenderable {
 	// private tween!: TWEEN.Tween<THREE.TypedArray>;;
 	// private activeTweens: Array<TWEEN.Tween<Array<THREE.Vector3>>> = new Array();
 
-	constructor(scene: THREE.Scene, navItems: Array<NavItem>, initParams: NavItem, resolution?: THREE.Vector2, pos?: THREE.Vector3, lookAt?: THREE.Vector3) {
+	constructor(
+		scene: THREE.Scene,
+		navItems: Array<NavItem>,
+		initParams: NavItem,
+		isMobile: boolean,
+		resolution?: THREE.Vector2,
+		pos?: THREE.Vector3,
+		lookAt?: THREE.Vector3
+	) {
 		// TODO: wip - properly position this element based on div/h1 element
 		// let mainTitleText: (HTMLElement | null) = document.getElementById("main-title");
 		// if (mainTitleText != null) {
@@ -91,23 +101,25 @@ export class TextCloud implements IRenderable {
 		// 	console.log('mainTitleText: ', mainTitleText);
 		// 	console.log('top: ', top, ' bottom: ', bottom);
 		// }
+
+		this.isMobile = isMobile;
+
 		this.resolution = new THREE.Vector2(resolution?.x, resolution?.y);
 
 		// load font and execute onLoad callback
-		this.fontLoader.load(typeface, (font) => {
-
+		this.fontLoader.load( this.isMobile ? typefaceMobile : typefaceRegular, (font) => {
 			navItems.forEach((navItem) => {
-				console.log('TextCloud navItems: ', navItem);
+				// console.log('TextCloud navItems: ', navItem);
 
 				if (navItem == null) {
-					console.log('returned on navItem: ', navItem);
+					// console.log('returned on navItem: ', navItem);
 					return;
 				}
 
 				this.particlesPositions.push(this.createParticleText(font, navItem.id, navItem.idx));
 			});
 
-			console.log(this.particlesPositions);
+			// console.log(this.particlesPositions);
 
 			this.initParticleSystem(font, initParams);
 
@@ -121,36 +133,47 @@ export class TextCloud implements IRenderable {
 			// play initial animation
 			this.startEntryAnimation(initParams);
 
+			this.font = font;
 			this.ready = true;
 		});
 	}
 
 	private createParticleText(font: Font, text: string, idx: number): Array<THREE.Vector3> {
+		
+		const size = this.isMobile ? window.innerWidth * 0.0075: window.innerWidth * 0.003;
+
 		const geometry = new TextGeometry(text, {
 			font: font,
-			size: window.innerWidth * 0.003, // TODO: window.innerWidth different for mobile and window
+			size: size, // TODO: window.innerWidth different for mobile and window
 			height: 1,
-			curveSegments: 10,
+			curveSegments: 10
 		});
 		geometry.center();
 
 		const textMesh = new THREE.Mesh(geometry);
-		const sampler = new MeshSurfaceSampler(textMesh)
-			.setWeightAttribute('color')
-			.build();
+		const sampler = new MeshSurfaceSampler(textMesh).setWeightAttribute('color').build();
 
 		const particles: Array<THREE.Vector3> = new Array<THREE.Vector3>();
 		for (let i = 0; i < particleCount; ++i) {
-			const position = new THREE.Vector3;
+			const position = new THREE.Vector3();
 			sampler.sample(position);
+
+			// move each sample up a bit
+			// position.y = position.y + 3;
+			// position.z = position.z + 3;
+
 			particles.push(position);
 		}
+
+		// cleanup
+		geometry.dispose();
+		textMesh.clear();
 
 		return particles; //randomPointsInBufferGeometry(geometry, particleCount); // Coordinates of each particle
 	}
 
 	private initParticleSystem(font: Font, initParams: NavItem) {
-		console.log('initParams: ', initParams);
+		// console.log('initParams: ', initParams);
 
 		this.currParticlesPos = this.createParticleText(font, initParams.id, initParams.idx);
 		if (this.currParticlesPos == null) {
@@ -164,7 +187,7 @@ export class TextCloud implements IRenderable {
 
 		// TODO: initialize position
 		this.particleSystem.position.x = 0;
-		this.particleSystem.position.y = 25;
+		this.particleSystem.position.y = 27;
 		this.particleSystem.position.z = 30;
 	}
 
@@ -195,17 +218,19 @@ export class TextCloud implements IRenderable {
 	public onNavigationChange(item: NavItem) {
 		if (!this.ready) return;
 
+		console.log('textCloud onNavChange ', item);
+
 		this.transitionTo(item);
 	}
 
-	public onThemeChange(val: boolean) { // TODO: rename to onThemeChange
-		console.log("themeCallback: " + val);
+	public onThemeChange(val: boolean) {
+		// TODO: rename to onThemeChange
+		// console.log("themeCallback: " + val);
 		if (val) {
 			// dark mode
 			this.material.color = new THREE.Color(NAMED_COLORS.yellowsea);
 			this.material.opacity = 0.7;
 			this.material.alphaHash = true;
-
 		} else {
 			// white mode
 			this.material.color = new THREE.Color(NAMED_COLORS.dimgray);
@@ -214,7 +239,7 @@ export class TextCloud implements IRenderable {
 		}
 	}
 
-	public onWindowResize() {
+	public onWindowResize(width: number, height: number) {
 		// Update the resolution uniform
 		// this.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight).multiplyScalar(window.devicePixelRatio);
 	}
@@ -231,30 +256,29 @@ export class TextCloud implements IRenderable {
 		// this.uniforms.u_mouse.value.set(event.touches[0].pageX, window.innerHeight - event.touches[0].pageY).multiplyScalar(window.devicePixelRatio);
 	}
 
-
 	public transitionTo(item: NavItem) {
 		this.morphTo(item);
 		this.currNav = item;
 	}
 
-	public getPosition(): THREE.Vector3 {
-		return this.particleSystem.position;
-	}
+	// public getPosition(): THREE.Vector3 {
+	// 	return this.particleSystem.position;
+	// }
 
-	public getParticleSystem() {
-		return this.particleSystem;
-	}
+	// public getParticleSystem() {
+	// 	return this.particleSystem;
+	// }
 
 	private getParticlePositions(item: NavItem): Array<THREE.Vector3> | null {
-
 		let pos: Array<THREE.Vector3> | undefined = this.particlesPositions.at(item.idx);
 		if (pos == null) {
-			console.log('getBufferGeometry: NULL', ' for ', item);
-			console.log('geom: : ', this.particlesPositions);
+			// console.log('getBufferGeometry: NULL', ' for ', item);
+			// console.log('geom: : ', this.particlesPositions);
 
 			return null;
 		}
-		console.log('getBufferGeometry: ', item);
+		// console.log('getBufferGeometry: ', item);
+		console.log('getBufferGeometry...');
 
 		return pos;
 	}
@@ -263,12 +287,7 @@ export class TextCloud implements IRenderable {
 		// if Home nav
 		const sphereGeom = new THREE.SphereGeometry(16, 16, 16);
 		const sphere = new THREE.Mesh(sphereGeom);
-		sphere.position.x = 100;
-		sphere.position.setY(-100);
-
-		const sphereSampler = new MeshSurfaceSampler(sphere)
-			.setWeightAttribute('color')
-			.build();
+		const sphereSampler = new MeshSurfaceSampler(sphere).setWeightAttribute('color').build();
 
 		let sphereParticlesPos: Array<THREE.Vector3> = new Array<THREE.Vector3>();
 		for (let i = 0; i < particleCount; ++i) {
@@ -276,6 +295,10 @@ export class TextCloud implements IRenderable {
 			sphereSampler.sample(position);
 			sphereParticlesPos.push(position);
 		}
+
+		// cleanup
+		sphereGeom.dispose();
+		sphere.clear();
 
 		const toPositionVectors: Array<THREE.Vector3> | null = this.getParticlePositions(navItem);
 
@@ -321,8 +344,4 @@ export class TextCloud implements IRenderable {
 			tween.start();
 		}
 	}
-
 }
-
-
-
