@@ -10,7 +10,9 @@ const config = {
 	preprocess: vitePreprocess(),
 	vitePlugin: {
 		inspector: {
-			showToggleButton: 'always'
+			toggleKeyCombo: 'meta-shift',
+			showToggleButton: 'always',
+			toggleButtonPos: 'bottom-right'
 		}
 	},
 	kit: {
