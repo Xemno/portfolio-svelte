@@ -8,6 +8,7 @@ import descCpuRayMarcher from '@md/Projects/descFastCpuRayMarcher.md?raw';
 import descMRLab from '@md/Projects/descMixedRealityLab.md?raw';
 import descBachelorThesis from '@md/Projects/descBachelorThesis.md?raw';
 import descMasterThesis from '@md/Projects/descMasterThesis.md?raw';
+import descDriveWebsite from '@md/Projects/descDriveWebsite.md?raw';
 import descThisWebsite from '@md/Projects/descThisWebsite.md?raw';
 
 import { base } from '$app/paths';
@@ -22,6 +23,23 @@ export const items: Array<Project> = [
 		name: 'This Website',
 		color: '#5e95e3',
 		description: descThisWebsite,
+		shortDescription:
+			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
+		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
+		logo: Assets.Unknown,
+		bannerImage: Assets.Unknown,
+		period: {
+			from: new Date(2022, 1, 20),
+			to: new Date(2023, 1, 20)
+		},
+		skills: getSkills('svelte', 'ts', 'css', 'js', 'html'),
+		type: 'Website Template'
+	},
+	{
+		slug: 'dr1ve-website',
+		name: 'Dr1ve Website',
+		color: '#5e95e3',
+		description: descDriveWebsite,
 		shortDescription:
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
 		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
