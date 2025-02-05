@@ -3,7 +3,7 @@ import type IRenderable from './IRenderable';
 import { NAMED_COLORS, type Color } from '$lib/utils/colors';
 import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
-import { randomPointsInBufferGeometry } from '../utils/VectorUtils';
+import { toWorldPosition } from '../utils/VectorUtils';
 import type { NavItem } from '$lib/types';
 import * as TWEEN from '@tweenjs/tween.js';
 
@@ -32,9 +32,12 @@ const particleCount = 5000;
 const typefaceRegular = '/src/lib/graphics/fonts/optimer_bold.typeface.json';
 const typefaceMobile = '/src/lib/graphics/fonts/optimer_regular.typeface.json';
 
+// TODO: refactor
+// TODO: refactor into TextCloud --> ParticleSystem (Text cloud using a particle system, theoretically could use other systems)
+// 						--> TweenMorphing --> 		(text cloud uses TweenMorphing that again uses ParticleSystem to morph the text cloud)
 
-export class TextCloud implements IRenderable {
-	private clock = new THREE.Clock();
+export default class TextCloud implements IRenderable {
+	// private clock = new THREE.Clock();
 
 	private lookAt?: THREE.Vector3;
 
@@ -47,10 +50,12 @@ export class TextCloud implements IRenderable {
 	private particleGeometry: THREE.BufferGeometry = new THREE.CircleGeometry(0.15, 64, 64);
 
 	// Each entry is a text cloud of positions - used to set currParticles' position attribute
-	private particlesPositions: Array<Array<THREE.Vector3>> = new Array<Array<THREE.Vector3>>();
+	private particlesPositions = new Array<Array<THREE.Vector3>>();
 	private currParticlesPos: Array<THREE.Vector3> | null = null;
 
-	private isMobile: boolean;
+	private isMobile: boolean = false;
+	private isPortraitMode: boolean = false;
+
 
 	// private particleMaterial = new THREE.MeshNormalMaterial({ transparent: true });
 	private material = new THREE.MeshStandardMaterial({
@@ -58,6 +63,9 @@ export class TextCloud implements IRenderable {
 		alphaHash: true,
 		opacity: 0.7
 	});
+
+	private renderer: THREE.WebGLRenderer;
+	private camera: THREE.PerspectiveCamera;
 
 	// Define the shader uniforms
 	// private uniforms = {
@@ -86,28 +94,28 @@ export class TextCloud implements IRenderable {
 	// private activeTweens: Array<TWEEN.Tween<Array<THREE.Vector3>>> = new Array();
 
 	constructor(
+		renderer: THREE.WebGLRenderer,
+		camera: THREE.PerspectiveCamera,
 		scene: THREE.Scene,
 		navItems: Array<NavItem>,
 		initParams: NavItem,
 		isMobile: boolean,
+		isPortrait: boolean,
 		resolution?: THREE.Vector2,
 		pos?: THREE.Vector3,
 		lookAt?: THREE.Vector3
 	) {
-		// TODO: wip - properly position this element based on div/h1 element
-		// let mainTitleText: (HTMLElement | null) = document.getElementById("main-title");
-		// if (mainTitleText != null) {
-		// 	let { top, bottom } = mainTitleText.getBoundingClientRect();
-		// 	console.log('mainTitleText: ', mainTitleText);
-		// 	console.log('top: ', top, ' bottom: ', bottom);
-		// }
+		this.renderer = renderer; // TODO: move out / remove dependency
+		this.camera = camera; // TODO: move out / remove dependency
 
-		this.isMobile = isMobile;
+
+		this.isMobile = isMobile; // TODO: move out / remove dependency
+		// this.isPortraitMode = isPortrait;
 
 		this.resolution = new THREE.Vector2(resolution?.x, resolution?.y);
 
 		// load font and execute onLoad callback
-		this.fontLoader.load( this.isMobile ? typefaceMobile : typefaceRegular, (font) => {
+		this.fontLoader.load(this.isMobile ? typefaceMobile : typefaceRegular, (font) => {
 			navItems.forEach((navItem) => {
 				// console.log('TextCloud navItems: ', navItem);
 
@@ -132,6 +140,8 @@ export class TextCloud implements IRenderable {
 
 			// play initial animation
 			this.startEntryAnimation(initParams);
+			this.onWindowResize(0, 0, isPortrait);
+
 
 			this.font = font;
 			this.ready = true;
@@ -139,8 +149,11 @@ export class TextCloud implements IRenderable {
 	}
 
 	private createParticleText(font: Font, text: string, idx: number): Array<THREE.Vector3> {
-		
-		const size = this.isMobile ? window.innerWidth * 0.0075: window.innerWidth * 0.003;
+
+		let size = this.isMobile ? window.innerWidth * 0.0075 : window.innerWidth * 0.005;
+
+		const maxSize = this.isMobile ? (this.isPortraitMode ? 4 : 6) : 8;
+		size = Math.min(size, maxSize);
 
 		const geometry = new TextGeometry(text, {
 			font: font,
@@ -157,11 +170,6 @@ export class TextCloud implements IRenderable {
 		for (let i = 0; i < particleCount; ++i) {
 			const position = new THREE.Vector3();
 			sampler.sample(position);
-
-			// move each sample up a bit
-			// position.y = position.y + 3;
-			// position.z = position.z + 3;
-
 			particles.push(position);
 		}
 
@@ -169,7 +177,7 @@ export class TextCloud implements IRenderable {
 		geometry.dispose();
 		textMesh.clear();
 
-		return particles; //randomPointsInBufferGeometry(geometry, particleCount); // Coordinates of each particle
+		return particles;
 	}
 
 	private initParticleSystem(font: Font, initParams: NavItem) {
@@ -177,7 +185,7 @@ export class TextCloud implements IRenderable {
 
 		this.currParticlesPos = this.createParticleText(font, initParams.id, initParams.idx);
 		if (this.currParticlesPos == null) {
-			console.log('Error - currParticles is NULL');
+			// console.log('Error - currParticles is NULL');
 		}
 
 		// initialize particle system
@@ -185,10 +193,8 @@ export class TextCloud implements IRenderable {
 		this.particleSystem.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
 		this.updateInstanceMatrix();
 
-		// TODO: initialize position
-		this.particleSystem.position.x = 0;
-		this.particleSystem.position.y = 27;
-		this.particleSystem.position.z = 30;
+
+		this.setMainTitleTextPosition();
 	}
 
 	private updateInstanceMatrix() {
@@ -202,6 +208,10 @@ export class TextCloud implements IRenderable {
 		});
 
 		this.particleSystem.instanceMatrix.needsUpdate = true;
+	}
+
+	public cleanup(): void {
+
 	}
 
 	public update(deltaTime: number, mouseScreenPos: THREE.Vector2 | void): void {
@@ -218,7 +228,7 @@ export class TextCloud implements IRenderable {
 	public onNavigationChange(item: NavItem) {
 		if (!this.ready) return;
 
-		console.log('textCloud onNavChange ', item);
+		// this.setMainTitleTextPosition(); // NOTE: updated onAfterUiUpdate
 
 		this.transitionTo(item);
 	}
@@ -239,9 +249,17 @@ export class TextCloud implements IRenderable {
 		}
 	}
 
-	public onWindowResize(width: number, height: number) {
+	public onWindowResize(width: number, height: number, isPortraitMode: boolean) {
+		// console.log('texCl portraitmode: ' + isPortraitMode);
+
+		this.onOrientationChange(isPortraitMode);
+
 		// Update the resolution uniform
 		// this.uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight).multiplyScalar(window.devicePixelRatio);
+	}
+
+	public onAfterUiUpdate() {
+		this.setMainTitleTextPosition();
 	}
 
 	// Updates the uniforms when the mouse moves
@@ -256,6 +274,39 @@ export class TextCloud implements IRenderable {
 		// this.uniforms.u_mouse.value.set(event.touches[0].pageX, window.innerHeight - event.touches[0].pageY).multiplyScalar(window.devicePixelRatio);
 	}
 
+	private onOrientationChange(isPortraitMode: boolean) {
+		if (this.isPortraitMode != isPortraitMode) {
+			this.isPortraitMode = isPortraitMode;
+
+			// if (!this.isMobile) return;
+			// this.setMainTitleTextPosition();
+		}
+	}
+
+	private setMainTitleTextPosition() {
+		console.log('TextCloud - setMainTitleTextPosition called');
+
+		let vWorldPos = this.getMainTitleTextPosition();
+		if (vWorldPos == null) return;
+		if (this.particleSystem == null) return;
+		if (vWorldPos != this.particleSystem.position) {
+			this.particleSystem.position.set(vWorldPos.x, vWorldPos.y, vWorldPos.z);
+		}
+	}
+
+	private getMainTitleTextPosition(): THREE.Vector3 | null {
+		let mainTitleText: (HTMLElement | null) = document.getElementById("main-title");
+		if (mainTitleText != null) {
+			let { top, bottom, left, right } = mainTitleText.getBoundingClientRect();
+			const midX = left + (right - left) / 2;
+			const midY = top + (bottom - top) / 2;
+			const midPoint = new THREE.Vector2(midX, midY);
+			return toWorldPosition(midPoint, this.camera, this.renderer);
+		}
+		return null;
+	}
+
+
 	public transitionTo(item: NavItem) {
 		this.morphTo(item);
 		this.currNav = item;
@@ -265,9 +316,9 @@ export class TextCloud implements IRenderable {
 	// 	return this.particleSystem.position;
 	// }
 
-	// public getParticleSystem() {
-	// 	return this.particleSystem;
-	// }
+	public getParticleSystem() {
+		return this.particleSystem;
+	}
 
 	private getParticlePositions(item: NavItem): Array<THREE.Vector3> | null {
 		let pos: Array<THREE.Vector3> | undefined = this.particlesPositions.at(item.idx);
@@ -278,7 +329,7 @@ export class TextCloud implements IRenderable {
 			return null;
 		}
 		// console.log('getBufferGeometry: ', item);
-		console.log('getBufferGeometry...');
+		// console.log('getBufferGeometry...');
 
 		return pos;
 	}
@@ -302,26 +353,65 @@ export class TextCloud implements IRenderable {
 
 		const toPositionVectors: Array<THREE.Vector3> | null = this.getParticlePositions(navItem);
 
-		this.morphParticlesFromTo(sphereParticlesPos, toPositionVectors!, 2000, TWEEN.Easing.Cubic.Out);
+		this.morphParticlesFromTo(sphereParticlesPos, toPositionVectors!, 2000, 0, TWEEN.Easing.Cubic.Out);
 	}
 
 	private morphTo(navItem: NavItem) {
 		const toPositionVectors: Array<THREE.Vector3> | null = this.getParticlePositions(navItem);
-		this.morphParticlesTo(toPositionVectors!, 1000, TWEEN.Easing.Quartic.Out);
+		this.morphParticlesTo(toPositionVectors!, 1000, 0, TWEEN.Easing.Quartic.Out);
 	}
 
-	private morphParticlesFromTo(fromPosArray: Array<THREE.Vector3>, toPosArray: Array<THREE.Vector3>, time: number, easing: EasingFunction): void {
+	private moveParticles(deltaPos: THREE.Vector3, particlesPosArray: Array<THREE.Vector3>) {
+		for (let i = 0; i < particlesPosArray.length; ++i) {
+			particlesPosArray[i] = new THREE.Vector3().subVectors(particlesPosArray[i], deltaPos);
+		}
+	}
+
+	private moveAllCurrParticles(deltaPos: THREE.Vector3) {
+		for (let i = 0; i < this.particlesPositions.length; ++i) {
+			this.moveParticles(deltaPos, this.particlesPositions[i]);
+		}
+	}
+
+
+	private moveCurrParticles(deltaPos: THREE.Vector3) {
+		if (this.currParticlesPos == null) {
+			// console.log('Error in moveTo, currParticlesPos == null.');
+			return;
+		}
+
+		const shuffle = (array: Array<THREE.Vector3>) => {
+			array.sort(() => Math.random() - 0.5);
+		};
+
+		const toPositionVectors: Array<THREE.Vector3> = new Array<THREE.Vector3>(particleCount);
+
+		for (let i = 0; i < particleCount; ++i) {
+			const newPos = new THREE.Vector3();
+			const currPos: THREE.Vector3 = this.currParticlesPos[i];
+
+			newPos.subVectors(currPos, deltaPos);
+			toPositionVectors[i] = newPos;
+		}
+		shuffle(toPositionVectors);
+
+		this.morphParticlesTo(toPositionVectors, 1000, 100, TWEEN.Easing.Quartic.Out);
+
+		this.moveAllCurrParticles(deltaPos);
+	}
+
+	private morphParticlesFromTo(fromPosArray: Array<THREE.Vector3>, toPosArray: Array<THREE.Vector3>, time: number, delay: number, easing: EasingFunction): void {
 		this.currParticlesPos = fromPosArray;
-		this.morphParticlesTo(toPosArray!, time, easing);
+		this.morphParticlesTo(toPosArray!, time, delay, easing);
 	}
 
-	private morphParticlesTo(toPosArray: Array<THREE.Vector3>, time: number, easing: EasingFunction): void {
+	private morphParticlesTo(toPosArray: Array<THREE.Vector3>, time: number, delay: number, easing: EasingFunction): void {
 		if (toPosArray == null) {
-			console.log('Error in morphParticles, toPosArray == null.');
+			// console.log('Error in morphParticles, toPosArray == null.');
 			return;
 		}
 		if (this.currParticlesPos == null) {
-			console.log('Error in morphParticles, currParticlesPos == null.');
+			// console.log('Error in morphParticles, currParticlesPos == null.');
 			return;
 		}
 
@@ -333,6 +423,7 @@ export class TextCloud implements IRenderable {
 
 			const tween = new TWEEN.Tween(currPos)
 				.to(toPos, time)
+				.delay(delay)
 				.easing(easing)
 				.onUpdate((pos) => {
 					let matrix: THREE.Matrix4 = new THREE.Matrix4();

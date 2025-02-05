@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
 	import { onHydrated, theme } from '$lib/stores/theme';
 	import { page } from '$app/stores';
 	import { routeToName } from '$lib/utils/helpers';
+	import { detectMobile } from '$lib/stores/navigation';
 	import MainScene from '$lib/graphics/scenes/mainScene';
+
 
 	let canvas: HTMLCanvasElement;
 	let scene: MainScene;
@@ -11,15 +13,39 @@
 	onMount(() => onHydrated());
 
 	onMount(() => {
-		scene = new MainScene(canvas, routeToName($page.url.pathname));
+		const isMobile = detectMobile();
+		console.log('MainScene - isMobile: ', isMobile);
+
+		scene = new MainScene(canvas, routeToName($page.url.pathname), isMobile);
 		theme.subscribe((v) => scene.onThemeChange(v));
-		page.subscribe((v) => scene.onNavigationChange(routeToName(v.url.pathname)));
+		page.subscribe((v) => {
+			scene.onNavigationChange(routeToName(v.url.pathname));
+			// console.log('scene.onNavigationChange');
+		});
 		scene.start();
+		console.log('MainScene - start.');
 
 		return () => {
 			scene.stop();
+			// scene.cleanup();
+			console.log('MainScene - stopped.');
 		};
 	});
+
+	onDestroy(() => {
+		console.log('MainScene - destroyed.');
+	});
+
+	// beforeUpdate(() => {
+	// 	console.log('the component is about to update');
+	// });
+
+	afterUpdate(() => {
+		if (scene != null) {
+			scene.onAfterUiUpdate();
+		}
+	});
+
 </script>
 
 <!-- <canvas id="canvas" class="fixed left-0 top-0 -z-50" bind:this={canvas} /> -->

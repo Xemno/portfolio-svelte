@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { NAMED_COLORS } from '$lib/utils/colors';
 import { SimplexPlane } from '../renderables/SimplexPlane';
-import { TextCloud } from '../renderables/TextCloud';
+import TextCloud from '../renderables/TextCloud';
 import { items as navItems } from '@data/navbar';
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
@@ -14,6 +14,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass.js';
 import { TAARenderPass } from 'three/examples/jsm/postprocessing/TAARenderPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { toScreenPosition } from '../utils/VectorUtils';
 
 let conf = {
 	fov: 75,
@@ -56,6 +57,8 @@ export default class MainScene {
 	private directionalLight!: THREE.DirectionalLight;
 
 	private isMobile: boolean;
+	private isPortraitMode!: boolean;
+
 
 	// private lightMesh!: THREE.Mesh;
 
@@ -101,7 +104,7 @@ export default class MainScene {
 		bloomPass.radius = params.radius;
 
 		const taaRenderPass = new TAARenderPass(this.scene, this.camera);
-		const afterimagePass = new AfterimagePass(0.5);
+		// const afterimagePass = new AfterimagePass(0.5);
 		const outputPass = new OutputPass();
 
 		this.composer = new EffectComposer(this.renderer);
@@ -130,7 +133,7 @@ export default class MainScene {
 		);
 		this.scene.add(this.simplexPlane.getPlane());
 
-		// initialies TextCloud
+		// initialies TextCloud -- TODO: refactor this
 		let texts: Array<NavItem> = new Array<NavItem>();
 		texts.push({ idx: 0, id: 'Qais El Okaili' }); // first item
 		Array.from(navItems).forEach(function (item, idx) {
@@ -138,16 +141,20 @@ export default class MainScene {
 		});
 		texts.push({ idx: 7, id: 'Search' }); // last item
 		this.textCloud = new TextCloud(
+			this.renderer,
+			this.camera,
 			this.scene,
 			texts,
 			initialText,
 			this.isMobile,
+			this.isPortraitMode,
 			new THREE.Vector2(this.renderer.domElement.width, this.renderer.domElement.height)
 		);
 
 		const lightTargetObj = new THREE.Object3D();
 		lightTargetObj.position.y = 150; // set above TextCloud
 		this.scene.add(lightTargetObj);
+
 		// this.camera.lookAt(new THREE.Vector3(0,10,0));
 
 		const lightMesh = new THREE.Mesh(
@@ -161,6 +168,9 @@ export default class MainScene {
 		lightMesh.position.y = 22;
 		lightMesh.position.z = 50;
 
+		// let screenPos = toScreenPosition(lightMesh, this.camera, this.renderer);
+		// console.log('screenPos: ' + screenPos.toArray() + '   - maxW: ' + this.renderer.getContext().canvas.width + ',  maxH: ' + this.renderer.getContext().canvas.height);
+
 		this.scene.add(lightMesh);
 
 		// init renderables to update
@@ -169,7 +179,7 @@ export default class MainScene {
 	}
 
 	public onThemeChange(val: boolean) {
-		console.log('themeCallback: ' + val);
+		// console.log('themeCallback: ' + val);
 		if (val) {
 			// dark mode
 			this.renderer.toneMapping = THREE.CineonToneMapping;
@@ -194,7 +204,7 @@ export default class MainScene {
 	}
 
 	public onNavigationChange(item: NavItem) {
-		console.log('scene onNavChange', item);
+		// console.log('scene onNavChange', item);
 		this.textCloud.onNavigationChange(item);
 	}
 
@@ -216,6 +226,7 @@ export default class MainScene {
 		// TODO: https://github.com/mrdoob/three.js/blob/master/examples/webgl_test_memory2.html
 	}
 
+
 	private update(): void {
 		this.animFrameId = requestAnimationFrame(this.update.bind(this));
 		const delta = this.clock.getDelta();
@@ -229,8 +240,8 @@ export default class MainScene {
 		this.composer.render();
 		// this.controls.update(delta);
 
-		this.camera.position.x = -1.5 * Math.sin(0.5 * Math.PI * this.normalizedMouseScreenPos.x);
-		this.camera.position.y = 1.0 * Math.sin(0.5 * Math.PI * this.normalizedMouseScreenPos.y);
+		// this.camera.position.x = -1.5 * Math.sin(0.5 * Math.PI * this.normalizedMouseScreenPos.x);
+		// this.camera.position.y = 1.0 * Math.sin(0.5 * Math.PI * this.normalizedMouseScreenPos.y);
 
 		// TODO: if mobile enable touch and disable above
 		// this.camera.position.x = - 1.5 * Math.sin(.5 * Math.PI * this.normalizedTouchScreenPos.x);
@@ -261,8 +272,11 @@ export default class MainScene {
 		this.windowScreenWidth = window.innerWidth;
 		this.windowScreenHeight = window.innerHeight;
 
+		this.isPortraitMode = screen.availHeight > screen.availWidth ? true : false;
+		console.log('mainScene - isPortraitMode: ', this.isPortraitMode);
+
 		if (renderer && camera) {
-			console.log('width: ' + this.windowScreenWidth + ' height: ' + this.windowScreenHeight);
+			// console.log('width: ' + this.windowScreenWidth + ' height: ' + this.windowScreenHeight);
 
 			renderer.setSize(this.windowScreenWidth, this.windowScreenHeight);
 			this.composer.setSize(this.windowScreenWidth, this.windowScreenHeight);
@@ -273,19 +287,23 @@ export default class MainScene {
 
 			this.renderWidth = wsize[0];
 			this.renderHeight = wsize[1];
-			console.log('renderWidth: ', this.renderWidth, '  -  renderHeight: ', this.renderHeight);
+			// console.log('renderWidth: ', this.renderWidth, '  -  renderHeight: ', this.renderHeight);
 
-
+			// console.log(' init setting all isPortraitMode: ', this.isPortraitMode);
 			this.renderables.forEach((item) => {
-				item.onWindowResize(this.windowScreenWidth, this.windowScreenHeight);
+				item.onWindowResize(this.windowScreenWidth, this.windowScreenHeight, this.isPortraitMode);
 			});
 
-			console.log('camera: ', camera.aspect);
+			// console.log('camera: ', camera.aspect);
 
 		}
 		// this.camera.aspect = window.innerWidth / window.innerHeight;
 		// this.camera.updateProjectionMatrix();
 		// this.renderer.setSize( window.innerWidth, window.innerHeight );
+	}
+
+	public onAfterUiUpdate() {
+		this.textCloud.onAfterUiUpdate();
 	}
 
 	private addMouseInputSupport(): void {

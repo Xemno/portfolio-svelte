@@ -21,6 +21,36 @@ export function toScreenPosition(
 	return new THREE.Vector2(vector.x, vector.y);
 }
 
+// TODO: https://stackoverflow.com/questions/29884485/threejs-canvas-size-based-on-container
+
+export function toWorldPosition(
+	screenPos: THREE.Vector2,
+	camera: THREE.Camera,
+	renderer: THREE.WebGLRenderer
+): THREE.Vector3 {
+
+	let vec = new THREE.Vector3();
+	let pos = new THREE.Vector3();
+
+	// TODO: maybe use this instead of window.innerWidth 
+	// let widthHalf = 0.5 * renderer.getContext().canvas.width;
+	// let heightHalf = 0.5 * renderer.getContext().canvas.height;
+
+	vec.set(
+		(screenPos.x / window.innerWidth) * 2 - 1,
+		- (screenPos.y / window.innerHeight) * 2 + 1,
+		-0.5,
+	);
+	
+	vec.unproject(camera);
+    vec.sub( camera.position );                
+	vec.normalize();
+
+	let distance = - camera.position.z / vec.z;
+	pos.copy(camera.position).add(vec.multiplyScalar(distance));
+	return pos;
+}
+
 export function randomPointsInBufferGeometry(
 	geometry: THREE.BufferGeometry,
 	n: number

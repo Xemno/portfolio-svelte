@@ -3,11 +3,6 @@ import { writable } from 'svelte/store';
 
 const key = '@qais-portfolio-website';
 
-const updateLocalStorage = (value: boolean) => {
-	if (browser) {
-		localStorage.setItem(key, JSON.stringify(value));
-	}
-};
 
 export const theme = writable<boolean>(false);
 
@@ -21,6 +16,12 @@ export const toggleTheme = (value?: boolean) =>
 
 		return $v;
 	});
+
+const updateLocalStorage = (value: boolean) => {
+	if (browser) {
+		localStorage.setItem(key, JSON.stringify(value));
+	}
+};
 
 export const onHydrated = () => {
 	const fromStore = localStorage.getItem(key);

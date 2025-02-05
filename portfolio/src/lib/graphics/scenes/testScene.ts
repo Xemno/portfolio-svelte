@@ -161,13 +161,13 @@ export default class TestScene {
 	private ctx: CanvasRenderingContext2D | null;
 
 	constructor(canvas: HTMLCanvasElement) {
-		console.log('Constructor called.');
+		// console.log('Constructor called.');
 
 		// var myCanvas = document.getElementById("myCanvas");
 		canvas.width = IMAGE_SIZE;
 		canvas.height = IMAGE_SIZE;
 
-		console.log('canvas: ', canvas);
+		// console.log('canvas: ', canvas);
 
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(
@@ -193,11 +193,11 @@ export default class TestScene {
 	}
 
 	private init(): void {
-		console.log('init() called.');
+		// console.log('init() called.');
 
 		this.loadImages().then((images) => {
 			document.getElementById('loading')?.setAttribute('style', 'display: none;');
-			console.log("'loading' attribute set for each image.");
+			// console.log("'loading' attribute set for each image.");
 
 			this.initWithImageTextures(images);
 			this.ready = true;
@@ -207,8 +207,8 @@ export default class TestScene {
 	}
 
 	private initWithImageTextures(textures: any) {
-		console.log('initWithImageTextures() called.');
-		console.log('textures:', textures);
+		// console.log('initWithImageTextures() called.');
+		// console.log('textures:', textures);
 
 		this.textures = textures;
 
@@ -309,7 +309,7 @@ export default class TestScene {
 					let img = document.createElement('img');
 					img.crossOrigin = 'anonymous';
 					img.src = `${root}/${files[i]}.${ext}`;
-					console.log(img.src);
+					// console.log(img.src);
 					img.onload = (image) => {
 						return resolve(image.target);
 					};
@@ -328,7 +328,7 @@ export default class TestScene {
 		let newHeight = size / height;
 
 		if (this.ctx == null) {
-			console.log('this.ctx is null in resizeImage().');
+			// console.log('this.ctx is null in resizeImage().');
 			return;
 		}
 
