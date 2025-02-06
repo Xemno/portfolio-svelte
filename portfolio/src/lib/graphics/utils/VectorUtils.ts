@@ -41,9 +41,9 @@ export function toWorldPosition(
 		- (screenPos.y / window.innerHeight) * 2 + 1,
 		-0.5,
 	);
-	
+
 	vec.unproject(camera);
-    vec.sub( camera.position );                
+	vec.sub(camera.position);
 	vec.normalize();
 
 	let distance = - camera.position.z / vec.z;
