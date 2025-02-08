@@ -2,7 +2,6 @@ import type IRenderable from '../renderables/IRenderable';
 import type { NavItem } from '$lib/types';
 
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { NAMED_COLORS } from '$lib/utils/colors';
 import { SimplexPlane } from '../renderables/SimplexPlane';
 import TextCloud from '../renderables/TextCloud';
@@ -11,10 +10,8 @@ import { items as navItems } from '@data/navbar';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
-import { AfterimagePass } from 'three/examples/jsm/postprocessing/AfterimagePass.js';
 import { TAARenderPass } from 'three/examples/jsm/postprocessing/TAARenderPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
-import { toScreenPosition } from '../utils/VectorUtils';
 
 let conf = {
 	fov: 75,
@@ -58,15 +55,6 @@ export default class MainScene {
 
 	private isMobile: boolean;
 	private isPortraitMode!: boolean;
-
-
-	// private lightMesh!: THREE.Mesh;
-
-	// private shaderMaterial!: THREE.ShaderMaterial;
-	// private uniforms = {
-	// 	u_time: { type: "f", value: 1.0 },
-	// 	u_resolution: { type: "v2", value: new THREE.Vector2() },
-	// };
 
 	private renderables: Array<IRenderable> = new Array<IRenderable>();
 
@@ -117,6 +105,100 @@ export default class MainScene {
 		this.composer.addPass(outputPass);
 
 		this.initScene(initialText);
+	}
+
+
+	public onThemeChange(val: boolean) {
+		// console.log('themeCallback: ' + val);
+		if (val) {
+			// dark mode
+			this.renderer.toneMapping = THREE.CineonToneMapping;
+			this.renderer.toneMappingExposure = 0.75;
+			this.renderer.setClearColor(NAMED_COLORS.black, 1);
+
+			this.scene.fog = new THREE.FogExp2(NAMED_COLORS.diserria, 0.004);
+			this.directionalLight.intensity = 300;
+		} else {
+			// white mode
+			this.renderer.toneMapping = THREE.LinearToneMapping;
+			this.renderer.toneMappingExposure = 0.75;
+			this.renderer.setClearColor(NAMED_COLORS.white, 1);
+
+			this.scene.fog = new THREE.FogExp2(NAMED_COLORS.tan, 0.006);
+			this.directionalLight.intensity = 10;
+		}
+
+		this.renderables.forEach((item) => {
+			item.onThemeChange(val);
+		});
+	}
+
+	public onNavigationChange(item: NavItem) {
+		// console.log('scene onNavChange', item);
+		this.textCloud.onNavigationChange(item);
+	}
+
+	public start(): void {
+		this.update();
+	}
+
+	public stop(): void {
+		cancelAnimationFrame(this.animFrameId);
+		this.scene.clear();
+		this.renderer.renderLists.dispose();
+		this.renderer.dispose();
+
+		// TODO: https://threejs.org/docs/index.html#manual/en/introduction/How-to-dispose-of-objects
+
+		// TODO: https://stackoverflow.com/questions/20997669/memory-leak-in-three-js
+		// TODO: https://stackoverflow.com/questions/12945092/memory-leak-with-three-js-and-many-shapes?rq=1
+		// TODO: https://github.com/mrdoob/three.js/blob/master/examples/webgl_test_memory.html
+		// TODO: https://github.com/mrdoob/three.js/blob/master/examples/webgl_test_memory2.html
+	}
+
+	public onAfterUiUpdate() {
+		this.textCloud.onAfterUiUpdate();
+	}
+
+	private update(): void {
+		this.animFrameId = requestAnimationFrame(this.update.bind(this));
+		const delta = this.clock.getDelta();
+		const time = this.clock.getElapsedTime();
+
+		this.renderables.forEach((item) => {
+			item.update(delta, this.normalizedMouseScreenPos);
+		});
+
+		this.render();
+		this.composer.render();
+		// this.controls.update(delta);
+
+		// this.camera.position.x = -1.5 * Math.sin(0.5 * Math.PI * this.normalizedMouseScreenPos.x);
+		// this.camera.position.y = 1.0 * Math.sin(0.5 * Math.PI * this.normalizedMouseScreenPos.y);
+
+		// TODO: if mobile enable touch and disable above
+		// this.camera.position.x = - 1.5 * Math.sin(.5 * Math.PI * this.normalizedTouchScreenPos.x);
+		// this.camera.position.y = 1.0 * Math.sin(.5 * Math.PI * this.normalizedTouchScreenPos.y);
+
+		// update uniforms
+		// this.uniforms['u_time'].value = performance.now() / 1000;
+		// this.uniforms['u_resolution'].value = new THREE.Vector2(this.renderer.domElement.width, this.renderer.domElement.height);
+	}
+
+	private render(): void {
+		this.renderer.clear();
+		this.renderer.render(this.scene, this.camera);
+	}
+
+	private addResizeSupport(): void {
+		this.onWindowResize(this.camera, this.renderer); // initial call to set renderHeight and renderWidth
+		window.addEventListener(
+			'resize',
+			() => {
+				this.onWindowResize(this.camera, this.renderer);
+			},
+			false
+		);
 	}
 
 	private initScene(initialText: NavItem) {
@@ -178,96 +260,6 @@ export default class MainScene {
 		this.renderables.push(this.simplexPlane);
 	}
 
-	public onThemeChange(val: boolean) {
-		// console.log('themeCallback: ' + val);
-		if (val) {
-			// dark mode
-			this.renderer.toneMapping = THREE.CineonToneMapping;
-			this.renderer.toneMappingExposure = 0.75;
-			this.renderer.setClearColor(NAMED_COLORS.black, 1);
-
-			this.scene.fog = new THREE.FogExp2(NAMED_COLORS.diserria, 0.004);
-			this.directionalLight.intensity = 300;
-		} else {
-			// white mode
-			this.renderer.toneMapping = THREE.LinearToneMapping;
-			this.renderer.toneMappingExposure = 0.75;
-			this.renderer.setClearColor(NAMED_COLORS.white, 1);
-
-			this.scene.fog = new THREE.FogExp2(NAMED_COLORS.tan, 0.006);
-			this.directionalLight.intensity = 10;
-		}
-
-		this.renderables.forEach((item) => {
-			item.onThemeChange(val);
-		});
-	}
-
-	public onNavigationChange(item: NavItem) {
-		// console.log('scene onNavChange', item);
-		this.textCloud.onNavigationChange(item);
-	}
-
-	public start(): void {
-		this.update();
-	}
-
-	public stop(): void {
-		cancelAnimationFrame(this.animFrameId);
-		this.scene.clear();
-		this.renderer.renderLists.dispose();
-		this.renderer.dispose();
-
-		// TODO: https://threejs.org/docs/index.html#manual/en/introduction/How-to-dispose-of-objects
-
-		// TODO: https://stackoverflow.com/questions/20997669/memory-leak-in-three-js
-		// TODO: https://stackoverflow.com/questions/12945092/memory-leak-with-three-js-and-many-shapes?rq=1
-		// TODO: https://github.com/mrdoob/three.js/blob/master/examples/webgl_test_memory.html
-		// TODO: https://github.com/mrdoob/three.js/blob/master/examples/webgl_test_memory2.html
-	}
-
-
-	private update(): void {
-		this.animFrameId = requestAnimationFrame(this.update.bind(this));
-		const delta = this.clock.getDelta();
-		const time = this.clock.getElapsedTime();
-
-		this.renderables.forEach((item) => {
-			item.update(delta, this.normalizedMouseScreenPos);
-		});
-
-		this.render();
-		this.composer.render();
-		// this.controls.update(delta);
-
-		// this.camera.position.x = -1.5 * Math.sin(0.5 * Math.PI * this.normalizedMouseScreenPos.x);
-		// this.camera.position.y = 1.0 * Math.sin(0.5 * Math.PI * this.normalizedMouseScreenPos.y);
-
-		// TODO: if mobile enable touch and disable above
-		// this.camera.position.x = - 1.5 * Math.sin(.5 * Math.PI * this.normalizedTouchScreenPos.x);
-		// this.camera.position.y = 1.0 * Math.sin(.5 * Math.PI * this.normalizedTouchScreenPos.y);
-
-		// update uniforms
-		// this.uniforms['u_time'].value = performance.now() / 1000;
-		// this.uniforms['u_resolution'].value = new THREE.Vector2(this.renderer.domElement.width, this.renderer.domElement.height);
-	}
-
-	private render(): void {
-		this.renderer.clear();
-		this.renderer.render(this.scene, this.camera);
-	}
-
-	private addResizeSupport(): void {
-		this.onWindowResize(this.camera, this.renderer); // initial call to set renderHeight and renderWidth
-		window.addEventListener(
-			'resize',
-			() => {
-				this.onWindowResize(this.camera, this.renderer);
-			},
-			false
-		);
-	}
-
 	private onWindowResize(camera: THREE.PerspectiveCamera, renderer: THREE.WebGLRenderer): void {
 		this.windowScreenWidth = window.innerWidth;
 		this.windowScreenHeight = window.innerHeight;
@@ -300,10 +292,6 @@ export default class MainScene {
 		// this.camera.aspect = window.innerWidth / window.innerHeight;
 		// this.camera.updateProjectionMatrix();
 		// this.renderer.setSize( window.innerWidth, window.innerHeight );
-	}
-
-	public onAfterUiUpdate() {
-		this.textCloud.onAfterUiUpdate();
 	}
 
 	private addMouseInputSupport(): void {

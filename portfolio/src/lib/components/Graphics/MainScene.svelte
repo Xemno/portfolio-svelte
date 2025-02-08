@@ -6,7 +6,6 @@
 	import { detectMobile } from '$lib/stores/navigation';
 	import MainScene from '$lib/graphics/scenes/mainScene';
 
-
 	let canvas: HTMLCanvasElement;
 	let scene: MainScene;
 
@@ -18,10 +17,7 @@
 
 		scene = new MainScene(canvas, routeToName($page.url.pathname), isMobile);
 		theme.subscribe((v) => scene.onThemeChange(v));
-		page.subscribe((v) => {
-			scene.onNavigationChange(routeToName(v.url.pathname));
-			// console.log('scene.onNavigationChange');
-		});
+		page.subscribe((v) => scene.onNavigationChange(routeToName(v.url.pathname)));
 		scene.start();
 		console.log('MainScene - start.');
 
@@ -45,7 +41,6 @@
 			scene.onAfterUiUpdate();
 		}
 	});
-
 </script>
 
 <!-- <canvas id="canvas" class="fixed left-0 top-0 -z-50" bind:this={canvas} /> -->
