@@ -58,7 +58,7 @@ export default class MainScene {
 
 	private renderables: Array<IRenderable> = new Array<IRenderable>();
 
-	constructor(canvas: HTMLCanvasElement, initialText: NavItem, isMobile: boolean) {
+	constructor(canvas: HTMLCanvasElement, navItemArray: Array<NavItem>, isMobile: boolean) {
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(conf.fov, window.innerWidth / window.innerHeight, 0.1, 1000);
 		this.camera.position.z = conf.cameraZ;
@@ -104,7 +104,7 @@ export default class MainScene {
 		// this.composer.addPass(afterimagePass); // TODO: selective only on the particles, causes flickering on edges of SimplexPlane
 		this.composer.addPass(outputPass);
 
-		this.initScene(initialText);
+		this.initScene(navItemArray);
 	}
 
 
@@ -201,7 +201,7 @@ export default class MainScene {
 		);
 	}
 
-	private initScene(initialText: NavItem) {
+	private initScene(navItemArray: Array<NavItem>) {
 		this.addResizeSupport();
 		this.addMouseInputSupport();
 
@@ -213,21 +213,15 @@ export default class MainScene {
 			this.renderWidth / 2,
 			this.renderHeight / 2
 		);
-		this.scene.add(this.simplexPlane.getPlane());
+		this.scene.add(this.simplexPlane.getMesh());
 
-		// initialies TextCloud -- TODO: refactor this
-		let texts: Array<NavItem> = new Array<NavItem>();
-		texts.push({ idx: 0, id: 'Qais El Okaili' }); // first item
-		Array.from(navItems).forEach(function (item, idx) {
-			texts.push({ idx: idx + 1, id: item.title });
-		});
-		texts.push({ idx: 7, id: 'Search' }); // last item
+		// TODO: fill texts with Array<Project> and Array<Experiences> and main NaxItems
+
 		this.textCloud = new TextCloud(
 			this.renderer,
 			this.camera,
-			this.scene,
-			texts,
-			initialText,
+			this.scene, // TODO: move out
+			navItemArray,
 			this.isMobile,
 			this.isPortraitMode,
 			new THREE.Vector2(this.renderer.domElement.width, this.renderer.domElement.height)
@@ -237,7 +231,7 @@ export default class MainScene {
 		lightTargetObj.position.y = 150; // set above TextCloud
 		this.scene.add(lightTargetObj);
 
-		// this.camera.lookAt(new THREE.Vector3(0,10,0));
+		// this.camera.lookAt(new THREE.Vector3(0,10,0));-
 
 		const lightMesh = new THREE.Mesh(
 			new THREE.SphereGeometry(1, 8, 8),
@@ -279,11 +273,12 @@ export default class MainScene {
 
 			this.renderWidth = wsize[0];
 			this.renderHeight = wsize[1];
-			// console.log('renderWidth: ', this.renderWidth, '  -  renderHeight: ', this.renderHeight);
+			console.log('renderWidth: ', this.renderWidth, '  -  renderHeight: ', this.renderHeight);
+			console.log('windowScreenWidth: ', this.windowScreenWidth, '  -  windowScreenHeight: ', this.windowScreenHeight);
 
 			// console.log(' init setting all isPortraitMode: ', this.isPortraitMode);
 			this.renderables.forEach((item) => {
-				item.onWindowResize(this.windowScreenWidth, this.windowScreenHeight, this.isPortraitMode);
+				item.onWindowResize(this.renderWidth, this.renderHeight, this.isPortraitMode);
 			});
 
 			// console.log('camera: ', camera.aspect);

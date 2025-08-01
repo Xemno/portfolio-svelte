@@ -32,7 +32,7 @@
 		}
 	}
 
-	// onMount(() => {	
+	// onMount(() => {
 	// 	const showAnim = gsap
 	// 		.from('.nav-menu', {
 	// 			yPercent: -100,
@@ -49,7 +49,6 @@
 	// 			console.log('self.direction: ', self.direction); // NOTE: -1 or 1
 	// 			console.log('self.velocity: ', self.getVelocity()); // NOTE: -1 or 1
 
-				
 	// 			if (self.direction === -1 ) {
 	// 				showAnim.play()
 	// 			} else {
@@ -58,14 +57,13 @@
 	// 		}
 	// 	});
 	// });
-
 </script>
 
 <div class="nav-menu">
-	<nav class="container flex flex-row items-center text-sm">
+	<nav class="container row items-center text-sm">
 		<a
 			href={`${base}/`}
-			class="nav-menu-left decoration-none w-auto md:w-150px lg:w-auto row flex flex-row items-center cursor-pointer px-4 text-[var(--secondary-text)] self-stretch hover:bg-[color:var(--main-hover)]"
+			class="nav-menu-left decoration-none w-auto md:w-150px lg:w-auto row row items-center cursor-pointer px-4 text-[var(--secondary-text)] self-stretch hover:bg-[color:var(--main-hover)]"
 		>
 			<UIcon icon="i-line-md-coffee-loop" classes="text-2em" />
 			<span

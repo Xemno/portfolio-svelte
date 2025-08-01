@@ -70,7 +70,7 @@
 	)}`}
 	style:bgColor={'red'}
 >
-	<div class="card-bg-img flex-1 flex flex-col p-25px rounded-15px">
+	<div class="card-bg-img flex-1 col p-25px rounded-15px">
 		<slot />
 	</div>
 </svelte:element>

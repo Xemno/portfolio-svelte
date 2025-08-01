@@ -13,7 +13,7 @@ let conf = {
 
 export class SimplexPlane implements IRenderable {
 	private plane: THREE.Mesh;
-	private simplexNoise: SimplexNoise;
+	private simplexNoise =  new SimplexNoise();
 	private geometry: THREE.PlaneGeometry;
 	private material: THREE.MeshLambertMaterial;
 
@@ -48,7 +48,6 @@ export class SimplexPlane implements IRenderable {
 		resolution?: THREE.Vector2
 	) {
 		this.geometry = new THREE.PlaneGeometry(width, height, widthSegments, heightSegments);
-		this.simplexNoise = new SimplexNoise();
 		this.material = new THREE.MeshLambertMaterial({ color: 0xffffff, side: THREE.DoubleSide });
 
 		this.resolution = new THREE.Vector2(resolution?.x, resolution?.y);
@@ -76,6 +75,7 @@ export class SimplexPlane implements IRenderable {
 		this.plane.rotation.x = -Math.PI / 2 - 0.15;
 		this.plane.position.y = -25;
 		// this.plane.position.z = - 100;
+		this.geometry.dispose();
 	}
 
 	public update(deltaTime: number, mouseScreenPos: THREE.Vector2) {
@@ -119,8 +119,11 @@ export class SimplexPlane implements IRenderable {
 		}
 	}
 
-	onWindowResize(width: number, height: number, isPortraitMode: boolean): void {
+	public onWindowResize(width: number, height: number, isPortraitMode: boolean): void {
+		this.geometry = new THREE.PlaneGeometry(width * 2, height * 2, width / 2, height / 2); // TODO: not corect since width and height not matching initial width height
 
+		// this.plane.clear();
+		this.plane.geometry = this.geometry;
 	}
 
 	public setEmissive(color: Color) {
@@ -133,7 +136,7 @@ export class SimplexPlane implements IRenderable {
 
 	public setRotation() {}
 
-	public getPlane(): THREE.Mesh {
+	public getMesh(): THREE.Mesh {
 		return this.plane;
 	}
 }

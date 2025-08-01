@@ -27,10 +27,10 @@ export const items: Array<Project> = [
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
 		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
 		logo: Assets.Unknown,
-		bannerImage: Assets.Unknown,
+		// // bannerImage: Assets.Unknown,
 		period: {
-			from: new Date(2022, 1, 20),
-			to: new Date(2023, 1, 20)
+			from: new Date(2023, 10, 15),
+			to: new Date(2025, 3, 15)
 		},
 		skills: getSkills('svelte', 'ts', 'css', 'js', 'html'),
 		type: 'Website Template'
@@ -44,10 +44,10 @@ export const items: Array<Project> = [
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore non dolores voluptatibus vitae praesentium aperiam, iure laboriosam repellendus sunt explicabo pariatur totam enim, nihil animi quisquam. Sit vero quod laborum!',
 		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
 		logo: Assets.Unknown,
-		bannerImage: Assets.Unknown,
+		// // bannerImage: Assets.Unknown,
 		period: {
-			from: new Date(2022, 1, 20),
-			to: new Date(2023, 1, 20)
+			from: new Date(2024, 8, 15),
+			to: new Date(2024, 10, 15)
 		},
 		skills: getSkills('svelte', 'ts', 'css', 'js', 'html'),
 		type: 'Website Template'
@@ -61,9 +61,10 @@ export const items: Array<Project> = [
 			'A Vercel-like developer portfolio website template made with Typescript and SvelteKit.',
 		links: [{ to: 'https://github.com/RiadhAdrani/slick-portfolio-svelte', label: 'GitHub' }],
 		logo: Assets.Unknown,
-		bannerImage: Assets.Unknown,
+		// // bannerImage: Assets.Unknown,
 		period: {
-			from: new Date()
+			from: new Date(2020, 8, 1),		// TODO:
+			to: new Date(2020, 12, 1)		// TODO: 
 		},
 		skills: getSkills('csharp', 'unity-engine', 'python'),
 		type: 'Website Template',
@@ -104,9 +105,10 @@ export const items: Array<Project> = [
 			'In this thesis I am researching touch and/or deformation sensing in soft substrates using electrical resistance/impedance tomography techniques.',
 		links: [],
 		logo: Assets.Unknown,
-		bannerImage: Assets.Unknown,
+		// bannerImage: Assets.Unknown,
 		period: {
-			from: new Date()
+			from: new Date(2020, 8, 1),		// TODO:
+			to: new Date(2020, 12, 1)		// TODO: 
 		},
 		skills: getSkills('c', 'cpp'),
 		type: 'Computational Robotics'
@@ -121,9 +123,10 @@ export const items: Array<Project> = [
 			'A focus of this project is to explore synergies between mixed reality and robotics.',
 		links: [],
 		logo: Assets.ETH,
-		bannerImage: getImagePath('julien-tromeur-EWg1-0UjeWY-unsplash.jpg'),
+		// bannerImage: getImagePath('julien-tromeur-EWg1-0UjeWY-unsplash.jpg'),
 		period: {
-			from: new Date()
+			from: new Date(2019, 11, 1),
+			to: new Date(2020, 2, 10)
 		},
 		skills: getSkills('csharp', 'unity-engine', 'cpp'),
 		type: 'Computer Graphics'
@@ -138,9 +141,10 @@ export const items: Array<Project> = [
 			'Implementation and SIMD optimization of a rendering engine using the Ray Marcher method based on Sphere Tracing.',
 		links: [{ to: 'https://github.com/Xemno/Optimized-CPU-Ray-Marcher', label: 'GitHub' }],
 		logo: Assets.ETH,
-		bannerImage: getImagePath('inception_0.png'),
+		// bannerImage: getImagePath('inception_0.png'),
 		period: {
-			from: new Date()
+			from: new Date(2020, 3, 14),
+			to: new Date(2020, 6, 31)
 		},
 		skills: getSkills('c', 'cpp'),
 		type: 'Advanced Systems Lab'
@@ -161,9 +165,10 @@ export const items: Array<Project> = [
 			'Development of an interactive soft-body and rigid-body physics engine in the Unity game engine.',
 		links: [{ to: 'https://github.com/devnio/Flowmo', label: 'GitHub' }],
 		logo: Assets.ETH,
-		bannerImage: getImagePath('flowmo_tree.jpg'),
+		// bannerImage: getImagePath('flowmo_tree.jpg'),
 		period: {
-			from: new Date()
+			from: new Date(2019, 8, 14),
+			to: new Date(2019, 12, 2)
 		},
 		skills: getSkills('csharp', 'unity-engine'),
 		type: 'Computer Graphics'
@@ -184,9 +189,10 @@ export const items: Array<Project> = [
 			'Road Image Segmentation Project for Computational Intelligence Lab 2019 at ETH Zurich',
 		links: [{ to: 'https://github.com/laurinpaech/segme-net', label: 'GitHub' }],
 		logo: Assets.ETH,
-		bannerImage: getImagePath('chicago108.png'),
+		// bannerImage: getImagePath('chicago108.png'),
 		period: {
-			from: new Date()
+			from: new Date(2019, 3, 14),
+			to: new Date(2019, 11, 31)
 		},
 		skills: getSkills('python'),
 		type: 'Machine Learning'

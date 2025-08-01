@@ -65,7 +65,7 @@
 </script>
 
 <SearchPage {title} on:search={(e) => (query = e.detail.search)} autoFocusSearch={true}>
-	<div class="flex flex-col items-stretch gap-10 p-2" />
+	<div class="col items-stretch gap-10 p-2" />
 	{#if !query}
 		<div
 			class="flex-1 self-center col-center m-t-10 mb-100 gap-5 font-300 text-[var(--accent-text)]"
@@ -81,9 +81,9 @@
 			<p class="font-300">Could not find anything...</p>
 		</div>
 	{:else}
-		<div class="flex flex-row flex-wrap gap-1">
+		<div class="row flex-wrap gap-1">
 			{#each result as item}
-				<Chip href={`${base}/${item.to}`} classes="flex flex-row items-center gap-2">
+				<Chip href={`${base}/${item.to}`} classes="row items-center gap-2">
 					<UIcon icon={item.icon} classes="text-1.2em" />
 					<span>{item.name}</span>
 				</Chip>

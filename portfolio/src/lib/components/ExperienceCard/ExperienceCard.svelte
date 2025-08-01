@@ -39,7 +39,10 @@
 			</h3>
 			<div class="row flex-wrap m-b-2 gap-1 text-0.9em font-300">
 				<ChipIcon name={`Company: ${experience.company}`}>
-					<UIcon icon="i-carbon-building" />
+					<div class="row items-center gap-2">
+						<UIcon icon="i-carbon-building" />
+						{experience.company}
+					</div>
 				</ChipIcon>
 				<ChipIcon name={`Location: ${experience.location}`}>
 					<UIcon icon="i-carbon-location" />
@@ -48,9 +51,14 @@
 					<UIcon icon="i-carbon-hourglass" />
 				</ChipIcon>
 			</div>
-			<div class="text-[var(--accent-text)] text-[0.9em] font-200">{period}</div>
+
+			<div class="row items-center gap-2">
+				<UIcon icon="i-carbon-calendar" classes="text-1.25em" />
+				<div class="text-[var(--accent-text)] text-[0.9em] font-200">{period}</div>
+			</div>
+
 			<div class="experience-description">{experience.shortDescription}</div>
-			<div class="flex flex-row flex-wrap mt-5">
+			<div class="row flex-wrap mt-5">
 				{#each experience.skills as skill}
 					<ChipIcon
 						logo={getAssetURL(skill.logo)}

@@ -9,12 +9,12 @@ export const NavBar = {
 } as const;
 
 export const items = [
-	{ title: 'Projects', to: '/projects', icon: 'i-carbon-cube' },
-	{ title: 'Experience', to: '/experience', icon: 'i-carbon-development' },
-	{ title: 'Education', to: '/education', icon: 'i-carbon-education' },
-	{ title: 'Skills', to: '/skills', icon: 'i-carbon-software-resource-cluster' },
-	{ title: 'Resumé', to: '/resume', icon: 'i-carbon-result' },
-	{ title: 'Test', to: '/test', icon: 'i-carbon-result' }
+	{ title: 'Projects', to: '/projects/', icon: 'i-carbon-cube' },
+	{ title: 'Experience', to: '/experience/', icon: 'i-carbon-development' },
+	{ title: 'Education', to: '/education/', icon: 'i-carbon-education' },
+	{ title: 'Skills', to: '/skills/', icon: 'i-carbon-software-resource-cluster' },
+	{ title: 'Resumé', to: '/resume/', icon: 'i-carbon-result' },
+	{ title: 'Test', to: '/test/', icon: 'i-carbon-result' }
 ] as const;
 
 // NOTE: Home and Search are not included

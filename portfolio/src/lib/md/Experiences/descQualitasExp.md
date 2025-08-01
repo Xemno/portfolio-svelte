@@ -7,3 +7,5 @@ web development and software optimization.
 Strong problem-solving and communication skills.
 
 _A curious mind looking to learn constantly._
+
+<br>

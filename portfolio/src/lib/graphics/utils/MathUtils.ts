@@ -4,6 +4,10 @@ export function lerp(a: number, b: number, t: number, eps: number = 1e-3) {
 	else return result;
 }
 
+export function interpolate(a: number, b: number, t: number): number {
+	return a + (b - a) * t;
+}
+
 export function map(
 	value: number,
 	start1: number,

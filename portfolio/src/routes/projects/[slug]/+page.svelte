@@ -28,15 +28,15 @@
 
 <TabTitle title={computedTitle} />
 
-<div class="pb-10 overflow-x-hidden col flex-1">
+<div class="col flex-1 pb-10">
 	{#if data.project === undefined}
 		<div class="p-5 col-center gap-3 m-y-auto text-[var(--accent-text)]">
 			<UIcon icon="i-carbon-cube" classes="text-3.5em" />
 			<p class="font-300">Could not load project data...</p>
 		</div>
 	{:else}
-		<div class="flex flex-col items-center overflow-x-hidden">
-			<Banner img={getAssetURL(data.project.bannerImage)}>
+		<div class="col items-center">
+			<Banner>
 				<div class="col-center p-y-20">
 					<div class="text-0.9em">
 						<MainTitle>{data.project.name}</MainTitle>
@@ -75,8 +75,8 @@
 				</div>
 			</Banner>
 
-			<div class="pt-3 pb-1 overflow-x-hidden w-full">
-				<div class="px-10px m-y-5 blurred-box">
+			<div class="pb-1 w-full">
+				<div class="blurred-box m-y-2">
 					{#if data.project.description}
 						<Markdown content={data.project.description} />
 					{:else}

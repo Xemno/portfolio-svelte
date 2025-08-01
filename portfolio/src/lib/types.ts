@@ -1,6 +1,6 @@
 import type { Color } from './utils/colors';
 
-export type NavItem = { idx: number; id: string };
+export type NavItem = { slug: string; name: string; idx: number };
 
 export type Icon = `i-${string}-${string}`;
 
@@ -49,7 +49,7 @@ export interface Skill<S extends string = string> extends Omit<Item<S>, 'shortDe
 }
 
 export interface Project<S extends string = string> extends Item<S> {
-	bannerImage: Asset;
+	// bannerImage: Asset;
 	links: Array<Link>;
 	color: Color;
 	period: {

@@ -28,8 +28,8 @@
 			<p class="font-300">Could not load experience data...</p>
 		</div>
 	{:else}
-		<div class="flex flex-col items-center overflow-x-hidden">
-			<Banner img={getAssetURL(data.experience.bannerImage)}>
+		<div class="col items-center overflow-x-hidden">
+			<Banner>
 				<div class="col-center p-y-20">
 					<div class="text-0.9em">
 						<MainTitle>{data.experience.name}</MainTitle>
@@ -73,7 +73,7 @@
 				</div>
 			</Banner>
 			<div class="pt-3 pb-1 overflow-x-hidden w-full">
-				<div class="px-10px m-y-5 blurred-box">
+				<div class="blurred-box m-y-2">
 					{#if data.experience.description}
 						<Markdown
 							content={data.experience.description ?? 'This place is yet to be filled...'}

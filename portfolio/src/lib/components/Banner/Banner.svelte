@@ -1,29 +1,19 @@
 <script lang="ts">
-	export let img = '';
-	export let useDefaultDimensions = true;
+	// export let img = '';
 	export let classes = '';
 </script>
 
 <div
-	style={`--bg-img:url(${img})`}
-	class={`row w-[100%] ${
-		useDefaultDimensions
-			? 'min-h-[200px] sm:min-h-[250px] md:min-h-[300px] lg:min-h-[350px] px-4 md:px-10'
-			: ''
-	} items-center skill-cover  ${classes}`}
+	class={`row w-full py-8 text-center min-h-[200px] sm:min-h-[250px] md:min-h-[300px]  lg:min-h-[350px] ${classes}`}
 >
-	<div class="p-x-2 col flex-1">
+	<div class="col flex-1 p-x-2">
 		<slot />
 	</div>
 </div>
 
-<style lang="scss">
+<!-- <style lang="scss">
 	.skill-cover {
 		background: linear-gradient(90deg, var(--main) 0%, var(--main) 55%, var(--main-60) 130%),
 			no-repeat 110% 45% / 50% var(--bg-img);
-
-		border-block-end: 1px solid var(--border);
-
-		// backdrop-filter: blur(40px);
 	}
-</style>
+</style> -->

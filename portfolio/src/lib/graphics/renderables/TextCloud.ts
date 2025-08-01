@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type IRenderable from './IRenderable';
-import { NAMED_COLORS, type Color } from '$lib/utils/colors';
+import { type Color } from '$lib/utils/colors';
 import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { toWorldPosition } from '../utils/VectorUtils';
@@ -8,8 +8,10 @@ import type { NavItem } from '$lib/types';
 import * as TWEEN from '@tweenjs/tween.js';
 
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
-import type { EasingFunction } from 'svelte/transition';
-import { detectMobile } from '$lib/stores/navigation';
+import { interpolate, lerp } from '../utils/MathUtils';
+import { easing } from '../utils/Easing';
+import { TextParticleSystem } from './TextParticleSystem';
+import { TweenMorphing } from './TweenMorphing';
 
 
 interface IVertices {
@@ -81,13 +83,15 @@ export default class TextCloud implements IRenderable {
 		camera: THREE.PerspectiveCamera,
 		scene: THREE.Scene,
 		navItems: Array<NavItem>,
-		initParams: NavItem,
+		// initParams: NavItem,
 		isMobile: boolean,
 		isPortrait: boolean,
 		resolution?: THREE.Vector2,
 		pos?: THREE.Vector3,
 		lookAt?: THREE.Vector3
 	) {
+		let initParams: NavItem = navItems.at(0)!;
+
 		this.renderer = renderer; // TODO: move out / remove dependency
 		this.camera = camera; // TODO: move out / remove dependency
 		this.isMobile = isMobile; // TODO: move out / remove dependency
@@ -111,7 +115,7 @@ export default class TextCloud implements IRenderable {
 			// 	this.lookAt = lookAt;
 			// }
 
-			scene.add(this.particleSystem.getParticleSystem());
+			scene.add(this.particleSystem.getParticleSystem()); // TODO: move out
 
 			// play initial animation
 			this.startEntryAnimation(initParams);
@@ -120,6 +124,10 @@ export default class TextCloud implements IRenderable {
 			this.font = font;
 			this.ready = true;
 		});
+	}
+
+	public getMesh(): THREE.Mesh {
+		return this.particleSystem.getParticleSystem();
 	}
 
 	public cleanup(): void {
@@ -152,8 +160,11 @@ export default class TextCloud implements IRenderable {
 	}
 
 	public onAfterUiUpdate() {
+		console.log('TextCloud - onAfterUiUpdate: ');
 		if (!this.ready) return;
 		let vWorldPos = this.getMainTitleTextPosition();
+		console.log('onAfterUiUpdate - vWorldPos: ', vWorldPos);
+
 		this.particleSystem.setCurrParticlesPos(vWorldPos);
 	}
 
@@ -172,11 +183,17 @@ export default class TextCloud implements IRenderable {
 	private onOrientationChange(isPortraitMode: boolean) {
 		if (this.isPortraitMode != isPortraitMode) {
 			this.isPortraitMode = isPortraitMode;
+
+			if (!this.ready) return;
+			let vWorldPos = this.getMainTitleTextPosition();
+			this.particleSystem.setCurrParticlesPos(vWorldPos);
 		}
 	}
 
 	private getMainTitleTextPosition(): THREE.Vector3 | null {
 		let mainTitleText: (HTMLElement | null) = document.getElementById("main-title");
+		console.log('mainTitleText: ', mainTitleText);
+
 		if (mainTitleText != null) {
 			let { top, bottom, left, right } = mainTitleText.getBoundingClientRect();
 			const midX = left + (right - left) / 2;
@@ -210,232 +227,3 @@ export default class TextCloud implements IRenderable {
 	}
 }
 
-class TextParticleSystem { // TODO: TextParticleSystem
-
-	private numParticles = 5000;
-
-	private instancedMeshParticles!: THREE.InstancedMesh;
-	// Instanced geometry
-	private particleGeometry: THREE.BufferGeometry = new THREE.CircleGeometry(0.15, 64, 64);
-
-	// Each entry is a text cloud of positions - used to set currParticles' position attribute
-	private readonly particlesPositions = new Array<Array<THREE.Vector3>>(); // static
-	private currParticlesPos: Array<THREE.Vector3> | null = null; // dynamic
-
-	private material = new THREE.MeshStandardMaterial({
-		color: 0xffaf00,
-		alphaHash: true,
-		opacity: 0.7
-	});
-
-	public getParticleSystem() {
-		return this.instancedMeshParticles;
-	}
-
-	public getNumParticles(): number {
-		return this.numParticles;
-	}
-
-	public setNumParticles(numParticles: number) {
-		this.numParticles = numParticles;
-	}
-
-	public createParticles(font: Font, navItems: Array<NavItem>) {
-		navItems.forEach((navItem) => this.particlesPositions.push(this.createTextParticlesPos(font, navItem)));
-	}
-
-	public createCurrParticles(font: Font, initParams: NavItem) {
-		this.currParticlesPos = this.createTextParticlesPos(font, initParams); // NOTE: current particle position
-		if (this.currParticlesPos == null) {
-			// console.log('Error - currParticles is NULL');
-		}
-
-		// initialize particle system
-		this.instancedMeshParticles = new THREE.InstancedMesh(this.particleGeometry, this.material, this.numParticles);
-		this.instancedMeshParticles.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
-		this.particleGeometry.dispose();
-		// this.updateInstanceMatrix();
-	}
-
-	public setCurrParticlesPos(vWorldPos: THREE.Vector3 | null) {
-		if (vWorldPos == null) return;
-		if (this.instancedMeshParticles == null) return;
-		if (vWorldPos != this.instancedMeshParticles.position) {
-			this.instancedMeshParticles.position.set(vWorldPos.x, vWorldPos.y, vWorldPos.z);
-		}
-	}
-
-	public getParticlesAtPos(idx: number) {
-		return this.particlesPositions.at(idx);
-	}
-
-	public forEachCurrParticle(fn: (vec: THREE.Vector3, idx: number) => void,) {
-		if (this.currParticlesPos == null) throw new Error('forEachCurrParticle::currParticlesPos must not be null')
-		this.currParticlesPos.forEach((vec: THREE.Vector3, idx) => fn(vec, idx));
-	}
-
-	public setCurrParticles(particlesPos: Array<THREE.Vector3>) {
-		if (particlesPos == null) throw new Error('setCurrParticles::particlesPos must not be null')
-		this.currParticlesPos = particlesPos;
-	}
-
-	public setMatrixAt(i: number, matrix: THREE.Matrix4) {
-		this.instancedMeshParticles.setMatrixAt(i, matrix);
-		this.instancedMeshParticles.instanceMatrix.needsUpdate = true;
-	}
-
-	public onThemeChange(val: boolean): void {
-		if (val) {
-			// dark mode
-			this.material.color = new THREE.Color(NAMED_COLORS.yellowsea);
-			this.material.opacity = 0.7;
-			this.material.alphaHash = true;
-		} else {
-			// white mode
-			this.material.color = new THREE.Color(NAMED_COLORS.dimgray);
-			this.material.opacity = 0.8;
-			this.material.alphaHash = true;
-		}
-	}
-
-	private createTextParticlesPos(font: Font, text: NavItem): Array<THREE.Vector3> {
-
-		let isPortraitMode = screen.availHeight > screen.availWidth ? true : false;
-		let isMobile = detectMobile();
-		let size = isMobile ? window.innerWidth * 0.0075 : window.innerWidth * 0.005;
-
-		const maxSize = isMobile ? (isPortraitMode ? 4 : 6) : 8;
-		size = Math.min(size, maxSize);
-
-		const geometry = new TextGeometry(text.id, {
-			font: font,
-			size: size, // TODO: window.innerWidth different for mobile and window
-			height: 1,
-			curveSegments: 10
-		});
-		geometry.center();
-
-		const textMesh = new THREE.Mesh(geometry);
-		const sampler = new MeshSurfaceSampler(textMesh).setWeightAttribute('color').build();
-
-		const particlePositions = new Array<THREE.Vector3>();
-		for (let i = 0; i < this.numParticles; ++i) {
-			const position = new THREE.Vector3();
-			sampler.sample(position);
-			particlePositions.push(position);
-		}
-
-		// cleanup
-		geometry.dispose();
-		textMesh.clear();
-
-		return particlePositions;
-	}
-
-	private updateInstanceMatrix() {
-		let dummy = new THREE.Object3D();
-
-		this.currParticlesPos!.forEach((pos, idx) => {
-			dummy.position.set(pos.x, pos.y, pos.z);
-			dummy.updateMatrix();
-
-			this.instancedMeshParticles.setMatrixAt(idx, dummy.matrix);
-		});
-
-		this.instancedMeshParticles.instanceMatrix.needsUpdate = true;
-	}
-}
-
-class TweenMorphing {
-	private readonly particleSystem: TextParticleSystem;
-
-	constructor(particleSystem: TextParticleSystem) {
-		this.particleSystem = particleSystem;
-	}
-
-	public update() {
-		const result = TWEEN.update();
-	}
-
-	public morphTo(navItem: NavItem) {
-		// TODO: check navItem is in range and plausible
-		const toPositionArray: Array<THREE.Vector3> = this.particleSystem.getParticlesAtPos(navItem.idx)!;
-		this.morphCurrParticlesTo(toPositionArray, 1000, 0, TWEEN.Easing.Quartic.Out);
-	}
-
-	public morphFromTo(fromPosArray: Array<THREE.Vector3>, toPosArray: Array<THREE.Vector3>, time: number, delay: number, easing: EasingFunction): void {
-		if (fromPosArray == null) throw new Error('morphFromTo::fromPosArray must not be null')
-		if (toPosArray == null) throw new Error('morphFromTo::toPosArray must not be null')
-		this.particleSystem.setCurrParticles(fromPosArray);
-		this.morphCurrParticlesTo(toPosArray, time, delay, easing);
-	}
-
-	private morphCurrParticlesTo(toPosArray: Array<THREE.Vector3>, time: number, delay: number, easing: EasingFunction): void {
-		TWEEN.removeAll();
-
-		this.particleSystem.forEachCurrParticle((currParticlePos: THREE.Vector3, idx: number) => {
-			let toPos: THREE.Vector3 = toPosArray[idx];
-
-			const tween = new TWEEN.Tween(currParticlePos)
-				.to(toPos, time)
-				.delay(delay)
-				.easing(easing)
-				.onUpdate((pos) => {
-					let matrix: THREE.Matrix4 = new THREE.Matrix4();
-					matrix.makeTranslation(new THREE.Vector3(pos.x, pos.y, pos.z));
-
-					this.particleSystem.setMatrixAt(idx, matrix);
-					// this.particleSystem.instanceMatrix.needsUpdate = true;
-				});
-			tween.start();
-		})
-	}
-	// private getParticlePositions(item: NavItem): Array<THREE.Vector3> | null {
-	// 	let pos: Array<THREE.Vector3> | undefined = this.particleSystem.getParticlesAtPos(item.idx);
-	// 	if (pos == null || pos == undefined) {
-	// 		return null;
-	// 	}
-	// 	return pos;
-	// }
-
-
-	// private moveParticles(deltaPos: THREE.Vector3, particlesPosArray: Array<THREE.Vector3> | undefined) {
-	// 	if (particlesPosArray == undefined) return;
-	// 	for (let i = 0; i < particlesPosArray.length; ++i) {
-	// 		particlesPosArray[i] = new THREE.Vector3().subVectors(particlesPosArray[i], deltaPos);
-	// 	}
-	// }
-
-	// private moveAllCurrParticles(deltaPos: THREE.Vector3) {
-	// 	for (let i = 0; i < this.particleSystem.getNumParticleTexts(); ++i) {
-	// 		this.moveParticles(deltaPos, this.particleSystem.getParticlesAtPos(i)); // TODO: make an iterable over particlesystem with function delegation
-	// 		// TODO: make an iterable over particlesystem with function delegation
-	// 		// TODO: make an iterable over particlesystem with function delegation
-	// 	}
-	// }
-
-	// private moveCurrParticles(deltaPos: THREE.Vector3) {
-	// 	if (this.particleSystem.getCurrParticles() == null) {
-	// 		// console.log('Error in moveTo, currParticlesPos == null.');
-	// 		return;
-	// 	}
-
-	// 	const shuffle = (array: Array<THREE.Vector3>) => {
-	// 		array.sort(() => Math.random() - 0.5);
-	// 	};
-
-	// 	const toPositionVectors: Array<THREE.Vector3> = new Array<THREE.Vector3>(particleCount);
-
-	// 	for (let i = 0; i < particleCount; ++i) {
-	// 		const newPos = new THREE.Vector3();
-	// 		const currPos: THREE.Vector3 = this.particleSystem.getCurrParticlesAtPos(i);
-
-	// 		newPos.subVectors(currPos, deltaPos);
-	// 		toPositionVectors[i] = newPos;
-	// 	}
-	// 	shuffle(toPositionVectors);
-
-	// 	this.morphParticlesTo(toPositionVectors, 1000, 100, TWEEN.Easing.Quartic.Out);
-	// 	this.moveAllCurrParticles(deltaPos);
-	// }
-}

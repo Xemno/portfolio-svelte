@@ -1,8 +1,10 @@
-import type { Item, NavItem, Skill } from '$lib/types';
+import type { Experience, Item, NavItem, Project, Skill } from '$lib/types';
 
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { links, description, lastName, name, title, skills } from '@data/home';
+import { items as projectItems } from '@data/projects';
+import { items as experiencetItems } from '@data/experience';
 import { items as navItems } from '@data/navbar';
 
 dayjs.extend(duration);
@@ -42,6 +44,12 @@ export const getMonthName = (index: number): string => {
 	];
 
 	return monthNames[index];
+};
+
+export const getMonthAndYear = (date?: Date) => {
+	if (!date) return 'Present';
+
+	return `${getMonthName(date.getMonth())} ${date.getFullYear()}`;
 };
 
 export const useImage = (url: string, base: string): string => `${base}${url}`;
@@ -88,23 +96,45 @@ export const isBlank = (str: string): boolean => {
 	return str.trim().length === 0;
 };
 
-export function routeToName(route: string): NavItem {
-	let navItem: NavItem = { idx: 0, id: name + ' ' + lastName }; // default is home
+export function getAllNamedRoutes(): Array<NavItem> {
+	let namedRoutes = new Array<NavItem>;
 
-	route = route.replaceAll('/', '');
+	namedRoutes.push({ slug: '/', name: name + ' ' + lastName, idx: 0 }); // default home
+	namedRoutes.push({ slug: '/search/', name: 'Search', idx: 1 });
 
-	Array.from(navItems).forEach(function (item, idx) {
-		const it = item.to.replaceAll('/', '');
-		if (route === it) {
-			navItem = { idx: idx + 1, id: item.title };
+	let lengthOffset = namedRoutes.length;
+
+	Array.from(navItems).forEach((item, idx) => {
+		namedRoutes.push({ slug: item.to, name: item.title, idx: idx + lengthOffset });
+	});
+
+	lengthOffset = namedRoutes.length;
+	projectItems.forEach((item: Project, idx) => {
+		namedRoutes.push({ slug: '/projects/' + item.slug + '/', name: item.name, idx: idx + lengthOffset });
+	});
+
+	lengthOffset = namedRoutes.length;
+	experiencetItems.forEach((item: Experience, idx) => {
+		namedRoutes.push({ slug: '/experience/' + item.slug + '/', name: item.name, idx: idx + lengthOffset });
+	});
+
+	return namedRoutes;
+};
+
+export function routeToName(searchArray: Array<NavItem>, route: string): NavItem {
+	let navItem = searchArray.at(0); // default home
+	if (navItem == undefined) return { slug: '', name: name + ' ' + lastName, idx: 0 };
+
+	// route = route.replaceAll(new RegExp(/^[^/]*_/g), '');
+
+	searchArray.forEach((item: NavItem) => {
+		if (item.slug == route) {
+			navItem = item;
 			return;
 		}
 	});
 
-	// search page
-	if (route === 'search') {
-		navItem = { idx: navItems.length + 1, id: 'Search' };
-	}
+	console.log('routeToName: ', route, navItem);
 
 	return navItem;
 }

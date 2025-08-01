@@ -2,7 +2,7 @@
 	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
 	import { onHydrated, theme } from '$lib/stores/theme';
 	import { page } from '$app/stores';
-	import { routeToName } from '$lib/utils/helpers';
+	import { getAllNamedRoutes, routeToName } from '$lib/utils/helpers';
 	import { detectMobile } from '$lib/stores/navigation';
 	import MainScene from '$lib/graphics/scenes/mainScene';
 
@@ -15,9 +15,14 @@
 		const isMobile = detectMobile();
 		console.log('MainScene - isMobile: ', isMobile);
 
-		scene = new MainScene(canvas, routeToName($page.url.pathname), isMobile);
+		const allNamedRoutes = getAllNamedRoutes();
+		// const initNamedRoute = routeToName(allNamedRoutes, $page.url.pathname);
+
+		// allNamedRoutes.forEach((item) => console.log('it: : ', item));
+
+		scene = new MainScene(canvas, allNamedRoutes, isMobile);
 		theme.subscribe((v) => scene.onThemeChange(v));
-		page.subscribe((v) => scene.onNavigationChange(routeToName(v.url.pathname)));
+		page.subscribe((v) => scene.onNavigationChange(routeToName(allNamedRoutes, v.url.pathname)));
 		scene.start();
 		console.log('MainScene - start.');
 
@@ -28,18 +33,21 @@
 		};
 	});
 
-	onDestroy(() => {
-		console.log('MainScene - destroyed.');
+	beforeUpdate(() => {
+		console.log('the component is about to update');
 	});
 
-	// beforeUpdate(() => {
-	// 	console.log('the component is about to update');
-	// });
-
+	// TODO: not working ....
 	afterUpdate(() => {
+		console.log('MainScene - afterUpdate.');
+
 		if (scene != null) {
 			scene.onAfterUiUpdate();
 		}
+	});
+
+	onDestroy(() => {
+		console.log('MainScene - destroyed.');
 	});
 </script>
 

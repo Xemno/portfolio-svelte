@@ -28,7 +28,7 @@
 	class="col self-center flex-1 md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-5px p-x-10px"
 >
 	<div class="md:flex-1 gap-10px">
-		<MainTitle classes="md:text-left animate-fade-in">{name} {lastName}</MainTitle>
+		<MainTitle classes="md:text-left py-10 md:max-w-2/3">{''} {''}</MainTitle>
 		<p class="text-[var(--tertiary-text)] text-center md:text-left text-[1.2em] font-extralight">
 			<Markdown content={description ?? 'This has yet to be filled...'} />
 		</p>

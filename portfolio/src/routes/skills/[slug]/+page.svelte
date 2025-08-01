@@ -76,7 +76,7 @@
 			<p class="font-300">Could not load skill data.</p>
 		</div>
 	{:else}
-		<div class="flex flex-col items-center overflow-x-hidden">
+		<div class="col items-center overflow-x-hidden">
 			<Banner img={getAssetURL(data.skill.logo)}>
 				<MainTitle>{data.skill.name}</MainTitle>
 			</Banner>
@@ -95,7 +95,7 @@
 			<div class="self-stretch mb-2">
 				<CardDivider />
 			</div>
-			<div class="flex flex-row gap-1 self-stretch flex-wrap">
+			<div class="row gap-1 self-stretch flex-wrap">
 				<div class="px-10px">
 					<!-- NOTE: render each related item as a Chip component -->
 					{#each related as item}

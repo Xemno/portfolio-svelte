@@ -193,6 +193,8 @@ body {
 
 	color: var(--tertiary-text);
 	overflow-y: auto !important;
+	margin-left: 1.0em;
+	margin-right: 1.0em;
 
 	code[class*='language-'],
 	pre[class*='language-'] {
@@ -245,6 +247,7 @@ body {
 		&.token.operator {
 			color: var(--code-operator);
 		}
+
 		&.token.interpolation {
 			color: var(--code-interpolation);
 		}
@@ -255,21 +258,15 @@ body {
 	}
 
 	& h1,
-	& h2,
-	& h3 {
-		color: var(--text);
-		margin-bottom: 0.45em;
-	}
-
-	& h1 {
-		font-size: 2em;
-	}
-
 	& h2 {
 		font-size: 1.8em;
 	}
 
 	& h3 {
+		color: var(--text);
+		margin-bottom: 0.45em;
+		margin-top: 0.45em;
+		font-weight: 900;
 		font-size: 1.6em;
 	}
 
@@ -330,7 +327,7 @@ body {
 		border-radius: 0.25em;
 	}
 
-	& :not(pre) > code[class*='language-'],
+	& :not(pre)>code[class*='language-'],
 	pre[class*='language-'] {
 		background-color: var(--main-hover);
 		border: 1px solid var(--border);
@@ -371,7 +368,7 @@ body {
 		// border: none;
 		border-top: 0.5px solid var(--border-low);
 		color: var(--border-low);
-		margin: 30px 0px;
+		margin: 20px 0px;
 	}
 }
 
@@ -391,6 +388,7 @@ body {
 	}
 
 	&:hover {
+
 		&::before,
 		&::after {
 			background-color: auto;
@@ -423,6 +421,7 @@ body {
 	height: auto !important;
 	overflow: hidden;
 }
+
 .video-container video {
 	min-width: 100%;
 	min-height: 100%;
@@ -437,6 +436,7 @@ body {
 	border-radius: 2px;
 	overflow: hidden;
 }
+
 .blurred-box:after {
 	content: '';
 	width: 100%;

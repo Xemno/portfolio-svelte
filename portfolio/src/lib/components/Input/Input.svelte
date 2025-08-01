@@ -2,7 +2,6 @@
 	// TODO: rename to SearchInput
 
 	import { onMount } from 'svelte';
-	import UIcon from '../Icon/UIcon.svelte';
 
 	export let value = '';
 	export let placeholder = '';
@@ -84,10 +83,10 @@
 		// border: none;
 		// color: transparent;
 
-		&:focus {
-			outline: 1px auto var(--border-hover);
-			background-color: var(--main-hover);
-		}
+		// &:focus {
+		// 	outline: 1px auto var(--border-hover);
+		// 	background-color: var(--main-hover);
+		// }
 	}
 
 	.box {
@@ -107,6 +106,7 @@
 		height: 45px;
 		border: solid;
 		// border-radius: 10px;
+		outline: transparent;
 	}
 
 	.box i {

@@ -2,18 +2,19 @@ import type { Asset } from '$lib/types';
 import { theme } from '$lib/stores/theme';
 import { base } from '$app/paths';
 
-// TODO: remove and use static logos
-// const gh = (file: string) =>
-// 	`https://raw.githubusercontent.com/Xemno/assets/portfolio/images/${file}`;
+const getImagePath = (file: string) => `${base}/images/${file}`;
 
-// NOTE: use for local retrieval
-const gh = (file: string) => `${base}/logos/${file}`;
+const getFilePath = (file: string) => `${base}/logos/${file}`;
 
 // Assets in light and dark mode
 const a = (light: string, dark?: string): Asset =>
-	dark ? { dark: gh(dark), light: gh(light) } : gh(light);
+	dark ? { dark: getFilePath(dark), light: getFilePath(light) } : getFilePath(light);
 
 const Assets = {
+	ETH: a('eth-zurich.png', 'eth_dark.png'),
+	ETH2: a('eth-zurich2.jpg'),
+	Unity: a('unity.png'),
+
 	AWS: a('aws.svg'),
 	Bootstrap: a('bootstrap.svg'),
 	C: a('C.svg'),
