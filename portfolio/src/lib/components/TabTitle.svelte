@@ -2,7 +2,11 @@
 	import { titleSuffix } from '@data/app';
 	import { useTitle } from '$lib/utils/helpers';
 
-	export let title: string;
+	interface Props {
+		title: string;
+	}
+
+	let { title = $bindable('Title') }: Props = $props();
 </script>
 
 <svelte:head>

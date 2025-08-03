@@ -160,10 +160,10 @@ export default class TextCloud implements IRenderable {
 	}
 
 	public onAfterUiUpdate() {
-		console.log('TextCloud - onAfterUiUpdate: ');
+		// console.log('TextCloud - onAfterUiUpdate: ');
 		if (!this.ready) return;
 		let vWorldPos = this.getMainTitleTextPosition();
-		console.log('onAfterUiUpdate - vWorldPos: ', vWorldPos);
+		// console.log('onAfterUiUpdate - vWorldPos: ', vWorldPos);
 
 		this.particleSystem.setCurrParticlesPos(vWorldPos);
 	}
@@ -192,7 +192,7 @@ export default class TextCloud implements IRenderable {
 
 	private getMainTitleTextPosition(): THREE.Vector3 | null {
 		let mainTitleText: (HTMLElement | null) = document.getElementById("main-title");
-		console.log('mainTitleText: ', mainTitleText);
+		// console.log('mainTitleText: ', mainTitleText);
 
 		if (mainTitleText != null) {
 			let { top, bottom, left, right } = mainTitleText.getBoundingClientRect();

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { onHydrated, theme } from '$lib/stores/theme';
 	import { page } from '$app/stores';
 	import { getAllNamedRoutes, routeToName } from '$lib/utils/helpers';
@@ -16,43 +16,31 @@
 		console.log('MainScene - isMobile: ', isMobile);
 
 		const allNamedRoutes = getAllNamedRoutes();
-		// const initNamedRoute = routeToName(allNamedRoutes, $page.url.pathname);
-
-		// allNamedRoutes.forEach((item) => console.log('it: : ', item));
 
 		scene = new MainScene(canvas, allNamedRoutes, isMobile);
 		theme.subscribe((v) => scene.onThemeChange(v));
 		page.subscribe((v) => scene.onNavigationChange(routeToName(allNamedRoutes, v.url.pathname)));
 		scene.start();
-		console.log('MainScene - start.');
+
+		var containerNode = document.querySelectorAll('div.container')[0];
+
+		const observer = new MutationObserver(() => {
+			scene.onAfterUiUpdate();
+		});
+		observer.observe(containerNode, { subtree: true, characterData: true, childList: true });
 
 		return () => {
 			scene.stop();
 			// scene.cleanup();
-			console.log('MainScene - stopped.');
+			observer.disconnect();
 		};
 	});
 
-	beforeUpdate(() => {
-		console.log('the component is about to update');
-	});
-
-	// TODO: not working ....
-	afterUpdate(() => {
-		console.log('MainScene - afterUpdate.');
-
-		if (scene != null) {
-			scene.onAfterUiUpdate();
-		}
-	});
-
-	onDestroy(() => {
-		console.log('MainScene - destroyed.');
-	});
+	onDestroy(() => {});
 </script>
 
 <!-- <canvas id="canvas" class="fixed left-0 top-0 -z-50" bind:this={canvas} /> -->
-<canvas id="canvas" bind:this={canvas} />
+<canvas id="canvas" bind:this={canvas}></canvas>
 
 <style lang="scss">
 	canvas {

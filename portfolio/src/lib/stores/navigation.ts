@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 export const navItemTitle = writable<string>('');
 
 export function detectMobile(): boolean {
-	console.log('..... detectMobile is called .........');
+	// console.log('..... detectMobile is called .........');
 	
 	const toMatch = [
 		/Android/i,

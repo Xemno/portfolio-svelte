@@ -11,7 +11,7 @@ export const items: Array<Experience> = [
 	{
 		slug: 'qualitas-ag',
 		company: 'Qualitas AG',
-		name: 'Software Engineer',
+		name: 'Java Software Engineer',
 		description: descQualitasExp,
 		shortDescription: 'C++ Game Developer working on the game Transport Fever 2.',
 		contract: ContractType.FullTime,
@@ -26,7 +26,7 @@ export const items: Array<Experience> = [
 	},
 	{
 		slug: 'urban-games',
-		name: 'Software Engineer',
+		name: 'C++ Software Engineer',
 		company: 'Urban Games GmbH',
 		description: descUGExp,
 		shortDescription: 'C++ Game Developer working on the game Transport Fever 2.',

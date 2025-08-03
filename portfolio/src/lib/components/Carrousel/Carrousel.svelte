@@ -2,29 +2,33 @@
 	import type { Skill } from '$lib/types';
 
 	import { onMount } from 'svelte';
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { getAssetURL } from '$lib/data/assets';
 	import UIcon from '../Icon/UIcon.svelte';
 	import CardLogo from '$lib/components/Card/CardLogo.svelte';
 	import Chip from '$lib/components/Chip/Chip.svelte';
 
-	export let items: Array<Skill> = [];
+	interface Props {
+		items?: Array<Skill>;
+	}
+
+	let { items = [] }: Props = $props();
 	const delay = 2500;
 
 	let element: HTMLElement;
 
 	let timeout: unknown;
-	let index = 0;
+	let index = $state(0);
 	let toRight = true;
 
-	$: {
+	$effect(() => {
 		if (element) {
 			element.scroll({
 				left: index * 150,
 				behavior: 'smooth'
 			});
 		}
-	}
+	});
 
 	const slide = (right: boolean) => {
 		if (right) {
@@ -75,10 +79,7 @@
 <div class="carrousel flex-[0.5] row-center">
 	<button
 		class="row-center font-500 p-5px m-y-0px m-x-10px cursor-pointer border-1px border-solid border-[var(--border)] bg-[var(--border)] rounded-[50%] hover:border-[var(--border-hover)]"
-		on:click={toggleLeft}
-		on:keyup
-		on:keydown
-		on:keypress
+		onclick={toggleLeft}
 	>
 		<UIcon icon="i-carbon-chevron-left" />
 	</button>
@@ -90,7 +91,7 @@
 				<span class="text-center m-t-20px">{item.name}</span>
 			</div> -->
 
-			<Chip href={`${base}/projects/${item.slug}`}>
+			<Chip href={resolve(`/projects/${item.slug}`)}>
 				<CardLogo
 					src={getAssetURL(item.logo)}
 					alt={item.name}
@@ -105,10 +106,7 @@
 
 	<button
 		class="row-center font-500 p-5px m-y-0px m-x-10px cursor-pointer border-1px border-solid border-[var(--border)] bg-[var(--border)] rounded-[50%] hover:border-[var(--border-hover)]"
-		on:click={toggleRight}
-		on:keyup
-		on:keydown
-		on:keypress
+		onclick={toggleRight}
 	>
 		<UIcon icon="i-carbon-chevron-right" />
 	</button>

@@ -1,5 +1,9 @@
 <script lang="ts">
-	import { countMonths, getMonthName, getTimeDiff } from '$lib/utils/helpers';
+	import type { Project } from '$lib/types';
+
+	import { getAssetURL } from '$lib/data/assets';
+	import { resolve } from '$app/paths';
+	import { getMonthName, getTimeDiff } from '$lib/utils/helpers';
 	import Chip from '../Chip/Chip.svelte';
 	import Card from '../Card/Card.svelte';
 	import CardTitle from '../Card/CardTitle.svelte';
@@ -7,25 +11,35 @@
 	import CardDivider from '../Card/CardDivider.svelte';
 	import ChipIcon from '../Chip/ChipIcon.svelte';
 	import CardLogo from '../Card/CardLogo.svelte';
-	import type { Project } from '$lib/types';
-	import { getAssetURL } from '$lib/data/assets';
-	import { base } from '$app/paths';
 	import UIcon from '../Icon/UIcon.svelte';
 
-	export let project: Project;
-	$: months = countMonths(project.period.from, project.period.to);
+	interface Props {
+		project: Project;
+	}
+
+	let { project }: Props = $props();
+	// let months = $derived(countMonths(project.period.from, project.period.to));
 	// $: period = `${months} month${months > 1 ? 's' : ''}`;
-	$: period = `${getTimeDiff(
-		project.period.from,
-		project.period.to ?? new Date(Date.now() + 1000 * 60 * 60 * 24)
-	)}`;
-	$: from = `${getMonthName(project.period.from.getMonth())} ${project.period.from.getFullYear()}`;
-	$: to = project.period.to
-		? `${getMonthName(project.period.to.getMonth())} ${project.period.to.getFullYear()}`
-		: 'now';
+	let period = $derived(
+		`${getTimeDiff(
+			project.period.from,
+			project.period.to ?? new Date(Date.now() + 1000 * 60 * 60 * 24)
+		)}`
+	);
+	let from = $derived(
+		`${getMonthName(project.period.from.getMonth())} ${project.period.from.getFullYear()}`
+	);
+	let to = $derived(
+		project.period.to
+			? `${getMonthName(project.period.to.getMonth())} ${project.period.to.getFullYear()}`
+			: 'now'
+	);
+
+	const customChipClass =
+		'py-[5px] px-[15px] m-[2.5px] decoration-none inline-block border-[1px] border-solid border-[var(--border)] rounded-[20px] tracking-wider text-[0.9em] text-[var(--tertiary-text)] duration-[150ms] font-light';
 </script>
 
-<Card color={project.color} href={`${base}/projects/${project.slug}`}>
+<Card color={project.color} href={resolve(`/projects/${project.slug}`)}>
 	<CardLogo
 		alt={project.name}
 		src={'/logos/eth-zurich.png'}
@@ -68,9 +82,9 @@
 		</p>
 	</div>
 	<div class="row justify-between text-0.8em font-400">
-		<Chip>{from}</Chip>
+		<div class={customChipClass}>{from}</div>
 		{#if from !== to}
-			<Chip>{to}</Chip>
+			<div class={customChipClass}>{to}</div>
 		{/if}
 	</div>
 	<CardDivider />
@@ -79,7 +93,7 @@
 			<ChipIcon
 				logo={getAssetURL(tech.logo)}
 				name={tech.name}
-				href={`${base}/skills/${tech.slug}`}
+				href={resolve(`/skills/${tech.slug}`)}
 			/>
 		{/each}
 	</div>

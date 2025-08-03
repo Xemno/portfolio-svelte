@@ -4,10 +4,13 @@
 
 	let el: SVGElement;
 
-	export let size = '30px';
-	export let color = 'var(--main-text)';
+	interface Props {
+		size?: string;
+		color?: string;
+		icon: Icons;
+	}
 
-	export let icon: Icons;
+	let { size = '30px', color = 'var(--main-text)', icon }: Props = $props();
 </script>
 
 <svg

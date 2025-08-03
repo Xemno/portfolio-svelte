@@ -1,13 +1,18 @@
 <script lang="ts">
 	import type { Education } from '$lib/types';
+
 	import { getTimeDiff, getMonthAndYear } from '$lib/utils/helpers';
 	import { getAssetURL } from '$lib/data/assets';
-	import Chip from '../Chip/Chip.svelte';
 	import Card from '../Card/Card.svelte';
 	import CardLogo from '../Card/CardLogo.svelte';
 	import UIcon from '../Icon/UIcon.svelte';
+	import ChipStatic from '../Chip/ChipStatic.svelte';
 
-	export let education: Education;
+	interface Props {
+		education: Education;
+	}
+
+	let { education }: Props = $props();
 </script>
 
 <Card margin="0px 0px 0px 0px" tiltDegree={5} color={education.color}>
@@ -45,7 +50,7 @@
 			 -->
 		<div class="row flex-wrap gap-1">
 			{#each education.subjects as subject}
-				<Chip>{subject}</Chip>
+				<ChipStatic>{subject}</ChipStatic>
 			{/each}
 		</div>
 	</div>

@@ -1,7 +1,8 @@
 <script lang="ts">
+	import type { Pathname } from '$app/types';
 	import type { Skill } from '$lib/types';
 
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { getAssetURL } from '$lib/data/assets';
 	import { title } from '@data/skills';
 	import * as projects from '@data/projects';
@@ -20,10 +21,14 @@
 		name: string;
 		img: string;
 		type: 'projects' | 'experience';
-		url: string;
+		url: Pathname;
 	};
 
-	export let data: { skill?: Skill };
+	interface Props {
+		data: { skill?: Skill };
+	}
+
+	let { data }: Props = $props();
 
 	// NOTE: search for related projects to that skill and show on the bottom
 	const getRelatedProjects = (): Array<Related> => {
@@ -62,9 +67,9 @@
 		return out;
 	};
 
-	$: computedTitle = data.skill ? `${data.skill.name} - ${title}` : title;
+	let computedTitle = $derived(data.skill ? `${data.skill.name} - ${title}` : title);
 
-	$: related = data.skill ? getRelatedProjects() : [];
+	let related = $derived(data.skill ? getRelatedProjects() : []);
 </script>
 
 <TabTitle title={computedTitle} />
@@ -77,7 +82,7 @@
 		</div>
 	{:else}
 		<div class="col items-center overflow-x-hidden">
-			<Banner img={getAssetURL(data.skill.logo)}>
+			<Banner>
 				<MainTitle>{data.skill.name}</MainTitle>
 			</Banner>
 			<div class="pt-3 pb-1 overflow-x-hidden w-full">
@@ -101,7 +106,7 @@
 					{#each related as item}
 						<Chip
 							classes="inline-flex flex-row items-center justify-center"
-							href={`${base}${item.url}`}
+							href={resolve(item.url)}
 						>
 							<CardLogo src={item.img} alt={item.name} radius={'0px'} size={15} classes="mr-2" />
 							<span class="text-[0.9em]">{item.display}</span>

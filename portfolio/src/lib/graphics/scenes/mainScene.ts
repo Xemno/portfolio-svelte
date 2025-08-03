@@ -8,8 +8,8 @@ import TextCloud from '../renderables/TextCloud';
 import { items as navItems } from '@data/navbar';
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { TAARenderPass } from 'three/examples/jsm/postprocessing/TAARenderPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 
@@ -134,7 +134,7 @@ export default class MainScene {
 	}
 
 	public onNavigationChange(item: NavItem) {
-		// console.log('scene onNavChange', item);
+		console.log('scene onNavChange', item);
 		this.textCloud.onNavigationChange(item);
 	}
 
@@ -259,7 +259,7 @@ export default class MainScene {
 		this.windowScreenHeight = window.innerHeight;
 
 		this.isPortraitMode = screen.availHeight > screen.availWidth ? true : false;
-		console.log('mainScene - isPortraitMode: ', this.isPortraitMode);
+		// console.log('mainScene - isPortraitMode: ', this.isPortraitMode);
 
 		if (renderer && camera) {
 			// console.log('width: ' + this.windowScreenWidth + ' height: ' + this.windowScreenHeight);
@@ -273,8 +273,8 @@ export default class MainScene {
 
 			this.renderWidth = wsize[0];
 			this.renderHeight = wsize[1];
-			console.log('renderWidth: ', this.renderWidth, '  -  renderHeight: ', this.renderHeight);
-			console.log('windowScreenWidth: ', this.windowScreenWidth, '  -  windowScreenHeight: ', this.windowScreenHeight);
+			// console.log('renderWidth: ', this.renderWidth, '  -  renderHeight: ', this.renderHeight);
+			// console.log('windowScreenWidth: ', this.windowScreenWidth, '  -  windowScreenHeight: ', this.windowScreenHeight);
 
 			// console.log(' init setting all isPortraitMode: ', this.isPortraitMode);
 			this.renderables.forEach((item) => {

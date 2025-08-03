@@ -11,10 +11,6 @@ import descMasterThesis from '@md/Projects/descMasterThesis.md?raw';
 import descDriveWebsite from '@md/Projects/descDriveWebsite.md?raw';
 import descThisWebsite from '@md/Projects/descThisWebsite.md?raw';
 
-import { base } from '$app/paths';
-
-const getImagePath = (file: string) => `${base}/images/${file}`;
-
 export const title = 'Projects';
 
 export const items: Array<Project> = [

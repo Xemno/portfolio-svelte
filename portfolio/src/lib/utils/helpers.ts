@@ -2,7 +2,7 @@ import type { Experience, Item, NavItem, Project, Skill } from '$lib/types';
 
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { links, description, lastName, name, title, skills } from '@data/home';
+import { lastName, name } from '@data/home';
 import { items as projectItems } from '@data/projects';
 import { items as experiencetItems } from '@data/experience';
 import { items as navItems } from '@data/navbar';
@@ -100,7 +100,7 @@ export function getAllNamedRoutes(): Array<NavItem> {
 	let namedRoutes = new Array<NavItem>;
 
 	namedRoutes.push({ slug: '/', name: name + ' ' + lastName, idx: 0 }); // default home
-	namedRoutes.push({ slug: '/search/', name: 'Search', idx: 1 });
+	namedRoutes.push({ slug: '/search', name: 'Search', idx: 1 });
 
 	let lengthOffset = namedRoutes.length;
 
@@ -110,12 +110,12 @@ export function getAllNamedRoutes(): Array<NavItem> {
 
 	lengthOffset = namedRoutes.length;
 	projectItems.forEach((item: Project, idx) => {
-		namedRoutes.push({ slug: '/projects/' + item.slug + '/', name: item.name, idx: idx + lengthOffset });
+		namedRoutes.push({ slug: '/projects/' + item.slug, name: item.name, idx: idx + lengthOffset });
 	});
 
 	lengthOffset = namedRoutes.length;
 	experiencetItems.forEach((item: Experience, idx) => {
-		namedRoutes.push({ slug: '/experience/' + item.slug + '/', name: item.name, idx: idx + lengthOffset });
+		namedRoutes.push({ slug: '/experience/' + item.slug, name: item.name, idx: idx + lengthOffset });
 	});
 
 	return namedRoutes;
@@ -134,7 +134,7 @@ export function routeToName(searchArray: Array<NavItem>, route: string): NavItem
 		}
 	});
 
-	console.log('routeToName: ', route, navItem);
+	console.log('routeToName: ', route, ' == ', navItem);
 
 	return navItem;
 }

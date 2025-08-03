@@ -7,4 +7,4 @@ nisi ipsa asperiores rem quo. Enim amet vitae animi quia voluptatibus facilis ex
 fuga magnam, repellat, dolorem, iste asperiores quae quis ea possimus nulla maxime minima tempora
 optio molestiae iure nobis? Maxime, iste.
 
-<div id="loading" class="loading" />
+<div id="loading" class="loading"></div>

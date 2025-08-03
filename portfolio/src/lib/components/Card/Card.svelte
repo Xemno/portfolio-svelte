@@ -6,25 +6,40 @@
 
 	let el: HTMLElement;
 
-	export let color = '#ffffff00';
-	export let margin = '0px';
-	export let tiltDegree = 5;
-	export let classes: Array<string> = [];
-	export let href: undefined | string = undefined;
-	export let bgImg: string | undefined = undefined;
+	interface Props {
+		color?: string;
+		margin?: string;
+		tiltDegree?: number;
+		classes?: Array<string>;
+		href?: undefined | string;
+		bgImg?: string | undefined;
+		children?: import('svelte').Snippet;
+	}
 
-	$: computedColor = isHexColor(color) ? color : convertNamedToHexColor(color as NamedColor);
-	$: borderColor = changeColorOpacity(computedColor, 0.5);
-	$: dropColor = changeColorOpacity(computedColor, 0.2);
-	$: bgColor = changeColorOpacity(computedColor, 0.01);
+	let {
+		color = '#ffffff00',
+		margin = '0px',
+		tiltDegree = 5,
+		classes = [],
+		href = undefined,
+		bgImg = undefined,
+		children
+	}: Props = $props();
 
-	$: {
+	let computedColor = $derived(
+		isHexColor(color) ? color : convertNamedToHexColor(color as NamedColor)
+	);
+	let borderColor = $derived(changeColorOpacity(computedColor, 0.5));
+	let dropColor = $derived(changeColorOpacity(computedColor, 0.2));
+	let bgColor = $derived(changeColorOpacity(computedColor, 0.01));
+
+	$effect(() => {
 		if (el) {
 			el.style.setProperty('--border-color', borderColor);
 			el.style.setProperty('--drop-color', dropColor);
 			el.style.setProperty('--bg-color', bgColor);
 		}
-	}
+	});
 
 	const onHover: MouseEventHandler<HTMLDivElement> = (ev) => {
 		const target = ev.currentTarget;
@@ -59,19 +74,19 @@
 	});
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <svelte:element
 	this={href ? 'a' : 'div'}
 	{href}
 	bind:this={el}
-	on:mousemove={onHover}
+	onmousemove={onHover}
 	class={`card text-inherit decoration-none inline-flex flex-col border-1px border-solid border-[var(--border)] rounded-15px duration relative ${classes.join(
 		' '
 	)}`}
 	style:bgColor={'red'}
 >
 	<div class="card-bg-img flex-1 col p-25px rounded-15px">
-		<slot />
+		{@render children?.()}
 	</div>
 </svelte:element>
 
@@ -89,7 +104,8 @@
 		--rot-x: 0;
 		--rot-y: 0;
 
-		background: linear-gradient(90deg, var(--main) 0%, var(--main) 60%, var(--main-60) 100%),
+		background:
+			linear-gradient(90deg, var(--main) 0%, var(--main) 60%, var(--main-60) 100%),
 			no-repeat right 40% / 40% var(--bg-img);
 
 		backdrop-filter: blur(10px);
@@ -106,7 +122,7 @@
 		}
 
 		&:hover {
-			transform: perspective(1000px) rotateX(var(--rot-x)) rotateY(var(--rot-y)) scale(1.02); // NOTE: learn from this
+			transform: perspective(1000px) rotateX(var(--rot-x)) rotateY(var(--rot-y)) scale(1.02);
 			border-color: var(--border-hover);
 		}
 	}

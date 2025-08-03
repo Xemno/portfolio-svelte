@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Experience } from '$lib/types';
 
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { getAssetURL } from '$lib/data/assets';
 	import { getTimeDiff } from '$lib/utils';
 	import { title } from '@data/experience';
@@ -14,9 +14,13 @@
 	import CardDivider from '$lib/components/Card/CardDivider.svelte';
 	import CardLogo from '$lib/components/Card/CardLogo.svelte';
 
-	export let data: { experience?: Experience };
+	interface Props {
+		data: { experience?: Experience };
+	}
 
-	$: computedTitle = data.experience ? `${data.experience.name} - ${title}` : title;
+	let { data }: Props = $props();
+
+	let computedTitle = $derived(data.experience ? `${data.experience.name} - ${title}` : title);
 </script>
 
 <TabTitle title={computedTitle} />
@@ -57,7 +61,7 @@
 						{#each data.experience.skills as item}
 							<Chip
 								classes="inline-flex flex-row items-center justify-center"
-								href={`${base}/skills/${item.slug}`}
+								href={resolve(`/skills/${item.slug}`)}
 							>
 								<CardLogo
 									src={getAssetURL(item.logo)}

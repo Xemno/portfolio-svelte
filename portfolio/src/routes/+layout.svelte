@@ -8,6 +8,11 @@
 	import MainScene from '$lib/components/Graphics/MainScene.svelte';
 
 	import { onNavigate } from '$app/navigation';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	onNavigate(({ complete }) => {
 		if (document == undefined) return;
@@ -15,7 +20,6 @@
 
 		return new Promise((resolve) => {
 			document.startViewTransition(async () => {
-				
 				resolve();
 				await complete;
 			});
@@ -69,7 +73,7 @@
 <div class={`body contents ${$theme ? 'theme-dark' : 'theme-light'}`} id="mydiv">
 	<NavMenu />
 	<MainScene />
-	<div class="content container"><slot /></div>
+	<div class="content container">{@render children?.()}</div>
 </div>
 
 <style lang="scss">

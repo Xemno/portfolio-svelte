@@ -1,29 +1,26 @@
 <script lang="ts">
-	import type { Skill } from '$lib/types';
-
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { items, title } from '@data/skills';
-	import { isBlank } from '$lib/utils/helpers';
 	import { getAssetURL } from '$lib/data/assets';
 	import SearchPage from '$lib/components/SearchPage.svelte';
 	import Card from '$lib/components/Card/Card.svelte';
 	import UIcon from '$lib/components/Icon/UIcon.svelte';
 
-	let result = items as unknown as Array<Skill>;
+	let search = $state('');
 
-	const onSearch = (e: CustomEvent<{ search: string }>) => {
-		const query = e.detail.search;
+	let result = $derived(
+		items.filter((skill) => {
+			const isSearched =
+				search.trim().length === 0 ||
+				skill.name.trim().toLowerCase().includes(search.trim().toLowerCase());
+			return isSearched;
+		})
+	);
 
-		if (isBlank(query)) {
-			result = items as unknown as Array<Skill>;
-			return;
-		}
-
-		result = items.filter((it) => it.name.toLowerCase().includes(query));
-	};
+	const onSearch = (query: string) => (search = query);
 </script>
 
-<SearchPage {title} on:search={onSearch}>
+<SearchPage {title} {onSearch}>
 	{#if result.length === 0}
 		<!-- NOTE: if search result is empty -->
 		<div class="p-5 m-b-100 col-center gap-3 m-y-auto text-[var(--accent-text)] flex-1">
@@ -37,7 +34,7 @@
 				<Card
 					classes={['cursor-pointer decoration-none']}
 					tiltDegree={5}
-					href={`${base}/skills/${skill.slug}`}
+					href={resolve(`/skills/${skill.slug}`)}
 					bgImg={getAssetURL(skill.logo)}
 					color={skill.color}
 				>

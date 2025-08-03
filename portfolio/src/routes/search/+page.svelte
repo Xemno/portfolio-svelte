@@ -2,71 +2,119 @@
 	import type { Icon, Item, Skill } from '$lib/types';
 
 	import { onMount } from 'svelte';
-	import { base } from '$app/paths';
+	import { resolve } from '$app/paths';
 	import { title } from '@data/search';
 	import { filterItemsByQuery, type ItemOrSkill } from '$lib/utils/helpers';
-	import * as experiences from '@data/experience';
-	import * as projects from '@data/projects';
-	import * as skills from '@data/skills';
+	import * as Experiences from '@data/experience';
+	import * as Education from '@data/education';
+	import * as Projects from '@data/projects';
+	import * as Skills from '@data/skills';
 	import SearchPage from '$lib/components/SearchPage.svelte';
 	import Chip from '$lib/components/Chip/Chip.svelte';
 	import UIcon from '$lib/components/Icon/UIcon.svelte';
+	import { NAMED_COLORS } from '$lib/utils/colors';
+	import type { Pathname } from '$app/types';
 
-	type SearchResultItem = {
-		icon: Icon;
+	type Item = {
 		name: string;
-		data: Item | Skill;
-		to: string;
+		// logo: string;
+		link: Pathname;
+		color: string;
 	};
 
-	let query = '';
-	let result: Array<SearchResultItem> = [];
+	type Group = {
+		icon: `i-carbon-${string}`;
+		name: string;
+		items: Array<Item>;
+	};
 
-	onMount(() => {
-		let searchParams = new URLSearchParams(window.location.search);
+	let search = $state('');
 
-		query = searchParams.get('q') ?? '';
-	});
+	const getResult = (q: string): Array<Group> => {
+		const skills = Skills.items.filter((it) => it.name.toLowerCase().includes(q.toLowerCase()));
 
-	$: {
-		result = [];
+		const projects = Projects.items.filter((it) => it.name.toLowerCase().includes(q.toLowerCase()));
 
-		// filter
-		result.push(
-			...filterItemsByQuery(projects.items, query).map<SearchResultItem>((data) => ({
-				data,
+		const experience = Experiences.items.filter(
+			(it) =>
+				it.name.toLowerCase().includes(q.toLowerCase()) ||
+				it.company.toLowerCase().includes(q) ||
+				it.location.toLowerCase().includes(q)
+		);
+
+		// const education = Education.items.filter(
+		// 	(it) =>
+		// 		it.name.toLowerCase().includes(q.toLowerCase()) ||
+		// 		it.degree.toLowerCase().includes(q) ||
+		// 		it.location.toLowerCase().includes(q) ||
+		// 		it.organization.toLowerCase().includes(q)
+		// );
+
+		const groups: Array<Group> = [];
+
+		if (skills.length) {
+			groups.push({
+				icon: 'i-carbon-assembly-cluster',
+				name: 'Skills',
+				items: skills.map((it) => ({
+					name: it.name,
+					// logo: $mode === 'dark' ? it.logo.dark : it.logo.light,
+					link: `/skills/${it.slug}`,
+					color: it.color
+				}))
+			});
+		}
+
+		if (projects.length) {
+			groups.push({
 				icon: 'i-carbon-cube',
-				name: data.name,
-				to: `projects/${data.slug}`
-			}))
-		);
+				name: 'Projects',
+				items: projects.map((it) => ({
+					name: it.name,
+					// logo: $mode === 'dark' ? it.logo.dark : it.logo.light,
+					link: `/projects/${it.slug}`,
+					color: it.color
+				}))
+			});
+		}
 
-		result.push(
-			...filterItemsByQuery(
-				skills.items as unknown as Array<ItemOrSkill>,
-				query
-			).map<SearchResultItem>((data) => ({
-				data,
-				icon: 'i-carbon-software-resource-cluster',
-				name: data.name,
-				to: `skills/${data.slug}`
-			}))
-		);
-
-		result.push(
-			...filterItemsByQuery(experiences.items, query).map<SearchResultItem>((data) => ({
-				data,
+		if (experience.length) {
+			groups.push({
 				icon: 'i-carbon-development',
-				name: `${data.name} @ ${data.company}`,
-				to: `experience/${data.slug}`
-			}))
-		);
-	}
+				name: 'Experience',
+				items: experience.map((it) => ({
+					name: it.name,
+					// logo: $mode === 'dark' ? it.logo.dark : it.logo.light,
+					link: `/experience/${it.slug}`,
+					color: it.color
+				}))
+			});
+		}
+
+		// if (education.length) {
+		// 	groups.push({
+		// 		icon: 'i-carbon-education',
+		// 		name: 'Education',
+		// 		items: education.map((it) => ({
+		// 			name: it.degree,
+		// 			// logo: $mode === 'dark' ? it.logo.dark : it.logo.light,
+		// 			link: `/education/${it.slug}`,
+		// 			color: NAMED_COLORS.gray
+		// 		}))
+		// 	});
+		// }
+
+		return groups;
+	};
+
+	let result = $derived(getResult(search));
+
+	const onSearch = (query: string) => (search = query);
 </script>
 
-<SearchPage {title} on:search={(e) => (query = e.detail.search)} autoFocusSearch={true}>
-	<div class="col items-stretch gap-10 p-2" />
-	{#if !query}
+<SearchPage {title} {onSearch} autoFocusSearch={true}>
+	<div class="col items-stretch gap-10 p-2"></div>
+	{#if !search}
 		<div
 			class="flex-1 self-center col-center m-t-10 mb-100 gap-5 font-300 text-[var(--accent-text)]"
 		>
@@ -82,11 +130,13 @@
 		</div>
 	{:else}
 		<div class="row flex-wrap gap-1">
-			{#each result as item}
-				<Chip href={`${base}/${item.to}`} classes="row items-center gap-2">
-					<UIcon icon={item.icon} classes="text-1.2em" />
-					<span>{item.name}</span>
-				</Chip>
+			{#each result as item (item.name)}
+				{#each item.items as it (it.name)}
+					<Chip href={resolve(it.link)} classes="row items-center gap-2">
+						<!-- <UIcon icon={it.logo} classes="text-1.2em" /> -->
+						<span>{it.name}</span>
+					</Chip>
+				{/each}
 			{/each}
 		</div>
 	{/if}

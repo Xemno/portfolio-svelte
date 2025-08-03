@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { Project } from '$lib/types';
-	import { base } from '$app/paths';
+
+	import { resolve } from '$app/paths';
 	import { getAssetURL } from '$lib/data/assets';
 	import { title } from '@data/projects';
-
 	import CardLogo from '$lib/components/Card/CardLogo.svelte';
 	import MainTitle from '$lib/components/MainTitle/MainTitle.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
@@ -13,17 +13,22 @@
 	import UIcon from '$lib/components/Icon/UIcon.svelte';
 	import CardDivider from '$lib/components/Card/CardDivider.svelte';
 
-	export let data: { project?: Project };
+	interface Props {
+		data: { project?: Project };
+	}
+
+	let { data }: Props = $props();
 
 	const screenshots = data.project?.screenshots ?? [];
 
 	let screenIndex: number | undefined = undefined;
 
-	$: screenshot =
+	let screenshot = $derived(
 		typeof screenIndex !== 'undefined' && screenshots[screenIndex]
 			? screenshots[screenIndex]
-			: undefined;
-	$: computedTitle = data.project ? `${data.project.name} - ${title}` : title;
+			: undefined
+	);
+	let computedTitle = $derived(data.project ? `${data.project.name} - ${title}` : title);
 </script>
 
 <TabTitle title={computedTitle} />
@@ -59,7 +64,7 @@
 						{#each data.project.skills as item}
 							<Chip
 								classes="inline-flex flex-row items-center justify-center"
-								href={`${base}/skills/${item.slug}`}
+								href={resolve(`/skills/${item.slug}`)}
 							>
 								<CardLogo
 									src={getAssetURL(item.logo)}

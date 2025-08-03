@@ -1,10 +1,10 @@
 import type { Asset } from '$lib/types';
 import { theme } from '$lib/stores/theme';
-import { base } from '$app/paths';
+import { resolve } from '$app/paths';
 
-const getImagePath = (file: string) => `${base}/images/${file}`;
+const getImagePath = (file: string) => resolve(`/images/${file}`);
 
-const getFilePath = (file: string) => `${base}/logos/${file}`;
+const getFilePath = (file: string) => resolve(`/logos/${file}`);
 
 // Assets in light and dark mode
 const a = (light: string, dark?: string): Asset =>

@@ -5,25 +5,23 @@
 	import { title, items } from '@data/education';
 	import type { Education } from '$lib/types';
 
-	let search = '';
-	let result: Array<Education> = items;
+	let search = $state('');
 
-	const onSearch = (ev: CustomEvent<{ search: string }>) => {
-		const s = ev.detail.search;
-		result = items.filter((it) => {
-			return (
-				it.degree.toLowerCase().includes(s) ||
-				it.description.toLowerCase().includes(s) ||
-				it.location.toLowerCase().includes(s) ||
-				it.name.toLowerCase().includes(s) ||
-				it.organization.toLowerCase().includes(s) ||
-				it.subjects.some((it) => it.toLowerCase().includes(s))
-			);
-		});
-	};
+	let result = $derived(
+		items.filter(
+			(it) =>
+				it.name.toLowerCase().includes(search.toLowerCase()) ||
+				it.description.toLowerCase().includes(search) ||
+				it.location.toLowerCase().includes(search) ||
+				it.degree.toLowerCase().includes(search) ||
+				it.organization.toLowerCase().includes(search)
+		)
+	);
+
+	const onSearch = (query: string) => (search = query);
 </script>
 
-<SearchPage {title} {search} on:search={onSearch}>
+<SearchPage {title} {onSearch}>
 	<div class="col items-center relative mt-10 flex-1">
 		{#if result.length === 0}
 			<div class="p-5 mb-100 col-center gap-3 m-y-auto text-[var(--accent-text)] flex-1">
@@ -33,14 +31,14 @@
 		{:else}
 			<div
 				class="w-[0.5px] hidden lg:flex top-0 bottom-0 py-50px bg-[var(--border)] absolute rounded"
-			/>
+			></div>
 			{#each result as education, index (education.slug)}
 				<div
 					class={`flex ${
 						index % 2 !== 0 ? 'flex-row' : 'flex-row-reverse'
 					} relative items-center w-full my-[10px]`}
 				>
-					<div class="flex-1 hidden lg:flex" />
+					<div class="flex-1 hidden lg:flex"></div>
 					<div class="hidden lg:inline p-15px bg-transparent">
 						<UIcon icon="i-carbon-condition-point" />
 					</div>

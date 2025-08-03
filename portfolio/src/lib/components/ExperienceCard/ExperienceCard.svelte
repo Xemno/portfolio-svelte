@@ -1,15 +1,20 @@
 <script lang="ts">
 	import type { Experience } from '$lib/types';
+
+	import { resolve } from '$app/paths';
 	import { getMonthName, getTimeDiff } from '$lib/utils/helpers';
 	import Card from '../Card/Card.svelte';
 	import CardLogo from '../Card/CardLogo.svelte';
 	import CardTitle from '../Card/CardTitle.svelte';
 	import ChipIcon from '../Chip/ChipIcon.svelte';
 	import { getAssetURL } from '$lib/data/assets';
-	import { base } from '$app/paths';
 	import UIcon from '../Icon/UIcon.svelte';
 
-	export let experience: Experience;
+	interface Props {
+		experience: Experience;
+	}
+
+	let { experience }: Props = $props();
 
 	const months = getTimeDiff(experience.period.from, experience.period.to);
 
@@ -26,7 +31,7 @@
 <Card
 	margin="0px 0px 20px 0px"
 	tiltDegree={2}
-	href={`${base}/experience/${experience.slug}`}
+	href={resolve(`/experience/${experience.slug}`)}
 	color={experience.color}
 >
 	<div class="col md:flex-row items-start gap-5 md:gap-1">
@@ -63,7 +68,7 @@
 					<ChipIcon
 						logo={getAssetURL(skill.logo)}
 						name={skill.name}
-						href={`${base}/skills/${skill.slug}`}
+						href={resolve(`/skills/${skill.slug}`)}
 					/>
 				{/each}
 			</div>

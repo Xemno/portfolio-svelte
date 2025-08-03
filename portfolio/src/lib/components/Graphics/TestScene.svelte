@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { onHydrated, theme } from '$lib/stores/theme';
+	import { onHydrated } from '$lib/stores/theme';
 	import TestScene from '$lib/graphics/scenes/testScene';
 
 	let canvas: HTMLCanvasElement;
@@ -18,7 +18,7 @@
 	});
 </script>
 
-<canvas id="canvas" class="fixed left-0 top-10 -z-50" bind:this={canvas} />
+<canvas id="canvas" class="fixed left-0 top-10 -z-50" bind:this={canvas}></canvas>
 
 <style lang="scss">
 	// body {

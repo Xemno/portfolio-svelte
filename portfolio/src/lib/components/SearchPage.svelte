@@ -1,26 +1,26 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
+	import { browser } from '$app/environment';
 	import CommonPage from './CommonPage.svelte';
 	import Input from './Input/Input.svelte';
-	import { browser } from '$app/environment';
 
-	export let title = 'Title';
-	export let search = '';
-	export let autoFocusSearch = false; // default no auto focus when redirecting to page
-
-	const dispatch = createEventDispatcher();
-
-	let mounted = false;
-
-	$: {
-		dispatch('search', { search: search.trim().toLowerCase() });
+	interface Props {
+		title: string;
+		onSearch: (value: string) => void;
+		autoFocusSearch?: boolean;
+		children?: Snippet;
 	}
 
-	$: {
+	let { title = 'Untitled', onSearch, autoFocusSearch, children }: Props = $props();
+
+	let query = $state('');
+	let mounted = $state(false);
+
+	$effect(() => {
 		if (browser && mounted) {
 			let searchParams = new URLSearchParams(window.location.search);
 
-			searchParams.set('q', search);
+			searchParams.set('q', query);
 
 			const url = `${window.location.protocol}//${window.location.host}${
 				window.location.pathname
@@ -29,13 +29,14 @@
 			const state = window.history.state;
 
 			window.history.replaceState(state, '', url);
+
+			onSearch(query);
 		}
-	}
+	});
 
 	onMount(() => {
 		let searchParams = new URLSearchParams(window.location.search);
-
-		search = searchParams.get('q') ?? '';
+		query = searchParams.get('q') ?? '';
 		mounted = true;
 	});
 </script>
@@ -43,11 +44,11 @@
 <CommonPage {title}>
 	<!-- NOTE: Search bar -->
 	<div class="w-100% row">
-		<Input bind:value={search} placeholder={'Search...'} {autoFocusSearch} />
+		<Input bind:value={query} placeholder={'Search...'} {autoFocusSearch} />
 	</div>
 
 	<!-- NOTE: Content with projects / skills / work experience cards -->
 	<div class="w-100% col flex-1">
-		<slot />
+		{@render children?.()}
 	</div>
 </CommonPage>
