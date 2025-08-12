@@ -2,7 +2,7 @@
 	import { onMount, type Snippet } from 'svelte';
 	import { browser } from '$app/environment';
 	import CommonPage from './CommonPage.svelte';
-	import Input from './Input/Input.svelte';
+	import SearchInput from './Input/SearchInput.svelte';
 
 	interface Props {
 		title: string;
@@ -44,7 +44,7 @@
 <CommonPage {title}>
 	<!-- NOTE: Search bar -->
 	<div class="w-100% row">
-		<Input bind:value={query} placeholder={'Search...'} {autoFocusSearch} />
+		<SearchInput bind:value={query} placeholder={'Search...'} {autoFocusSearch} />
 	</div>
 
 	<!-- NOTE: Content with projects / skills / work experience cards -->

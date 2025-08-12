@@ -1,6 +1,4 @@
 <script lang="ts">
-	// TODO: rename to SearchInput
-
 	import { onMount } from 'svelte';
 
 	interface Props {
