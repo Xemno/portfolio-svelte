@@ -2,9 +2,9 @@ import { detectMobile } from '$lib/stores/navigation';
 import type { NavItem } from '$lib/types';
 import { NAMED_COLORS } from '$lib/utils/colors';
 import * as THREE from 'three';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
-import type { Font } from 'three/examples/jsm/loaders/FontLoader';
-import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+import type { Font } from 'three/examples/jsm/loaders/FontLoader.js';
+import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
 
 export class TextParticleSystem {
 
@@ -43,7 +43,7 @@ export class TextParticleSystem {
 	public createCurrParticles(font: Font, initParams: NavItem) {
 		this.currParticlesPos = this.createTextParticlesPos(font, initParams); // NOTE: current particle position
 		if (this.currParticlesPos == null) {
-			// console.log('Error - currParticles is NULL');
+			console.log('Error - currParticles is NULL');
 		}
 
 		// initialize particle system

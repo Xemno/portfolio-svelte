@@ -22,8 +22,10 @@
 		page.subscribe((v) => scene.onNavigationChange(routeToName(allNamedRoutes, v.url.pathname)));
 		scene.start();
 
-		var containerNode = document.querySelectorAll('div.container')[0];
-
+		// var containerNode = document.querySelectorAll('div.container')[0];
+		var containerNode = document.querySelectorAll('div')[0];
+		console.log("querySelectorAll: ", containerNode);
+		
 		const observer = new MutationObserver(() => {
 			scene.onAfterUiUpdate();
 		});

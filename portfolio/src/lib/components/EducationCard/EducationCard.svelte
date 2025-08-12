@@ -7,6 +7,7 @@
 	import CardLogo from '../Card/CardLogo.svelte';
 	import UIcon from '../Icon/UIcon.svelte';
 	import ChipStatic from '../Chip/ChipStatic.svelte';
+	import CardTitle from '../Card/CardTitle.svelte';
 
 	interface Props {
 		education: Education;
@@ -19,7 +20,7 @@
 	<div class="flex-1 col gap-2 items-stretch">
 		<div class="row justify-between">
 			<div class="">
-				<div class="text-[1.3em]">{education.degree}</div>
+				<CardTitle title={education.degree} />
 				<div class="mb-2">{education.organization}</div>
 				<div class="col text-[var(--accent-text)] text-[0.9em] font-200">
 					<div class="row items-center gap-2 mb-1">

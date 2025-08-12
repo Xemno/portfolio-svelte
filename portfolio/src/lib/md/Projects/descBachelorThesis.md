@@ -1,5 +1,8 @@
 # Sensing for Soft Robots Using Electrical Resistance/Impedance Tomography
 
+_The description provided here offers a concise overview of my bachelor's thesis, summarizing its key objectives, methodology, and findings. For a more in-depth exploration—including detailed analysis, implementation specifics, and extended results—the complete thesis document is available upon request._
+
+<br>
 In this thesis I am researching touch and/or deformation sensing in soft substrates using electrical resistance/impedance tomography techniques.
 I investigated the use of conductive soft foam material to localize touch inputs on its surface and to sense its own volumetric deformation with electrical impedance changes.
 <br/><br/>
@@ -22,9 +25,7 @@ Tomographic Reconstruction is a multidimensional inverse problem. So the challen
 
 ## System Overview
 
-<p align="center" >
-  <img style="overflow:hidden; width: 65%;" src="../images/soft_system.png" alt="Satellite Image of a Chicago road"/>
-</p>
+<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/soft_system.png" alt="System overview" />
 
 ### Signal Generation
 
@@ -37,34 +38,24 @@ AD5930 produces a current output. Thus, resulting in no issues with the voltage 
 Input current to AD8220 is negligible because of very high input impedance. Thus, we can set the output voltage of the AD5930 with resistors.
 Here with 200 Ohm and 3mA the output voltage is set to 0.6V
 
-<p align="center" >
-  <img style="overflow:hidden; width: 55%;" src="../images/signal_gen.png" alt="Satellite Image of a Chicago road"/>
-</p>
-
 ### VCCS - Voltage Controlled Current Source
 
 The VCCS accepts an input voltage and produces a constant output current, which is important for our impedance measurements.
 As a VCCS a [Howland Current Pump](https://www.allaboutcircuits.com/technical-articles/the-howland-current-pump/) was used to produce a constant current.
 
-<p align="center" >
-  <img style="overflow:hidden; width: 55%;" src="../images/signal_gen.png" alt="Satellite Image of a Chicago road"/>
-</p>
+<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/signal_gen.png" alt="Signal generation" >
 
 #### Simulating error currents
 
 1k to 100k OHMs stepsize is 5k, resulting in 20 traces. R_S is 20k Ohm and V_in is 0.6V peak to peak.
 
-<p align="center" >
-  <img style="overflow:hidden; width: 65%;" src="../images/error_currents.png" alt="Satellite Image of a Chicago road"/>
-</p>
+<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/error_currents.png" alt="Error currents" >
 
 ## Measurement Scheme
 
 The system applys is an adjacent pattern measurement scheme. In the adjacent method the measurement pattern consists of differential measurements between all adjacent electrodes except the injecting electrodes. This is then done for all adjacent electrodes as injecting electrodes resulting in 40 measurements. This results in 5 measurements per adjacent pair, which for 8 electrode pair results in a measurement matrix M of 40 entries.
 
-<p align="center" >
-  <img style="overflow:hidden; width: 75%;" src="../images/measure_scheme.png" alt="Satellite Image of a Chicago road"/>
-</p>
+<img class="w-full md:w-2/3"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/measure_scheme.png" alt="Measurement scheme" >
 
 ### Multiplexers
 
@@ -77,9 +68,7 @@ And more non-ideal properties
 
 ### Differential Voltage Measurement
 
-<p align="center" >
-  <img style="overflow:hidden; width: 45%;" src="../images/diff_measure.png" alt="Satellite Image of a Chicago road"/>
-</p>
+<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/diff_measure.png" alt="Difference measurement" >
 
 ## Signal Sampling
 
@@ -87,7 +76,8 @@ Using the programmable delay block (PDB) of the [Teensy](https://www.pjrc.com/te
 As depicted is the measured sampling of a full signal period of the system.
 
 <p align="center" >
-  <img style="overflow:hidden; width: 45%;" src="../images/sampled_signal.png" alt="Satellite Image of a Chicago road"/>
+  <img class="w-full md:w-1/3"  style="overflow:hidden;  ; margin: 0 auto; border-radius: 5px" src="../images/sampled_signal.png" alt="Signal sampling" >
+  <img class="w-full md:w-1/3"  style="overflow:hidden;  ; margin: 0 auto; border-radius: 5px" src="../images/sampled_signal_2.png" alt="Signal sampling" >
 </p>
 
 The system takes up to 512 samples per signal measurement and reducing this to one RMS value.

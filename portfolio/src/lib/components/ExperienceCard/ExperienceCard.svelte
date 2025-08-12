@@ -36,12 +36,8 @@
 >
 	<div class="col md:flex-row items-start gap-5 md:gap-1">
 		<CardLogo src={getAssetURL(experience.logo)} alt={experience.company} size={75} />
-		<div class="col ml-0 md:ml-[20px] gap-3 w-full">
-			<h3
-				class="flex text-[0.9em] flex-col items-start sm:flex-row sm:items-center justify-between sm:gap-5 md:flex-col md:items-start md:gap-0 lg:flex-row lg:items-center"
-			>
-				<CardTitle title={experience.name} />
-			</h3>
+		<div class="col ml-0 md:ml-[20px] gap-2 w-full">
+			<CardTitle title={experience.name} />
 			<div class="row flex-wrap m-b-2 gap-1 text-0.9em font-300">
 				<ChipIcon name={`Company: ${experience.company}`}>
 					<div class="row items-center gap-2">
@@ -62,7 +58,9 @@
 				<div class="text-[var(--accent-text)] text-[0.9em] font-200">{period}</div>
 			</div>
 
-			<div class="experience-description">{experience.shortDescription}</div>
+			<div class="text-[0.95em] text-[var(--secondary-text)] font-300">
+				{experience.shortDescription}
+			</div>
 			<div class="row flex-wrap mt-5">
 				{#each experience.skills as skill}
 					<ChipIcon

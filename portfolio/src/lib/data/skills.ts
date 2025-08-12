@@ -99,6 +99,13 @@ export const items = [
 		description: 'Lorem',
 		logo: Assets.Unity,
 		name: 'Unity Game Engine'
+	}),
+	s({
+		slug: 'nodejs',
+		color: 'orange',
+		description: 'NodeJS',
+		logo: Assets.NodeJs,
+		name: 'NodeJS'
 	})
 ] as const;
 

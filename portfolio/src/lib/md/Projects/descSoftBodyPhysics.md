@@ -1,10 +1,10 @@
 # Physically-Based Simulation
 
 This project was part of the Physically-Based Simulation masters course at the [Computer Graphics Lab](https://cgl.ethz.ch/teaching/simulation19/home.php), ETH Zürich, Switzerland
-<br/><br/>
+<br/> <br/>
 
 The Goal of our project was to creat a physically-based interctive system for games. It should support both soft and rigid bodies, handle collisions and provide support for user interaction (GUI, input etc.). For this reason we used Unity as a framework for rendering while writing our own physics engine.
-<br/><br/>
+<br/> <br/>
 
 Our engine consists of a position based dynamics system with a Verlet integration scheme. All objects are represented by particles and constraints. In each timestep, every particle's position is predicted by an explicit integration step, then the positions are readjusted to satisfy the constraints. Collisions resolution is handled in the same way, by projection. Solving for the constraints is done iteratively in a Gauss-Seidel fashion.
 

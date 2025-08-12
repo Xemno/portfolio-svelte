@@ -31,6 +31,7 @@ interface Item {
 type GeometryItems = Array<Item>;
 
 // Options
+// TODO: move into data/app.ts file
 const particleCount = 5000;
 const typefaceRegular = '/src/lib/graphics/fonts/optimer_bold.typeface.json';
 const typefaceMobile = '/src/lib/graphics/fonts/optimer_regular.typeface.json';
@@ -147,6 +148,7 @@ export default class TextCloud implements IRenderable {
 
 	public onNavigationChange(item: NavItem) {
 		if (!this.ready) return;
+		// console.log('Text Cloud: scene onNavChange', item);
 		this.tweenMorphing.morphTo(item);
 	}
 
@@ -163,7 +165,7 @@ export default class TextCloud implements IRenderable {
 		// console.log('TextCloud - onAfterUiUpdate: ');
 		if (!this.ready) return;
 		let vWorldPos = this.getMainTitleTextPosition();
-		// console.log('onAfterUiUpdate - vWorldPos: ', vWorldPos);
+		console.log('onAfterUiUpdate - vWorldPos: ', vWorldPos);
 
 		this.particleSystem.setCurrParticlesPos(vWorldPos);
 	}
@@ -192,7 +194,7 @@ export default class TextCloud implements IRenderable {
 
 	private getMainTitleTextPosition(): THREE.Vector3 | null {
 		let mainTitleText: (HTMLElement | null) = document.getElementById("main-title");
-		// console.log('mainTitleText: ', mainTitleText);
+		console.log('mainTitleText: ', mainTitleText);
 
 		if (mainTitleText != null) {
 			let { top, bottom, left, right } = mainTitleText.getBoundingClientRect();

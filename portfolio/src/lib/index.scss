@@ -187,7 +187,7 @@ body {
 	--code-class-name: var(--secondary-text);
 
 	font-family: 'Open Sans';
-	// font-size: 16px;
+	// font-size: 20px;
 
 	// mix-blend-mode: difference;
 
@@ -257,9 +257,12 @@ body {
 		}
 	}
 
-	& h1,
-	& h2 {
+	& h1 {
 		font-size: 1.8em;
+	}
+	& h2 {
+		font-size: 1.6em;
+		margin-top: 0.45em;
 	}
 
 	& h3 {
@@ -267,7 +270,7 @@ body {
 		margin-bottom: 0.45em;
 		margin-top: 0.45em;
 		font-weight: 900;
-		font-size: 1.6em;
+		font-size: 1.4em;
 	}
 
 	& h4 {
@@ -283,7 +286,7 @@ body {
 	}
 
 	& p {
-		line-height: 1.75rem;
+		line-height: 1.65rem;
 
 		// background-color: var(--md-bg-main);
 
@@ -445,9 +448,8 @@ body {
 	position: absolute;
 	left: 0px;
 	right: 0;
-	top: -25px;
 	bottom: 0;
-	box-shadow: inset 0 0 0 1000px rgba(161, 161, 161, 0.1);
+	box-shadow: inset 0 0 0 1000px rgba(255, 255, 255, 0);
 	backdrop-filter: blur(40px);
 	z-index: -99;
 }

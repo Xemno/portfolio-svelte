@@ -134,7 +134,7 @@ export default class MainScene {
 	}
 
 	public onNavigationChange(item: NavItem) {
-		console.log('scene onNavChange', item);
+		// console.log('scene onNavChange', item);
 		this.textCloud.onNavigationChange(item);
 	}
 

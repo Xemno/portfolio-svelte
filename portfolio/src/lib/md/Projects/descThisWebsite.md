@@ -1,40 +1,27 @@
-# asd
 
-> This is a blockquote.
+# Modern Interactive Portfolio Website
 
-> Svelte is a free and open-source front end component framework or language created by Rich Harris and maintained by the Svelte core team members.
+<p>In my free time, I, designed and developed a responsive, interactive portfolio using Svelte and TypeScript for a clean, type-safe codebase, enhanced with Three.js for immersive 3D visuals. </p> <br>
 
-## asd
+<p> Built as part of my exploration into full-stack development, demonstrating hands-on experience with these technologies.</p>
 
-I read this interesting quote the other day:
+<p>This hands-on project deepened my expertise in frontend architecture, real-time graphics, and performance tuning—proving that powerful visuals and developer efficiency can coexist.</p>
 
-"Her eyes had called him and his soul had leaped at the call. To live, to err, to fall, to triumph, to recreate life out of life!"
+## Key Contributions
 
-`Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa quod voluptatem saepe sapiente vitae necessitatibus blanditiis quidem veniam fugit. Tenetur deserunt fuga officiis delectus voluptate sunt, nihil molestiae fugiat inventore?
-Reiciendis consectetur adipisci quaerat, quisquam, excepturi error veritatis corrupti omnis nihil minus soluta dolor autem pariatur. At, maiores explicabo ipsam delectus aliquid, assumenda commodi, modi velit minima atque suscipit odio.`
+- **Dynamic 3D Text Rendering**: Implemented a WebGL-based responsive text cloud particle system using Three.js, ensuring seamless adaptation to viewport constraints.
 
-<p>
+- **CSS-Aware 3D Graphics**: Synchronized 3D text positioning with DOM layout for device-independent scaling and alignment.
 
-Svelte is :
+- **Cross-Device Optimization**: Applied adaptive sizing and orientation logic based on screen resolution, delivering smooth performance on desktop and mobile.
 
-- compiled : Svelte shifts as much work as possible out of the browser and into your build step. No more manual optimisations — just faster, more efficient apps.
-- compact : Write breathtakingly concise components using languages you already know — HTML, CSS and JavaScript. Oh, and your application bundles will be tiny as well.
-- complete : Built-in scoped styling, state management, motion primitives, form bindings and more — don't waste time trawling npm for the bare essentials. It's all here.
+- **Efficient Architecture**: Leveraged Svelte’s reactivity for a high-performance component-based structure with minimal overhead.
 
-</p>
+- **Type-Safe Development**: Used TypeScript for maintainable, error-resistant code.
 
-```ts
-<script>
-    let count = 1;
-    $: doubled = count * 2;
+- **Interactive Visuals**: Enhanced engagement with optimized Three.js-driven effects (e.g., [specify: 3D models, particle systems, or interactive scenes]).
 
-<button on:click={() => count = count + 1}>Count</button>
-```
+- **Deployment**: Deployed with GitHub Pages
+<br>
 
-### Heading 3
-
-#### Heading 4
-
-##### Heading 5
-
-###### Heading 6
+_Credit_: The sites base UI component layout is based on [RiadhAdranis Slick Portfolio](https://github.com/RiadhAdrani/slick-portfolio-svelte).
