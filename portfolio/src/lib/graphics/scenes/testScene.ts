@@ -3,8 +3,8 @@ import * as THREE from 'three';
 import shaderVert from '$lib/graphics/shaders/ImageBlendEffect/blendVert.glsl';
 import shaderFrag from '$lib/graphics/shaders/ImageBlendEffect/blendFrag.glsl';
 
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
 
 const MOUSE_WHEEL_EVENT = 'wheel';
 const TOUCH_MOVE = 'touchmove';
