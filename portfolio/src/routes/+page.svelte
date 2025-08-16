@@ -62,6 +62,5 @@
 		<!-- NOTE: test layout -->
 	</div>
 
-	<!-- TODO: hyperlink on click on an item of the caroussel, s.t. it redirects to that subpage -->
 	<Carrousel items={projectItems} />
 </div>

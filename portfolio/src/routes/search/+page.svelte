@@ -12,7 +12,6 @@
 	import SearchPage from '$lib/components/SearchPage.svelte';
 	import Chip from '$lib/components/Chip/Chip.svelte';
 	import UIcon from '$lib/components/Icon/UIcon.svelte';
-	import { NAMED_COLORS } from '$lib/utils/colors';
 	import type { Pathname } from '$app/types';
 
 	type Item = {

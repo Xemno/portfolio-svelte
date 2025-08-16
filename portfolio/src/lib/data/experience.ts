@@ -19,7 +19,7 @@ export const items: Array<Experience> = [
 		location: 'Zug',
 		period: { from: new Date(2024, 0, 1) },
 		skills: getSkills('ts', 'js'),
-		color: 'coral',
+		color: '#00BFFF',
 		links: [],
 		logo: Assets.Unknown,
 		// bannerImage: Assets.Unknown
@@ -35,7 +35,7 @@ export const items: Array<Experience> = [
 		location: 'Schaffhausen',
 		period: { from: new Date(2021, 3, 1), to: new Date(2023, 11, 31) },
 		skills: getSkills('svelte', 'ts', 'sass', 'css', 'html', 'js'),
-		color: 'darkseagreen',
+		color: '#00BFFF',
 		links: [],
 		logo: Assets.Unknown,
 		// bannerImage: Assets.Unknown

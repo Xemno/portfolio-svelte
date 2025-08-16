@@ -2,7 +2,6 @@
 	import type { Education } from '$lib/types';
 
 	import { getTimeDiff, getMonthAndYear } from '$lib/utils/helpers';
-	import { getAssetURL } from '$lib/data/assets';
 	import Card from '../Card/Card.svelte';
 	import CardLogo from '../Card/CardLogo.svelte';
 	import UIcon from '../Icon/UIcon.svelte';
@@ -38,19 +37,18 @@
 						{getTimeDiff(education.period.from, education.period.to)}
 					</div>
 				</div>
-
-				<!-- <div class="text-[var(--accent-text)] text-[0.9em] font-200 mb-2">
-					{education.location} · {getTimeDiff(education.period.from, education.period.to)}
-				</div> -->
 			</div>
 
-			<CardLogo src={getAssetURL(education.logo)} alt={education.name} size={75} />
+			<CardLogo
+				src={education.logo}
+				alt={education.name}
+				size={75}
+				classes="object-scale-down max-h-12 w-fit object-fit "
+			/>
 		</div>
 
-		<!--  NOTE:		<div class="row flex-wrap gap-1 sm:overflow-y-auto sm:max-h-20"> in order to enable scrollbar
-			 -->
-		<div class="row flex-wrap gap-1">
-			{#each education.subjects as subject}
+		<div class="row flex-wrap gap-1 sm:overflow-y-auto sm:max-h-30">
+			{#each education.majors as subject}
 				<ChipStatic>{subject}</ChipStatic>
 			{/each}
 		</div>

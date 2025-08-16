@@ -11,10 +11,10 @@ const a = (light: string, dark?: string): Asset =>
 	dark ? { dark: getFilePath(dark), light: getFilePath(light) } : getFilePath(light);
 
 const Assets = {
-	ETH: a('eth-zurich.png', 'eth_dark.png'),
-	ETH2: a('eth-zurich2.jpg'),
+	ETH: a('image_white_mode.png', 'image_dark_mode.png'),
+	Drive: a('drive_dark.png', 'drive_light.png'),
+	
 	Unity: a('unity.png'),
-
 	AWS: a('aws.svg'),
 	Bootstrap: a('bootstrap.svg'),
 	C: a('C.svg'),
@@ -86,6 +86,7 @@ let currentTheme: boolean;
 
 theme.subscribe((v) => (currentTheme = v));
 
+// TODO: remove
 export const getAssetURL = (asset: Asset): string => {
 	return typeof asset === 'string' ? asset : currentTheme ? asset.dark : asset.light; // TODO: fix this to work dark/light mode
 };

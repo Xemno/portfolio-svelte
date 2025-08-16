@@ -4,7 +4,6 @@
 	import { getAssetURL } from '$lib/data/assets';
 	import { resolve } from '$app/paths';
 	import { getMonthName, getTimeDiff } from '$lib/utils/helpers';
-	import Chip from '../Chip/Chip.svelte';
 	import Card from '../Card/Card.svelte';
 	import CardTitle from '../Card/CardTitle.svelte';
 	import CardLink from '../Card/CardLink.svelte';
@@ -40,20 +39,16 @@
 </script>
 
 <Card color={project.color} href={resolve(`/projects/${project.slug}`)}>
-	<CardLogo
-		alt={project.name}
-		src={'/logos/eth-zurich.png'}
-		size={40}
-		radius={'0'}
-		classes="block [[data-theme=dark]_&]:hidden"
-	/>
-	<CardLogo
-		alt={project.name}
-		src={'/logos/eth_dark.png'}
-		size={40}
-		radius={'0'}
-		classes="hidden [[data-theme=dark]_&]:block"
-	/>
+	{#if project.slug == 'my-portfolio-website'}
+		<UIcon icon="i-line-md-coffee-loop" classes="text-2em" />
+	{:else}
+		<CardLogo
+			alt={project.name}
+			src={project.logo}
+			classes="object-scale-down max-h-12 w-fit object-fit "
+		/>
+	{/if}
+
 	<div class="m-t-20px row justify-between items-center">
 		<CardTitle title={project.name} />
 		<div class="row">
@@ -62,6 +57,7 @@
 			{/each}
 		</div>
 	</div>
+
 	<CardDivider />
 	<div
 		class="col m-b-10px justify-between text-[var(--secondary-text)] text-0.9em font-italic font-300"
@@ -77,7 +73,7 @@
 		</div>
 	</div>
 	<div class="col sm:h-100px md:h-160px">
-		<p class="text-[0.95em] text-[var(--secondary-text)] font-300 m-t-20px m-b-40px line-clamp-4">
+		<p class="text-[0.9em] text-[var(--secondary-text)] font-300 m-t-20px m-b-40px line-clamp-4">
 			{project.shortDescription}
 		</p>
 	</div>

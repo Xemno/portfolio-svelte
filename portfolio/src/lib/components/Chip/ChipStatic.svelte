@@ -12,7 +12,7 @@
 
 	let { active = false, size = 'auto', classes = '', children }: Props = $props();
 
-	let className = ` chip line-clamp-1 row-center  py-[5px] px-[15px] m-[2.5px]  border-[1px] border-solid border-[var(--border)] rounded-[20px] tracking-wider text-[0.9em] text-[var(--tertiary-text)] duration-[150ms] font-light ${classes}`;
+	let className = `chip line-clamp-1 row-center py-[5px] px-[10px] m-[1.5px] border-[1px] border-solid border-[var(--border)] rounded-[20px] tracking-wider text-[0.8em] text-[var(--tertiary-text)] duration-[150ms] font-light ${classes}`;
 
 	onMount(() => {
 		el.style.setProperty('--size', size);

@@ -9,35 +9,41 @@ export const items: Array<Education> = [
 		description: 'asd1',
 		location: 'Zurich, Switzerland',
 		logo: Assets.ETH,
-		name: 'asd2',
+		name: '',
 		organization: 'ETH Zurich',
 		period: { from: new Date(2019, 5, 1), to: new Date(2021, 3, 1) },
 		shortDescription: 'asd3',
 		slug: 'education-item-1',
-		subjects: [
+		majors: [
 			'Computer Vision',
 			'Distributed Algorithms',
 			'Computer Graphics',
 			'Machine Learning',
 			'Probabilistic AI',
-			'Shape Modeling & Geometry Processing',
+			'Geometry Processing',
 			'Advanced Systems Lab',
 			'Computational Intelligence Lab'
 		],
-		color: 'coral'
+		color: '#FFD700'
 	},
 	{
 		degree: 'Bachelor Computer Science',
 		description: '',
 		location: 'Zurich, Switzerland',
-		logo: Assets.ETH2,
+		logo: Assets.ETH,
 		name: '',
 		organization: 'ETH Zurich',
 		period: { from: new Date(2014, 8, 1), to: new Date(2019, 5, 1) },
 		shortDescription: '',
 		slug: 'education-item-2',
-		subjects: ['Algorithms & Data structures', 'Machine Learning'],
-		color: 'coral'
+		majors: [
+			'Machine Learning', 
+			'Distributed Systems', 
+			'Visual Computing', 
+			'Systems Programming',
+			'Neuroinformatics'
+		],
+		color: '#FFD700'
 	},
 	{
 		degree: 'Electronics Technician',
@@ -46,18 +52,18 @@ export const items: Array<Education> = [
 		logo: Assets.Unknown,
 		name: '',
 		organization: 'Technische Fachschule Biel',
-		period: { from: new Date(2008, 0, 1), to: new Date(2012, 0, 1) },
+		period: { from: new Date(2008, 7, 1), to: new Date(2012, 3, 1) },
 		shortDescription: '',
 		slug: 'education-item-3',
-		subjects: [
+		majors: [
 			'Assembly',
-			'C',
+			'C', 'Electrical Engineering',
 			'Electronics',
 			'Physics',
 			'Altium Designer',
-			'PCB and electronic design',
+			'PCB design / production',
 			'Micorcontrollers'
 		],
-		color: 'coral'
+		color: '#FFD700'
 	}
 ];

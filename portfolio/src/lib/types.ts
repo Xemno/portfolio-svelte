@@ -23,7 +23,9 @@ export enum ContractType {
 	Internship = 'Internship'
 }
 
-export type Asset = string | { light: string; dark: string };
+export type AssetExtended = { light: string; dark: string };
+
+export type Asset = string | AssetExtended;
 
 export interface Item<S extends string = string> {
 	slug: S;
@@ -73,7 +75,7 @@ export interface Education<S extends string = string> extends Item<S> {
 		from: Date;
 		to?: Date;
 	};
-	subjects: Array<string>;
+	majors: Array<string>;
 	degree: string;
 	color: Color;
 }

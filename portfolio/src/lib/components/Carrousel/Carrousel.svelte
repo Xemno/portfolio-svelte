@@ -21,10 +21,12 @@
 	let index = $state(0);
 	let toRight = true;
 
+	let scrollWidth = 232;
+
 	$effect(() => {
 		if (element) {
 			element.scroll({
-				left: index * 150,
+				left: index * scrollWidth,
 				behavior: 'smooth'
 			});
 		}
@@ -74,6 +76,8 @@
 	onMount(() => {
 		toggle(true);
 	});
+
+	let className = `chip  cursor-pointer  decoration-none  border-[1px] border-solid border-[var(--border)] rounded-[20px] tracking-wider text-[0.9em] text-[var(--tertiary-text)] duration-[150ms] font-light`;
 </script>
 
 <div class="carrousel flex-[0.5] row-center">
@@ -84,23 +88,32 @@
 		<UIcon icon="i-carbon-chevron-left" />
 	</button>
 
-	<div bind:this={element} class="row overflow-hidden box-content w-150px">
+	<div bind:this={element} class="row overflow-hidden box-content w-232px">
 		{#each items as item}
 			<!-- <div class="box-content w-150px p-15px col-center">
 				<img class="w-120px h-120px aspect-square" src={getAssetURL(item.logo)} alt={item.name} />
 				<span class="text-center m-t-20px">{item.name}</span>
 			</div> -->
 
-			<Chip href={resolve(`/projects/${item.slug}`)}>
+			<a
+				href={resolve(`/projects/${item.slug}`)}
+				class="{className} box-content w-230px p-15px col-center"
+			>
+				<CardLogo src={item.logo} alt={item.name} classes="w-200px h-100px  object-contain" />
+				<span class="text-center m-t-20px">{item.name}</span>
+			</a>
+
+			<!-- <Chip
+				href={resolve(`/projects/${item.slug}`)}
+				classes="box-content col-center w-180px h-120px"
+			>
 				<CardLogo
-					src={getAssetURL(item.logo)}
+					src={item.logo}
 					alt={item.name}
-					radius={'0px'}
-					size={113}
-					classes="m-t-2"
+					classes="object-contain"
 				/>
 				<span class="col-center text-center m-t-20px">{item.name}</span>
-			</Chip>
+			</Chip> -->
 		{/each}
 	</div>
 
@@ -111,3 +124,16 @@
 		<UIcon icon="i-carbon-chevron-right" />
 	</button>
 </div>
+
+<style lang="scss">
+	.chip {
+		background: var(--main);
+		background: transparent;
+		backdrop-filter: blur(40px);
+
+		&:hover {
+			background: var(--main-hover);
+			border-color: var(--border-hover);
+		}
+	}
+</style>
