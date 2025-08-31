@@ -2,8 +2,6 @@ import type { Color } from './utils/colors';
 
 export type NavItem = { slug: string; name: string; idx: number };
 
-export type Icon = `i-${string}-${string}`;
-
 export enum Platform {
 	GitHub = 'github',
 	StackOverflow = 'stackoverflow',
@@ -23,9 +21,9 @@ export enum ContractType {
 	Internship = 'Internship'
 }
 
+export type Icon = `i-${string}-${string}`;
 export type AssetExtended = { light: string; dark: string };
-
-export type Asset = string | AssetExtended;
+export type Asset = string | Icon | AssetExtended;
 
 export interface Item<S extends string = string> {
 	slug: S;

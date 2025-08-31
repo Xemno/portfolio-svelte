@@ -22,13 +22,13 @@ export const items: Array<Project> = [
 		shortDescription:
 			'A dynamic, interactive website I built while mastering modern web development with Svelte, Node.js, and Three.js.',
 		links: [{ to: '', label: '' }],
-		logo: Assets.Unknown,
+		logo: 'i-line-md-coffee-loop',
 		period: {
 			from: new Date(2023, 10, 15),
 			to: new Date(2025, 3, 15)
 		},
 		skills: getSkills('svelte', 'ts', 'css', 'js', 'html', 'nodejs'),
-		type: 'Website Template',
+		type: 'Personal Project',
 		screenshots: [],
 	},
 	{
@@ -45,7 +45,7 @@ export const items: Array<Project> = [
 			to: new Date(2024, 10, 15)
 		},
 		skills: getSkills('svelte', 'ts', 'css', 'js', 'html', 'nodejs'),
-		type: 'Website Template',
+		type: 'Professional Website',
 		screenshots: []
 	},
 	{

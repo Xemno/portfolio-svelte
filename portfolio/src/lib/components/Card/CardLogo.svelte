@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { type Asset, type AssetExtended } from '$lib/types';
+	import { type Asset, type AssetExtended, type Icon } from '$lib/types';
+	import UIcon from '../Icon/UIcon.svelte';
 
 	interface Props {
 		src: Asset;
@@ -10,16 +11,16 @@
 	}
 
 	let { src, alt, size = 50, radius = '10px', classes = '' }: Props = $props();
+
+	// console.log("CardLogo: ", src);
 </script>
 
 {#if typeof src === 'string'}
-	<img
-		class={`rounded-${radius} ${classes} aspect-square`}
-		{src}
-		{alt}
-		height={size}
-		width={size}
-	/>
+	{#if src.startsWith('i-')}
+		<UIcon icon={src as Icon} classes={`${classes}`} />
+	{:else}
+		<img class={`rounded-${radius} ${classes} w-fit`} {src} {alt} height={size} width={size} />
+	{/if}
 {:else}
 	<img
 		class={`rounded-${radius} ${classes} block [[data-theme=dark]_&]:hidden`}

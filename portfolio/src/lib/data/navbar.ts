@@ -9,8 +9,8 @@ export const NavBar = {
 } as const;
 
 export const items = [
-	{ title: 'Projects', to: '/projects', icon: 'i-carbon-cube' },
-	{ title: 'Experience', to: '/experience', icon: 'i-carbon-development' },
+	{ title: 'Projects', to: '/projects', icon: 'i-line-md-document-code' },
+	{ title: 'Experience', to: '/experience', icon: 'i-line-md-text-box' },
 	{ title: 'Education', to: '/education', icon: 'i-carbon-education' },
 	{ title: 'Skills', to: '/skills', icon: 'i-carbon-software-resource-cluster' },
 	{ title: 'Resumé', to: '/resume', icon: 'i-carbon-result' },

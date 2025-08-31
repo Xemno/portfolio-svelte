@@ -1,6 +1,8 @@
 <script lang="ts">
+	import type { Icon } from "$lib/types";
+
 	interface Props {
-		icon?: `i-${string}-${string}` | undefined;
+		icon?: Icon;
 		classes?: string;
 	}
 

@@ -9,6 +9,8 @@
 	import ChipIcon from '../Chip/ChipIcon.svelte';
 	import { getAssetURL } from '$lib/data/assets';
 	import UIcon from '../Icon/UIcon.svelte';
+	import Markdown from '../Markdown.svelte';
+	import Chip from '../Chip/Chip.svelte';
 
 	interface Props {
 		experience: Experience;
@@ -35,7 +37,7 @@
 	color={experience.color}
 >
 	<div class="col md:flex-row items-start gap-5 md:gap-1">
-		<CardLogo src={getAssetURL(experience.logo)} alt={experience.company} size={75} />
+		<UIcon icon={experience.logo} classes="text-3.5em" />
 		<div class="col ml-0 md:ml-[20px] gap-2 w-full">
 			<CardTitle title={experience.name} />
 			<div class="row flex-wrap m-b-2 gap-1 text-0.9em font-300">
@@ -58,8 +60,15 @@
 				<div class="text-[var(--accent-text)] text-[0.9em] font-200">{period}</div>
 			</div>
 
-			<div class="text-[0.95em] text-[var(--secondary-text)] font-300">
-				{experience.shortDescription}
+			<div class="sm:text-[0.9em] text-[0.8em] text-[var(--secondary-text)]">
+				{#if experience.shortDescription}
+					<Markdown content={experience.shortDescription ?? 'This place is yet to be filled...'} />
+				{:else}
+					<div class="p-5 col-center gap-3 m-y-auto text-[var(--border)]">
+						<UIcon icon="i-carbon-text-font" classes="text-3.5em" />
+						<p class="font-300">No description...</p>
+					</div>
+				{/if}
 			</div>
 			<div class="row flex-wrap mt-5">
 				{#each experience.skills as skill}

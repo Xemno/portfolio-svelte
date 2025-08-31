@@ -186,7 +186,7 @@ body {
 	--code-interpolation: var(--code-keyword);
 	--code-class-name: var(--secondary-text);
 
-	font-family: 'Open Sans';
+	font-family: 'Josefin Sans', sans-serif;
 	// font-size: 20px;
 
 	// mix-blend-mode: difference;
@@ -349,8 +349,9 @@ body {
 	}
 
 	& blockquote {
+		// TODO: improve blockquites
 		padding: 5px 20px;
-		// background-color: var(--main-hover);
+		background-color: var(--main-hover);
 		border: 1px solid var(--dividerLight);
 		margin-right: 15px;
 		margin-left: 5px;

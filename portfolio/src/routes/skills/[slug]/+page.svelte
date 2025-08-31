@@ -49,6 +49,7 @@
 					type: 'projects',
 					url: `/projects/${item.slug}`
 				});
+				console.log('typeof: ', item.logo, '  ', typeof item.logo);
 			}
 		});
 
@@ -61,6 +62,7 @@
 					type: 'experience',
 					url: `/experience/${item.slug}`
 				});
+				console.log('typeof: ', item.logo, '  ', typeof item.logo);
 			}
 		});
 
@@ -102,14 +104,19 @@
 			</div>
 			<div class="row gap-1 self-stretch flex-wrap">
 				<div class="px-10px">
-					<!-- NOTE: render each related item as a Chip component -->
 					{#each related as item}
 						<Chip
 							classes="inline-flex flex-row items-center justify-center"
 							href={resolve(item.url)}
 						>
-							<CardLogo src={item.img} alt={item.name} radius={'0px'} size={15} classes="mr-2" />
-							<span class="text-[0.9em]">{item.display}</span>
+							<CardLogo
+								src={item.img}
+								alt={item.name}
+								radius={'0px'}
+								size={20}
+								classes="mr-2 text-1.2em h-4 md:h-5"
+							/>
+							<span class="text-0.9em md:text-1.0em line-clamp-1">{item.display}</span>
 						</Chip>
 					{/each}
 				</div>

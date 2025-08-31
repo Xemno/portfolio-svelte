@@ -13,7 +13,7 @@ const a = (light: string, dark?: string): Asset =>
 const Assets = {
 	ETH: a('image_white_mode.png', 'image_dark_mode.png'),
 	Drive: a('drive_dark.png', 'drive_light.png'),
-	
+
 	Unity: a('unity.png'),
 	AWS: a('aws.svg'),
 	Bootstrap: a('bootstrap.svg'),
@@ -77,7 +77,13 @@ const Assets = {
 	Jest: a('jest.png'),
 	Unocss: a('unocss.svg'),
 	Ruvy: a('ruvy.svg'),
-	Postcss: a('postcss.svg')
+	Postcss: a('postcss.svg'),
+	OpenGL: a('opengl.png'),
+	Vulkan: a('vulkan.png'),
+	Lua: a('lua.png'),
+	UG: a('ug.png'),
+	SQL: a('sql.png'),
+	PLSQL: a('plsql.png')
 };
 
 export default Assets;

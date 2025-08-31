@@ -82,7 +82,7 @@
 		<div class="flex-row flex-1 self-center h-full justify-center hidden md:flex">
 			{#each items as item (item.title)}
 				<a href={resolve(`${item.to}`)} class="nav-menu-item !text-[var(--secondary-text)]">
-					<UIcon icon={item.icon} classes="text-1.3em" />
+					<UIcon icon={item.icon} classes="text-1.8em" />
 					<span class="nav-menu-item-label">{item.title}</span>
 				</a>
 			{/each}
@@ -96,16 +96,16 @@
 					href={resolve(`/search`)}
 					class="text-inherit col-center self-stretch px-2 hover:bg-[color:var(--main-hover)]"
 				>
-					<UIcon icon="i-carbon-search" />
+				<UIcon icon="i-carbon-search" classes="text-1.5em" />
 				</a>
 				<button
 					class="bg-transparent text-1em border-none cursor-pointer hover:bg-[color:var(--main-hover)] text-[var(--secondary-text)] px-2"
 					onclick={() => toggleTheme()}
 				>
 					{#if $theme}
-						<UIcon icon="i-line-md-sunny-outline-to-moon-loop-transition" classes="text-1.3em" />
+						<UIcon icon="i-line-md-sunny-outline-to-moon-loop-transition" classes="text-1.5em" />
 					{:else}
-						<UIcon icon="i-line-md-moon-to-sunny-outline-loop-transition" classes="text-1.3em" />
+						<UIcon icon="i-line-md-moon-to-sunny-outline-loop-transition" classes="text-1.5em" />
 					{/if}
 				</button>
 			</div>
@@ -128,24 +128,23 @@
 					class="nav-menu-item !text-[var(--secondary-text)] gap-5"
 					onclick={() => toggleExpanded(false)}
 				>
-					<UIcon icon={item.icon} classes="text-1.3em" />
+					<UIcon icon={item.icon} classes="text-1.5em" />
 					<span class="">{item.title}</span>
 				</a>
 			{/each}
 		</div>
-		<div class="col gap-2 m-t-7">
+		<div class="col gap-2 m-t-8">
 			<a
 				href={resolve(`/search`)}
-				class="text-inherit decoration-none px-6 py-3 gap-2 row hover:bg-[color:var(--main-hover)]"
+				class="nav-menu-item !text-[var(--secondary-text)] gap-5"
 				onclick={() => toggleExpanded(false)}
 			>
-				<UIcon icon="i-carbon-search" classes="text-1.2em" />
+				<UIcon icon="i-carbon-search" classes="text-1.5em" />
 				<span>Search</span>
 			</a>
-			<button
-				class="bg-transparent text-1em border-none cursor-pointer px-6 py-3 gap-2 row hover:bg-[color:var(--main-hover)] text-[var(--secondary-text)] px-2"
-				onclick={() => toggleTheme()}
-			>
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div class="nav-menu-item !text-[var(--secondary-text)] gap-5" onclick={() => toggleTheme()}>
 				{#if $theme}
 					<UIcon icon="i-line-md-sunny-outline-to-moon-loop-transition" classes="text-1.5em" />
 					<span>Dark Theme</span>
@@ -153,7 +152,7 @@
 					<UIcon icon="i-line-md-moon-to-sunny-outline-loop-transition" classes="text-1.5em" />
 					<span>Light Theme</span>
 				{/if}
-			</button>
+			</div>
 		</div>
 	</div>
 </div>

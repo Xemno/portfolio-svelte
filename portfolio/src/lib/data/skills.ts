@@ -25,6 +25,21 @@ export const items = [
 		name: 'C'
 	}),
 	s({
+		slug: 'java',
+		color: 'yellow',
+		description:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent orci enim, congue sit amet justo eget, consequat sollicitudin libero. Etiam iaculis lectus tempor, hendrerit enim in, luctus arcu. Maecenas id enim et nibh ullamcorper auctor ac eu est. Donec imperdiet, diam quis malesuada faucibus, nibh ex gravida sapien, posuere pharetra nunc libero tristique turpis. Sed egestas laoreet semper. In hac habitasse platea dictumst. Praesent vitae est nec felis maximus facilisis. Duis luctus dui id urna tristique varius. Ut vulputate leo arcu, non bibendum arcu pulvinar eget. Fusce semper elit ut congue lacinia. Suspendisse magna diam, tempus vitae interdum eget, dictum vitae nisl. Praesent quis fringilla tortor. Donec vitae sagittis dui.',
+		logo: Assets.Java,
+		name: 'Java'
+	}),
+	s({
+		slug: 'csharp',
+		color: 'orange',
+		description: 'Lorem',
+		logo: Assets.Csharp,
+		name: 'C#'
+	}),
+	s({
 		slug: 'js',
 		color: 'yellow',
 		description:
@@ -87,13 +102,6 @@ export const items = [
 		name: 'Python'
 	}),
 	s({
-		slug: 'csharp',
-		color: 'orange',
-		description: 'Lorem',
-		logo: Assets.Csharp,
-		name: 'C#'
-	}),
-	s({
 		slug: 'unity-engine',
 		color: 'orange',
 		description: 'Lorem',
@@ -106,6 +114,41 @@ export const items = [
 		description: 'NodeJS',
 		logo: Assets.NodeJs,
 		name: 'NodeJS'
+	}),
+	s({
+		slug: 'opengl',
+		color: 'orange',
+		description: 'OpenGL',
+		logo: Assets.OpenGL,
+		name: 'OpenGL'
+	}),
+	s({
+		slug: 'vulkan',
+		color: 'orange',
+		description: 'Vulkan',
+		logo: Assets.Vulkan,
+		name: 'Vulkan'
+	}),
+	s({
+		slug: 'lua',
+		color: 'orange',
+		description: 'Lua',
+		logo: Assets.Lua,
+		name: 'Lua'
+	}),
+	s({
+		slug: 'sql',
+		color: 'orange',
+		description: 'SQL',
+		logo: Assets.SQL,
+		name: 'SQL'
+	}),
+	s({
+		slug: 'plsql',
+		color: 'orange',
+		description: 'PL/SQL',
+		logo: Assets.PLSQL,
+		name: 'PL/SQL'
 	})
 ] as const;
 

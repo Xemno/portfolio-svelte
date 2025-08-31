@@ -2,10 +2,10 @@
 
 _The description provided here offers a concise overview of my bachelor's thesis, summarizing its key objectives, methodology, and findings. For a more in-depth exploration—including detailed analysis, implementation specifics, and extended results—the complete thesis document is available upon request._
 
-<br>
+## Intro
+
 In this thesis I am researching touch and/or deformation sensing in soft substrates using electrical resistance/impedance tomography techniques.
 I investigated the use of conductive soft foam material to localize touch inputs on its surface and to sense its own volumetric deformation with electrical impedance changes.
-<br/><br/>
 
 ## Tomographic Reconstruction
 
