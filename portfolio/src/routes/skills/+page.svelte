@@ -5,6 +5,8 @@
 	import SearchPage from '$lib/components/SearchPage.svelte';
 	import Card from '$lib/components/Card/Card.svelte';
 	import UIcon from '$lib/components/Icon/UIcon.svelte';
+	import CardDivider from '$lib/components/Card/CardDivider.svelte';
+	import SkillCard from '$lib/components/SkillCard/SkillCard.svelte';
 
 	let search = $state('');
 
@@ -18,6 +20,9 @@
 	);
 
 	const onSearch = (query: string) => (search = query);
+
+
+
 </script>
 
 <SearchPage {title} {onSearch}>
@@ -30,16 +35,11 @@
 	{:else}
 		<!-- NOTE: result is either filled completely or filtered with search result -->
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 lg:gap-5 mt-10">
-			{#each result as skill (skill.slug)}
-				<Card
-					classes={['cursor-pointer decoration-none']}
-					tiltDegree={5}
-					href={resolve(`/skills/${skill.slug}`)}
-					bgImg={getAssetURL(skill.logo)}
-					color={skill.color}
-				>
-					<p class="text-[var(--tertiary-text)]">{skill.name}</p>
-				</Card>
+			{#each result as skill}
+
+				<SkillCard data={skill} />
+
+
 			{/each}
 		</div>
 	{/if}
