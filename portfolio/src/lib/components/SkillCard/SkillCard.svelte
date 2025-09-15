@@ -8,12 +8,14 @@
 	import CardTitle from '../Card/CardTitle.svelte';
 	import CardLink from '../Card/CardLink.svelte';
 	import CardDivider from '../Card/CardDivider.svelte';
-	import ChipIcon from '../Chip/ChipIcon.svelte';
-	import CardLogo from '../Card/CardLogo.svelte';
+	// import ChipIcon from '../Chip/ChipIcon.svelte';
+	// import CardLogo from '../Card/CardLogo.svelte';
 	import UIcon from '../Icon/UIcon.svelte';
 	import { title } from '@data/skills';
 	import * as projects from '@data/projects';
 	import * as experiences from '@data/experience';
+	import CardLogo from '../Card/CardLogo.svelte';
+	import Chip from '../Chip/Chip.svelte';
 
 	type Related = {
 		display: string;
@@ -24,16 +26,16 @@
 	};
 
 	interface Props {
-		data: { skill: Skill };
+		skill: Skill;
 	}
 
-	let { data }: Props = $props();
+	let { skill }: Props = $props();
 
 	// NOTE: search for related projects to that skill and show on the bottom
 	const getRelatedProjects = (): Array<Related> => {
 		const out: Array<Related> = [];
 
-		const skill = data.skill;
+		// const skill = data.skill;
 
 		if (!skill) {
 			return [];
@@ -68,12 +70,12 @@
 		return out;
 	};
 
-	let computedTitle = $derived(data.skill ? `${data.skill.name} - ${title}` : title);
+	let computedTitle = $derived(skill ? `${skill.name} - ${title}` : title);
 
-	let related = $derived(data.skill ? getRelatedProjects() : []);
+	let related = $derived(skill ? getRelatedProjects() : []);
 </script>
 
-{#if data.skill === undefined}
+{#if skill === undefined}
 	<div class="p-5 col-center gap-3 m-y-auto text-[var(--accent-text)]">
 		<UIcon icon="i-carbon-software-resource-cluster" classes="text-3.5em" />
 		<p class="font-300">Could not load skill data.</p>
@@ -82,16 +84,33 @@
 	<Card
 		classes={['cursor-pointer decoration-none']}
 		tiltDegree={5}
-		href={resolve(`/skills/${data.skill.slug}`)}
-		bgImg={getAssetURL(data.skill.logo)}
-		color={data.skill.color}
+		href={resolve(`/skills/${skill.slug}`)}
+		bgImg={getAssetURL(skill.logo)}
+		color={skill.color}
 	>
-		<CardTitle title={data.skill.name} />
+		<CardTitle title={skill.name} />
 
-		<p class="text-[var(--tertiary-text)]">{data.skill.name}</p>
+		<!-- <div class="self-stretch mb-2">
+			<CardDivider />
+		</div> -->
 
-		<CardDivider />
+		<div class="row gap-0 self-stretch flex-wrap">
+			<!-- <div class="px-10px"> -->
+			{#each related as item}
+				<Chip classes="inline-flex flex-row items-center justify-center w-full" href={resolve(item.url)}>
+					<CardLogo
+						src={'i-line-md-chevron-small-right'}
+						alt={item.name}
+						radius={'0px'}
+						size={20}
+						classes="mr-1 md:mr-2 text-1.0em md:text-1.2em h-8 md:h-5 "
+					/>
+					<span class="text-0.75em md:text-0.8em line-clamp-1 w-full">{item.display}</span>
+				</Chip>
+			{/each}
+			<!-- </div> -->
+		</div>
 
-		<CardDivider />
+		<!-- <CardDivider /> -->
 	</Card>
 {/if}
