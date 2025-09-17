@@ -3,6 +3,7 @@
 	import { convertNamedToHexColor, type NamedColor } from '$lib/utils/colors';
 	import { changeColorOpacity, isHexColor } from '$lib/utils/colors';
 	import type { MouseEventHandler } from 'svelte/elements';
+	import type { Asset } from '$lib/types';
 
 	let el: HTMLElement;
 
@@ -12,7 +13,7 @@
 		tiltDegree?: number;
 		classes?: Array<string>;
 		href?: undefined | string;
-		bgImg?: string | undefined;
+		bgImg?: Asset | undefined;
 		children?: import('svelte').Snippet;
 	}
 
@@ -70,7 +71,6 @@
 
 	onMount(() => {
 		el.style.setProperty('margin', margin);
-		el.style.setProperty('--bg-img', bgImg ? `url(${bgImg})` : '');
 	});
 </script>
 
@@ -84,6 +84,7 @@
 		' '
 	)}`}
 	style:bgColor={'red'}
+	style={`--bg-img:url(${bgImg})`}
 >
 	<div class="card-bg-img flex-1 col p-25px rounded-15px">
 		{@render children?.()}
