@@ -64,6 +64,7 @@ export interface Experience<S extends string = string> extends Project<S> {
 	company: string;
 	location: string;
 	contract: ContractType;
+	logo: Icon;
 }
 
 export interface Education<S extends string = string> extends Item<S> {

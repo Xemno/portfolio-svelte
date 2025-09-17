@@ -3,14 +3,12 @@
 
 	import { resolve } from '$app/paths';
 	import { getMonthName, getTimeDiff } from '$lib/utils/helpers';
+	import { getAssetURL } from '$lib/data/assets';
 	import Card from '../Card/Card.svelte';
-	import CardLogo from '../Card/CardLogo.svelte';
 	import CardTitle from '../Card/CardTitle.svelte';
 	import ChipIcon from '../Chip/ChipIcon.svelte';
-	import { getAssetURL } from '$lib/data/assets';
 	import UIcon from '../Icon/UIcon.svelte';
 	import Markdown from '../Markdown.svelte';
-	import Chip from '../Chip/Chip.svelte';
 
 	interface Props {
 		experience: Experience;
@@ -72,11 +70,7 @@
 			</div>
 			<div class="row flex-wrap mt-5">
 				{#each experience.skills as skill}
-					<ChipIcon
-						logo={getAssetURL(skill.logo)}
-						name={skill.name}
-						href={resolve(`/skills/${skill.slug}`)}
-					/>
+					<ChipIcon logo={getAssetURL(skill.logo)} name={skill.name} />
 				{/each}
 			</div>
 		</div>

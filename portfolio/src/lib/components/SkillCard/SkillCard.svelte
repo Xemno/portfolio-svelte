@@ -70,9 +70,11 @@
 		return out;
 	};
 
-	let computedTitle = $derived(skill ? `${skill.name} - ${title}` : title);
+	// let computedTitle = $derived(skill ? `${skill.name} - ${title}` : title);
 
 	let related = $derived(skill ? getRelatedProjects() : []);
+
+	// let assetLogo = $derived(getAssetURL(skill.logo));
 </script>
 
 {#if skill === undefined}
@@ -81,36 +83,34 @@
 		<p class="font-300">Could not load skill data.</p>
 	</div>
 {:else}
-	<Card
-		classes={['cursor-pointer decoration-none']}
-		tiltDegree={5}
-		href={resolve(`/skills/${skill.slug}`)}
-		bgImg={getAssetURL(skill.logo)}
-		color={skill.color}
-	>
+	<Card classes={['decoration-none']} tiltDegree={5} bgImg={skill.logo} color={skill.color}>
 		<CardTitle title={skill.name} />
 
-		<!-- <div class="self-stretch mb-2">
-			<CardDivider />
-		</div> -->
+		<CardDivider />
 
-		<div class="row gap-0 self-stretch flex-wrap">
-			<!-- <div class="px-10px"> -->
-			{#each related as item}
-				<Chip classes="inline-flex flex-row items-center justify-center w-full" href={resolve(item.url)}>
-					<CardLogo
-						src={'i-line-md-chevron-small-right'}
-						alt={item.name}
-						radius={'0px'}
-						size={20}
-						classes="mr-1 md:mr-2 text-1.0em md:text-1.2em h-8 md:h-5 "
-					/>
-					<span class="text-0.75em md:text-0.8em line-clamp-1 w-full">{item.display}</span>
-				</Chip>
-			{/each}
-			<!-- </div> -->
-		</div>
-
-		<!-- <CardDivider /> -->
+		{#if related.length == 0}
+			<div class="p-5 col-center gap-3 m-y-auto text-[var(--accent-text)]">
+				<UIcon icon="i-carbon-software-resource-cluster" classes="text-1.5em" />
+				<p class="text-0.75em md:text-0.8em">No related projects yet.</p>
+			</div>
+		{:else}
+			<div class="row gap-0 self-stretch flex-wrap">
+				{#each related as item}
+					<Chip
+						classes="inline-flex flex-row items-center justify-center w-full"
+						href={resolve(item.url)}
+					>
+						<CardLogo
+							src={'i-line-md-chevron-small-right'}
+							alt={item.name}
+							radius={'0px'}
+							size={20}
+							classes="mr-1 md:mr-2 text-1.0em md:text-1.2em h-8 md:h-5"
+						/>
+						<span class="text-0.75em md:text-0.8em line-clamp-1 w-full">{item.display}</span>
+					</Chip>
+				{/each}
+			</div>
+		{/if}
 	</Card>
 {/if}

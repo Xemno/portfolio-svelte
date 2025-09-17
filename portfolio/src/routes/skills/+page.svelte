@@ -11,7 +11,7 @@
 
 	let search = $state('');
 
-	let result : Skill[] = $derived(
+	let result: Skill[] = $derived(
 		items.filter((skill) => {
 			const isSearched =
 				search.trim().length === 0 ||
@@ -21,9 +21,6 @@
 	);
 
 	const onSearch = (query: string) => (search = query);
-
-
-
 </script>
 
 <SearchPage {title} {onSearch}>
@@ -37,10 +34,7 @@
 		<!-- NOTE: result is either filled completely or filtered with search result -->
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3 lg:gap-5 mt-10">
 			{#each result as skill}
-
-				<SkillCard skill={skill} />
-
-
+				<SkillCard {skill} />
 			{/each}
 		</div>
 	{/if}
