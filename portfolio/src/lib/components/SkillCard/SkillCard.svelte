@@ -50,7 +50,7 @@
 					type: 'projects',
 					url: `/projects/${item.slug}`
 				});
-				console.log('typeof: ', item.logo, '  ', typeof item.logo);
+				// console.log('typeof: ', item.logo, '  ', typeof item.logo);
 			}
 		});
 
@@ -63,7 +63,7 @@
 					type: 'experience',
 					url: `/experience/${item.slug}`
 				});
-				console.log('typeof: ', item.logo, '  ', typeof item.logo);
+				// console.log('typeof: ', item.logo, '  ', typeof item.logo);
 			}
 		});
 

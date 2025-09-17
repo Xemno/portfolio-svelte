@@ -1,13 +1,11 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import type { Experience, Project, Skill } from '$lib/types';
 	import { items, title } from '@data/skills';
-	import { getAssetURL } from '$lib/data/assets';
 	import SearchPage from '$lib/components/SearchPage.svelte';
-	import Card from '$lib/components/Card/Card.svelte';
 	import UIcon from '$lib/components/Icon/UIcon.svelte';
-	import CardDivider from '$lib/components/Card/CardDivider.svelte';
 	import SkillCard from '$lib/components/SkillCard/SkillCard.svelte';
-	import type { Skill } from '$lib/types';
+	import * as projects from '@data/projects';
+	import * as experiences from '@data/experience';
 
 	let search = $state('');
 
@@ -20,7 +18,35 @@
 		})
 	);
 
-	const onSearch = (query: string) => (search = query);
+	const skill2RelatedCount = new Map<string, number>();
+
+	const compareFn = (a: Skill, b: Skill) => {
+		const countA = skill2RelatedCount.get(a.slug)!;
+		const countB = skill2RelatedCount.get(b.slug)!;
+		return countB - countA;
+	};
+
+	// find skill in projects or experience and count total occurences in skill2RelatedCount
+	const findAndSet = (it: Project | Experience, skill: Skill) => {
+		if (it.skills.some((tech) => tech.slug === skill.slug)) {
+			skill2RelatedCount.set(skill.slug, skill2RelatedCount.get(skill.slug)! + 1);
+		}
+	};
+
+	$effect.pre(() => {
+		items.forEach((skill) => {
+			skill2RelatedCount.set(skill.slug, 0);
+			projects.items.forEach((proj) => findAndSet(proj, skill));
+			experiences.items.forEach((exp) => findAndSet(exp, skill));
+		});
+
+		result.sort(compareFn);
+	});
+
+	const onSearch = (query: string) => {
+		search = query;
+		result.sort(compareFn);
+	};
 </script>
 
 <SearchPage {title} {onSearch}>
