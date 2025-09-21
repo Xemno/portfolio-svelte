@@ -35,7 +35,7 @@
 			<Banner>
 				<div class="col-center p-y-20">
 					<div class="text-0.9em">
-						<MainTitle classes="py-10">{''}</MainTitle>
+						<MainTitle classes="py-10">{data.project.name}</MainTitle>
 					</div>
 					<p class="font-300 text-center text-[var(--tertiary-text)] m-y-2">{data.project.type}</p>
 					<div class="w-75%">

@@ -36,7 +36,7 @@
 			<Banner>
 				<div class="col-center p-y-20">
 					<div class="text-0.9em">
-						<MainTitle classes="py-10">{''}</MainTitle>
+						<MainTitle classes="py-10">{data.experience.name}</MainTitle>
 					</div>
 					<p class="font-300 text-[var(--tertiary-text)] m-y-2 text-center">
 						{data.experience.company} · {data.experience.location} · {data.experience.type}

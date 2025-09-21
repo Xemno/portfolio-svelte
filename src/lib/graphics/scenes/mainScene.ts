@@ -5,7 +5,6 @@ import * as THREE from 'three';
 import { NAMED_COLORS } from '$lib/utils/colors';
 import { SimplexPlane } from '../renderables/SimplexPlane';
 import TextCloud from '../renderables/TextCloud';
-import { items as navItems } from '@data/navbar';
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';

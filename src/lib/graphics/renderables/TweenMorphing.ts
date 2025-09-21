@@ -2,7 +2,7 @@ import type { NavItem } from '$lib/types';
 import type { EasingFunction } from 'svelte/transition';
 import type { TextParticleSystem } from './TextParticleSystem';
 import * as THREE from 'three';
-import * as TWEEN from '@tweenjs/tween.js';
+import * as TWEEN from 'https://unpkg.com/@tweenjs/tween.js@23.1.3/dist/tween.esm.js';
 
 export class TweenMorphing {
 	private readonly particleSystem: TextParticleSystem;
@@ -20,11 +20,19 @@ export class TweenMorphing {
 	}
 
 	public morphTo(navItem: NavItem) {
-		// TODO: check navItem is in range and plausible
 		const toPositionArray: Array<THREE.Vector3> = this.particleSystem.getParticlesAtPos(
 			navItem.idx
 		)!;
 		this.morphCurrParticlesTo(toPositionArray, 1000, 0, TWEEN.Easing.Quartic.Out);
+	}
+
+	public morphFromToCubic(
+		fromPosArray: Array<THREE.Vector3>,
+		toPosArray: Array<THREE.Vector3>,
+		time: number,
+		delay: number,
+	): void {
+		this.morphFromTo(fromPosArray, toPosArray, time, delay, TWEEN.Easing.Cubic.Out);
 	}
 
 	public morphFromTo(
@@ -39,6 +47,7 @@ export class TweenMorphing {
 		this.particleSystem.setCurrParticles(fromPosArray);
 		this.morphCurrParticlesTo(toPosArray, time, delay, easing);
 	}
+
 
 	private morphCurrParticlesTo(
 		toPosArray: Array<THREE.Vector3>,

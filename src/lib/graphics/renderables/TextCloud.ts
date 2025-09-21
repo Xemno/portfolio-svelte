@@ -1,15 +1,11 @@
 import * as THREE from 'three';
 import type IRenderable from './IRenderable';
-import { type Color } from '$lib/utils/colors';
 import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { toWorldPosition } from '../utils/VectorUtils';
 import type { NavItem } from '$lib/types';
-import * as TWEEN from '@tweenjs/tween.js';
 
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
-import { interpolate, lerp } from '../utils/MathUtils';
-import { easing } from '../utils/Easing';
 import { TextParticleSystem } from './TextParticleSystem';
 import { TweenMorphing } from './TweenMorphing';
 
@@ -88,7 +84,7 @@ export default class TextCloud implements IRenderable {
 		return this.particleSystem.getParticleSystem();
 	}
 
-	public cleanup(): void {}
+	public cleanup(): void { }
 
 	public update(deltaTime: number, mouseScreenPos: THREE.Vector2 | void): void {
 		if (this.lookAt != null) {
@@ -118,9 +114,9 @@ export default class TextCloud implements IRenderable {
 		this.particleSystem.setCurrParticlesPos(vWorldPos);
 	}
 
-	public onMouseMove(event: MouseEvent) {}
+	public onMouseMove(event: MouseEvent) { }
 
-	public onTouchMove(event: TouchEvent) {}
+	public onTouchMove(event: TouchEvent) { }
 
 	private onOrientationChange(isPortraitMode: boolean) {
 		if (this.isPortraitMode != isPortraitMode) {
@@ -164,12 +160,11 @@ export default class TextCloud implements IRenderable {
 
 		const toPositionVectors = this.particleSystem.getParticlesAtPos(navItem.idx);
 
-		this.tweenMorphing.morphFromTo(
+		this.tweenMorphing.morphFromToCubic(
 			sphereParticlesPos,
 			toPositionVectors!,
 			2000,
-			0,
-			TWEEN.Easing.Cubic.Out
+			0
 		);
 	}
 }

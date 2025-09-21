@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { titleSuffix } from '@data/app';
-	import { links, description, title } from '@data/home';
+	import { links, description, title, name, lastName } from '@data/home';
 	import { useTitle } from '$lib/utils/helpers';
 	import { isBlank } from '$lib/utils/helpers';
 	import { getPlatfromIcon } from '$lib/utils';
@@ -25,7 +25,8 @@
 	class="col self-center flex-1 md:flex-row md:slef-stretch justify-center lg:justify-between items-center p-y-5px p-x-10px"
 >
 	<div class="md:flex-1 gap-10px">
-		<MainTitle classes="md:text-left py-10 md:max-w-2/3">{''} {''}</MainTitle>
+		<!-- <MainTitle classes="md:text-left py-10 md:max-w-2/3">{''} {''}</MainTitle> -->
+		<MainTitle classes="md:text-left ">{name} {lastName}</MainTitle>
 		<p class="text-[var(--tertiary-text)] text-center md:text-left text-[1.2em] font-extralight">
 			<Markdown content={description ?? 'This has yet to be filled...'} />
 		</p>
