@@ -58,7 +58,7 @@
 				items: skills.map((it) => ({
 					name: it.name,
 					// logo: $mode === 'dark' ? it.logo.dark : it.logo.light,
-					link: `/skills/${it.slug}`,
+					link: `/skills/?q=${it.name}`,
 					color: it.color
 				}))
 			});
