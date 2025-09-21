@@ -1,9 +1,8 @@
 <script lang="ts">
 	import type { Project } from '$lib/types';
-
-	import { resolve } from '$app/paths';
 	import { getAssetURL } from '$lib/data/assets';
 	import { title } from '@data/projects';
+
 	import CardLogo from '$lib/components/Card/CardLogo.svelte';
 	import MainTitle from '$lib/components/MainTitle/MainTitle.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
@@ -12,6 +11,7 @@
 	import Banner from '$lib/components/Banner/Banner.svelte';
 	import UIcon from '$lib/components/Icon/UIcon.svelte';
 	import CardDivider from '$lib/components/Card/CardDivider.svelte';
+	import ChipIcon from '$lib/components/Chip/ChipIcon.svelte';
 
 	interface Props {
 		data: { project?: Project };
@@ -19,15 +19,6 @@
 
 	let { data }: Props = $props();
 
-	const screenshots = data.project?.screenshots ?? [];
-
-	let screenIndex: number | undefined = undefined;
-
-	let screenshot = $derived(
-		typeof screenIndex !== 'undefined' && screenshots[screenIndex]
-			? screenshots[screenIndex]
-			: undefined
-	);
 	let computedTitle = $derived(data.project ? `${data.project.name} - ${title}` : title);
 </script>
 
@@ -44,7 +35,7 @@
 			<Banner>
 				<div class="col-center p-y-20">
 					<div class="text-0.9em">
-						<MainTitle>{data.project.name}</MainTitle>
+						<MainTitle classes="py-10">{''}</MainTitle>
 					</div>
 					<p class="font-300 text-center text-[var(--tertiary-text)] m-y-2">{data.project.type}</p>
 					<div class="w-75%">
@@ -62,10 +53,7 @@
 					</div>
 					<div class="row-center flex-wrap m-b-2">
 						{#each data.project.skills as item}
-							<Chip
-								classes="inline-flex flex-row items-center justify-center"
-								href={resolve(`/skills/${item.slug}`)}
-							>
+							<ChipIcon name={`Skill: ${item.name}`}>
 								<CardLogo
 									src={getAssetURL(item.logo)}
 									alt={item.name}
@@ -74,7 +62,7 @@
 									classes="mr-2"
 								/>
 								<span class="text-[0.9em]">{item.name}</span>
-							</Chip>
+							</ChipIcon>
 						{/each}
 					</div>
 				</div>
@@ -94,23 +82,6 @@
 				<div class="w-100% m-t-8">
 					<CardDivider />
 				</div>
-				{#if screenshots.length > 0}
-					<div
-						class="px-10px grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 m-t-10"
-					>
-						{#each screenshots as item}
-							<div class="col-center gap-3 overflow-hidden w-100% h-100% rounded-5px">
-								<img class="aspect-video w-100%" src={item.src} alt={item.label} />
-								<p class="text-[var(--tertiary-text)] font-300">{item.label}</p>
-							</div>
-						{/each}
-					</div>
-				{:else}
-					<!-- <div class="p-5 col-center gap-3 m-y-auto text-[var(--border)]">
-						<UIcon icon="i-carbon-image" classes="text-3.5em" />
-						<p class="font-300">No screenshots</p>
-					</div> -->
-				{/if}
 			</div>
 		</div>
 	{/if}

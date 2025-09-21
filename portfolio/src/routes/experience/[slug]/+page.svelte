@@ -1,10 +1,9 @@
 <script lang="ts">
 	import type { Experience } from '$lib/types';
-
-	import { resolve } from '$app/paths';
 	import { getAssetURL } from '$lib/data/assets';
 	import { getTimeDiff } from '$lib/utils';
 	import { title } from '@data/experience';
+
 	import Markdown from '$lib/components/Markdown.svelte';
 	import MainTitle from '$lib/components/MainTitle/MainTitle.svelte';
 	import TabTitle from '$lib/components/TabTitle.svelte';
@@ -13,6 +12,7 @@
 	import UIcon from '$lib/components/Icon/UIcon.svelte';
 	import CardDivider from '$lib/components/Card/CardDivider.svelte';
 	import CardLogo from '$lib/components/Card/CardLogo.svelte';
+	import ChipIcon from '$lib/components/Chip/ChipIcon.svelte';
 
 	interface Props {
 		data: { experience?: Experience };
@@ -36,7 +36,7 @@
 			<Banner>
 				<div class="col-center p-y-20">
 					<div class="text-0.9em">
-						<MainTitle>{data.experience.name}</MainTitle>
+						<MainTitle classes="py-10">{''}</MainTitle>
 					</div>
 					<p class="font-300 text-[var(--tertiary-text)] m-y-2 text-center">
 						{data.experience.company} · {data.experience.location} · {data.experience.type}
@@ -59,10 +59,7 @@
 					</div>
 					<div class="row-center flex-wrap m-b-2">
 						{#each data.experience.skills as item}
-							<Chip
-								classes="inline-flex flex-row items-center justify-center"
-								href={resolve(`/skills/${item.slug}`)}
-							>
+							<ChipIcon name={`Skill: ${item.name}`}>
 								<CardLogo
 									src={getAssetURL(item.logo)}
 									alt={item.name}
@@ -70,8 +67,8 @@
 									size={15}
 									classes="mr-2"
 								/>
-								<span class="text-[0.9em]">{item.name}</span>
-							</Chip>
+								<span class="text-[0.8em]">{item.name}</span>
+							</ChipIcon>
 						{/each}
 					</div>
 				</div>

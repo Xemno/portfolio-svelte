@@ -31,7 +31,6 @@ export interface Item<S extends string = string> {
 	logo: Asset;
 	shortDescription: string;
 	description: string;
-	screenshots?: Array<{ src: string; label: string }>;
 }
 
 export interface Link {
@@ -79,39 +78,9 @@ export interface Education<S extends string = string> extends Item<S> {
 	color: Color;
 }
 
-// export interface PageParams {
-// 	title: string;
-// }
-
-// export interface PageWithSearchParams<T> extends PageParams {
-// 	items: Array<T>;
-// }
-
 export interface HomeLink {
 	platform: Platform;
 	link: string;
 }
-
-// export interface HomePageParams extends PageParams {
-// 	name: string;
-// 	lastName: string;
-// 	description: string;
-// 	links: Array<HomeLink>;
-// 	skills?: Array<Skill>;
-// }
-
-// export type SearchPageParams = PageParams;
-
-// export type ProjectPageParams = PageWithSearchParams<Project>;
-
-// export type ExperiencePageParams = PageWithSearchParams<Experience>;
-
-// export type SkillsPageParams = PageWithSearchParams<Skill>;
-
-// export type EducationPageParams = PageWithSearchParams<Education>;
-
-// export interface ResumePageParams extends PageParams {
-// 	item: string;
-// }
 
 export type StringWithAutoComplete<T> = T | (string & Record<never, never>);

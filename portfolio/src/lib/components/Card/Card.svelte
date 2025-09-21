@@ -84,7 +84,7 @@
 		' '
 	)}`}
 	style:bgColor={'red'}
-	style={`--bg-img:url(${bgImg})`}
+	style={bgImg ? `--bg-img:url(${bgImg})` : ''}
 >
 	<div class="card-bg-img flex-1 col p-25px rounded-15px">
 		{@render children?.()}

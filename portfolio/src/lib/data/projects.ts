@@ -21,7 +21,7 @@ export const items: Array<Project> = [
 		description: descThisWebsite,
 		shortDescription:
 			'A dynamic, interactive website I built while mastering modern web development with Svelte, Node.js, and Three.js.',
-		links: [{ to: '', label: '' }],
+		links: [{ to: '/', label: 'qais.elokaili.ch' }],
 		logo: 'i-line-md-coffee-loop',
 		period: {
 			from: new Date(2023, 10, 15),
@@ -29,7 +29,6 @@ export const items: Array<Project> = [
 		},
 		skills: getSkills('svelte', 'ts', 'css', 'js', 'html', 'nodejs'),
 		type: 'Personal Project',
-		screenshots: [],
 	},
 	{
 		slug: 'dr1ve-website',
@@ -46,7 +45,6 @@ export const items: Array<Project> = [
 		},
 		skills: getSkills('svelte', 'ts', 'css', 'js', 'html', 'nodejs'),
 		type: 'Professional Website',
-		screenshots: []
 	},
 	{
 		slug: 'master-thesis',
@@ -63,7 +61,6 @@ export const items: Array<Project> = [
 		},
 		skills: getSkills('csharp', 'unity-engine', 'python'),
 		type: 'Master Thesis at Disney Research',
-		screenshots: []
 	},
 
 	{
@@ -81,7 +78,6 @@ export const items: Array<Project> = [
 		},
 		skills: getSkills('c', 'cpp'),
 		type: 'Computational Robotics',
-		screenshots: []
 	},
 
 	{
@@ -99,7 +95,6 @@ export const items: Array<Project> = [
 		},
 		skills: getSkills('csharp', 'unity-engine', 'cpp'),
 		type: 'Computer Graphics',
-		screenshots: []
 	},
 
 	{
@@ -117,7 +112,6 @@ export const items: Array<Project> = [
 		},
 		skills: getSkills('c', 'cpp'),
 		type: 'Advanced Systems Lab',
-		screenshots: []
 	},
 
 	{
@@ -135,7 +129,6 @@ export const items: Array<Project> = [
 		},
 		skills: getSkills('csharp', 'unity-engine'),
 		type: 'Computer Graphics',
-		screenshots: []
 	},
 
 	{
@@ -153,6 +146,5 @@ export const items: Array<Project> = [
 		},
 		skills: getSkills('python'),
 		type: 'Machine Learning',
-		screenshots: []
 	}
 ];
