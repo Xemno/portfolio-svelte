@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-auto';
+import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 const base = '/portfolio-svelte';
@@ -8,15 +8,9 @@ const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
 	preprocess: vitePreprocess(),
-	vitePlugin: {
-		inspector: {
-			toggleKeyCombo: 'meta-shift',
-			showToggleButton: 'always',
-			toggleButtonPos: 'bottom-right'
-		}
-	},
 	kit: {
 		adapter: adapter({ fallback: '404.html' }),
+
 		alias: {
 			$lib: './src/lib',
 			'@data': './src/lib/data',
