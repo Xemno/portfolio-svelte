@@ -21,7 +21,6 @@ export function toScreenPosition(
 	return new THREE.Vector2(vector.x, vector.y);
 }
 
-// TODO: https://stackoverflow.com/questions/29884485/threejs-canvas-size-based-on-container
 
 export function toWorldPosition(
 	screenPos: THREE.Vector2,
@@ -31,10 +30,6 @@ export function toWorldPosition(
 
 	let vec = new THREE.Vector3();
 	let pos = new THREE.Vector3();
-
-	// TODO: maybe use this instead of window.innerWidth 
-	// let widthHalf = 0.5 * renderer.getContext().canvas.width;
-	// let heightHalf = 0.5 * renderer.getContext().canvas.height;
 
 	vec.set(
 		(screenPos.x / window.innerWidth) * 2 - 1,

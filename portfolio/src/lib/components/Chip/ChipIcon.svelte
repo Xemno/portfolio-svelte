@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Asset } from '$app/types';
 	import { theme } from '$lib/stores/theme';
 
 	interface Props {

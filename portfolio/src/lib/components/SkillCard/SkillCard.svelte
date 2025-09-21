@@ -31,12 +31,8 @@
 
 	let { skill }: Props = $props();
 
-	// NOTE: search for related projects to that skill and show on the bottom
 	const getRelatedProjects = (): Array<Related> => {
 		const out: Array<Related> = [];
-
-		// const skill = data.skill;
-
 		if (!skill) {
 			return [];
 		}
@@ -50,7 +46,6 @@
 					type: 'projects',
 					url: `/projects/${item.slug}`
 				});
-				// console.log('typeof: ', item.logo, '  ', typeof item.logo);
 			}
 		});
 
@@ -63,7 +58,6 @@
 					type: 'experience',
 					url: `/experience/${item.slug}`
 				});
-				// console.log('typeof: ', item.logo, '  ', typeof item.logo);
 			}
 		});
 

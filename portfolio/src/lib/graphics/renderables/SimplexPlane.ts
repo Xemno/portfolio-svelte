@@ -1,10 +1,7 @@
-import * as THREE from 'three';
-import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise';
 import type IRenderable from './IRenderable';
+import * as THREE from 'three';
+import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js';
 import { NAMED_COLORS, type Color } from '$lib/utils/colors';
-
-import shaderVert from '$lib/graphics/shaders/test01/vertex2.glsl';
-import shaderFrag from '$lib/graphics/shaders/test01/frag.glsl';
 
 let conf = {
 	xyCoef: 50,
@@ -13,30 +10,11 @@ let conf = {
 
 export class SimplexPlane implements IRenderable {
 	private plane: THREE.Mesh;
-	private simplexNoise =  new SimplexNoise();
+	private simplexNoise = new SimplexNoise();
 	private geometry: THREE.PlaneGeometry;
 	private material: THREE.MeshLambertMaterial;
 
 	private resolution: THREE.Vector2;
-
-	private material2 = new THREE.MeshStandardMaterial({
-		color: 0x000000,
-		alphaHash: true,
-		opacity: 0.7
-	});
-
-	// private shaderMaterial : THREE.ShaderMaterial;
-	// private uniforms = {
-	// 	time: { value: 1.0 }
-	// };
-
-	// private shaderMaterial! : THREE.ShaderMaterial;
-	// private uniforms = {
-	// 	u_time: { type: "f", value: 1.0 },
-	// 	u_resolution: { type: "v2", value: new THREE.Vector2() },
-	// };
-
-	// TODO: apply builder pattern ? but with static builder 
 
 	private elapsedTime: number = 0;
 
@@ -49,41 +27,16 @@ export class SimplexPlane implements IRenderable {
 	) {
 		this.geometry = new THREE.PlaneGeometry(width, height, widthSegments, heightSegments);
 		this.material = new THREE.MeshLambertMaterial({ color: 0xffffff, side: THREE.DoubleSide });
-
 		this.resolution = new THREE.Vector2(resolution?.x, resolution?.y);
-
-		// console.log('SimplexPlane constructor.');
-		
-
-		// this.shaderMaterial = new THREE.ShaderMaterial({
-		// 	uniforms: this.uniforms,
-		// 	vertexShader: shaderVert,
-		// 	fragmentShader: shaderFrag,
-		// });
-		// this.shaderMaterial = new THREE.ShaderMaterial({
-		// 	uniforms: this.uniforms,
-		// 	vertexShader: shaderVert,
-		// 	fragmentShader: shaderFrag
-		// 	// transparent: true,
-		// 	// visible: true,
-		// 	// side: THREE.DoubleSide,
-		// 	// depthWrite: false
-		// });
-
-		// this.material = new THREE.MeshLambertMaterial({ color: 0xffffff, side: THREE.DoubleSide, wireframe: true }); // NOTE: enable wireframe
 		this.plane = new THREE.Mesh(this.geometry, this.material);
 		this.plane.rotation.x = -Math.PI / 2 - 0.15;
 		this.plane.position.y = -25;
-		// this.plane.position.z = - 100;
 		this.geometry.dispose();
 	}
 
 	public update(deltaTime: number, mouseScreenPos: THREE.Vector2) {
 		let pArray = this.plane.geometry.attributes.position.array;
-
-		let deltaVelocity = mouseScreenPos.x + mouseScreenPos.y;
-		// console.log('deltaVelocity: ', pArray);
-		// console.log('deltaTime: ', deltaTime);
+		let deltaVelocity = (mouseScreenPos.x + mouseScreenPos.y) / 10.0;
 
 		this.elapsedTime = this.elapsedTime + deltaTime * 0.2;
 
@@ -98,18 +51,9 @@ export class SimplexPlane implements IRenderable {
 		this.plane.geometry.attributes.position.needsUpdate = true;
 		// compute normals so shading works properly
 		this.plane.geometry.computeVertexNormals();
-
-		// if needed:
-		// this.plane.geometry.computeBoundingBox();
-		// this.plane.geometry.computeBoundingSphere();
-
-		// this.uniforms[ 'u_time' ].value = performance.now() / 1000;
-		// this.uniforms[ 'u_resolution' ].value = this.resolution;
 	}
 
 	public onThemeChange(val: boolean) {
-		// TODO: rename to onThemeChange
-		// console.log('themeCallback: ' + val);
 		if (val) {
 			// dark mode
 			this.material.emissive.set(new THREE.Color(NAMED_COLORS.black));
@@ -134,7 +78,7 @@ export class SimplexPlane implements IRenderable {
 		this.plane.position.set(pos.x, pos.y, pos.z);
 	}
 
-	public setRotation() {}
+	public setRotation() { }
 
 	public getMesh(): THREE.Mesh {
 		return this.plane;

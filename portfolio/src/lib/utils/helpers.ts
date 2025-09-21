@@ -134,8 +134,6 @@ export function routeToName(searchArray: Array<NavItem>, route: string): NavItem
 		}
 	});
 
-	// console.log('routeToName: ', route, ' == ', navItem);
-
 	return navItem;
 }
 

@@ -32,49 +32,32 @@ export default class MainScene {
 	private scene!: THREE.Scene;
 	private renderer: THREE.WebGLRenderer;
 	private clock: THREE.Clock;
-
-	// private controls: OrbitControls;
 	private simplexPlane!: SimplexPlane;
 	private textCloud!: TextCloud;
-
 	private normalizedMouseScreenPos = new THREE.Vector2();
 	private normalizedTouchScreenPos = new THREE.Vector2();
-	// private mouseWorldPosition = new THREE.Vector3();
 	private mousePlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-	// private raycaster = new THREE.Raycaster();
-
 	private animFrameId: number = -1;
 	private renderWidth: number = 0;
 	private renderHeight: number = 0;
 	private windowScreenWidth: number = 0;
 	private windowScreenHeight: number = 0;
-
 	private composer!: EffectComposer;
-
 	private directionalLight!: THREE.DirectionalLight;
-
 	private isMobile: boolean;
 	private isPortraitMode!: boolean;
-
 	private renderables: Array<IRenderable> = new Array<IRenderable>();
 
 	constructor(canvas: HTMLCanvasElement, navItemArray: Array<NavItem>, isMobile: boolean) {
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(conf.fov, window.innerWidth / window.innerHeight, 0.1, 1000);
 		this.camera.position.z = conf.cameraZ;
-		// this.camera.position.z = 100;
-		// this.camera.rotation.x += Math.PI/3;
 		this.isMobile = isMobile;
 
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: canvas });
 		this.renderer.setPixelRatio(window.devicePixelRatio);
 
 		this.clock = new THREE.Clock();
-		// this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-		// this.controls.maxPolarAngle = Math.PI / 2.0;
-
-		// TODO: https://github.com/mrdoob/three.js/blob/master/examples/webgl_postprocessing_unreal_bloom_selective.html
-		// TODO: selective bloom only on the particles
 		const params = {
 			threshold: 10,
 			strength: 0.05,
@@ -82,7 +65,6 @@ export default class MainScene {
 			exposure: 1
 		};
 
-		// NOTE: Bloom Pass
 		let renderpass = new RenderPass(this.scene, this.camera);
 		renderpass.clearAlpha = 0;
 
@@ -92,16 +74,13 @@ export default class MainScene {
 		bloomPass.radius = params.radius;
 
 		const taaRenderPass = new TAARenderPass(this.scene, this.camera);
-		// const afterimagePass = new AfterimagePass(0.5);
 		const outputPass = new OutputPass();
 
 		this.composer = new EffectComposer(this.renderer);
 		this.composer.setSize(window.innerWidth, window.innerHeight);
 		this.composer.addPass(renderpass);
 		this.composer.addPass(taaRenderPass);
-		this.composer.addPass(bloomPass); // TODO: selective bloom only on the particles
-		// TODO: afterimagePass causes white background to be black, thus, have to apply it selective on the
-		// this.composer.addPass(afterimagePass); // TODO: selective only on the particles, causes flickering on edges of SimplexPlane
+		this.composer.addPass(bloomPass);
 		this.composer.addPass(outputPass);
 
 		this.initScene(navItemArray);
@@ -109,7 +88,6 @@ export default class MainScene {
 
 
 	public onThemeChange(val: boolean) {
-		// console.log('themeCallback: ' + val);
 		if (val) {
 			// dark mode
 			this.renderer.toneMapping = THREE.CineonToneMapping;
@@ -134,7 +112,6 @@ export default class MainScene {
 	}
 
 	public onNavigationChange(item: NavItem) {
-		// console.log('scene onNavChange', item);
 		this.textCloud.onNavigationChange(item);
 	}
 
@@ -147,13 +124,6 @@ export default class MainScene {
 		this.scene.clear();
 		this.renderer.renderLists.dispose();
 		this.renderer.dispose();
-
-		// TODO: https://threejs.org/docs/index.html#manual/en/introduction/How-to-dispose-of-objects
-
-		// TODO: https://stackoverflow.com/questions/20997669/memory-leak-in-three-js
-		// TODO: https://stackoverflow.com/questions/12945092/memory-leak-with-three-js-and-many-shapes?rq=1
-		// TODO: https://github.com/mrdoob/three.js/blob/master/examples/webgl_test_memory.html
-		// TODO: https://github.com/mrdoob/three.js/blob/master/examples/webgl_test_memory2.html
 	}
 
 	public onAfterUiUpdate() {
@@ -171,18 +141,6 @@ export default class MainScene {
 
 		this.render();
 		this.composer.render();
-		// this.controls.update(delta);
-
-		// this.camera.position.x = -1.5 * Math.sin(0.5 * Math.PI * this.normalizedMouseScreenPos.x);
-		// this.camera.position.y = 1.0 * Math.sin(0.5 * Math.PI * this.normalizedMouseScreenPos.y);
-
-		// TODO: if mobile enable touch and disable above
-		// this.camera.position.x = - 1.5 * Math.sin(.5 * Math.PI * this.normalizedTouchScreenPos.x);
-		// this.camera.position.y = 1.0 * Math.sin(.5 * Math.PI * this.normalizedTouchScreenPos.y);
-
-		// update uniforms
-		// this.uniforms['u_time'].value = performance.now() / 1000;
-		// this.uniforms['u_resolution'].value = new THREE.Vector2(this.renderer.domElement.width, this.renderer.domElement.height);
 	}
 
 	private render(): void {
@@ -205,8 +163,6 @@ export default class MainScene {
 		this.addResizeSupport();
 		this.addMouseInputSupport();
 
-		// this.scene.fog = new THREE.FogExp2(0xfff00f, 0.004); // TODO: fog color
-
 		this.simplexPlane = new SimplexPlane(
 			this.renderWidth * 2,
 			this.renderHeight * 2,
@@ -215,12 +171,11 @@ export default class MainScene {
 		);
 		this.scene.add(this.simplexPlane.getMesh());
 
-		// TODO: fill texts with Array<Project> and Array<Experiences> and main NaxItems
 
 		this.textCloud = new TextCloud(
 			this.renderer,
 			this.camera,
-			this.scene, // TODO: move out
+			this.scene,
 			navItemArray,
 			this.isMobile,
 			this.isPortraitMode,
@@ -230,23 +185,16 @@ export default class MainScene {
 		const lightTargetObj = new THREE.Object3D();
 		lightTargetObj.position.y = 150; // set above TextCloud
 		this.scene.add(lightTargetObj);
-
-		// this.camera.lookAt(new THREE.Vector3(0,10,0));-
-
 		const lightMesh = new THREE.Mesh(
 			new THREE.SphereGeometry(1, 8, 8),
 			new THREE.MeshBasicMaterial({ color: 0xffffff })
 		);
 		this.directionalLight = new THREE.DirectionalLight(THREE.Color.NAMES.wheat, 300);
-		this.directionalLight.target = lightTargetObj; // NOTE: can't rotate, have to set target obj
+		this.directionalLight.target = lightTargetObj;
 
 		lightMesh.add(this.directionalLight);
 		lightMesh.position.y = 22;
 		lightMesh.position.z = 50;
-
-		// let screenPos = toScreenPosition(lightMesh, this.camera, this.renderer);
-		// console.log('screenPos: ' + screenPos.toArray() + '   - maxW: ' + this.renderer.getContext().canvas.width + ',  maxH: ' + this.renderer.getContext().canvas.height);
-
 		this.scene.add(lightMesh);
 
 		// init renderables to update
@@ -259,11 +207,7 @@ export default class MainScene {
 		this.windowScreenHeight = window.innerHeight;
 
 		this.isPortraitMode = screen.availHeight > screen.availWidth ? true : false;
-		// console.log('mainScene - isPortraitMode: ', this.isPortraitMode);
-
 		if (renderer && camera) {
-			// console.log('width: ' + this.windowScreenWidth + ' height: ' + this.windowScreenHeight);
-
 			renderer.setSize(this.windowScreenWidth, this.windowScreenHeight);
 			this.composer.setSize(this.windowScreenWidth, this.windowScreenHeight);
 
@@ -273,34 +217,15 @@ export default class MainScene {
 
 			this.renderWidth = wsize[0];
 			this.renderHeight = wsize[1];
-			// console.log('renderWidth: ', this.renderWidth, '  -  renderHeight: ', this.renderHeight);
-			// console.log('windowScreenWidth: ', this.windowScreenWidth, '  -  windowScreenHeight: ', this.windowScreenHeight);
-
-			// console.log(' init setting all isPortraitMode: ', this.isPortraitMode);
 			this.renderables.forEach((item) => {
 				item.onWindowResize(this.renderWidth, this.renderHeight, this.isPortraitMode);
 			});
-
-			// console.log('camera: ', camera.aspect);
-
 		}
-		// this.camera.aspect = window.innerWidth / window.innerHeight;
-		// this.camera.updateProjectionMatrix();
-		// this.renderer.setSize( window.innerWidth, window.innerHeight );
+
 	}
 
 	private addMouseInputSupport(): void {
 		document.addEventListener('mousemove', (event) => {
-			// const v = new THREE.Vector3(); // TODO:
-			// this.camera.getWorldDirection(v); // TODO:
-			// v.normalize(); // TODO:
-			// this.mousePlane.normal = v;
-
-			// this.raycaster.setFromCamera(this.normalizedMouseScreenPos, this.camera);
-			// this.raycaster.ray.intersectPlane(this.mousePlane, this.mouseWorldPosition); // TODO:mouseWorldPosition
-			// console.log( this.raycaster.ray );
-			// console.log( this.mouseWorldPosition );
-
 			this.normalizedMouseScreenPos.x = (event.clientX / this.windowScreenWidth) * 2 - 1;
 			this.normalizedMouseScreenPos.y = -(event.clientY / this.windowScreenHeight) * 2 + 1;
 

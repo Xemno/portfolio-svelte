@@ -14,14 +14,6 @@ import { TextParticleSystem } from './TextParticleSystem';
 import { TweenMorphing } from './TweenMorphing';
 
 
-interface IVertices {
-	[index: string]: {
-		x: number;
-		y: number;
-		z: number;
-	};
-}
-
 interface Item {
 	idx: number;
 	geometry: TextGeometry;
@@ -31,14 +23,11 @@ interface Item {
 type GeometryItems = Array<Item>;
 
 // Options
-// TODO: move into data/app.ts file
 const particleCount = 5000;
 const typefaceRegular = '/src/lib/graphics/fonts/optimer_bold.typeface.json';
 const typefaceMobile = '/src/lib/graphics/fonts/optimer_regular.typeface.json';
 
 export default class TextCloud implements IRenderable {
-	// private clock = new THREE.Clock();
-
 	private lookAt?: THREE.Vector3;
 
 	private fontLoader = new FontLoader();
@@ -51,33 +40,8 @@ export default class TextCloud implements IRenderable {
 	private particleSystem: TextParticleSystem;
 	private tweenMorphing: TweenMorphing;
 
-	// private particleMaterial = new THREE.MeshNormalMaterial({ transparent: true });
-	private material = new THREE.MeshStandardMaterial({
-		color: 0xffaf00,
-		alphaHash: true,
-		opacity: 0.7
-	});
-
 	private renderer: THREE.WebGLRenderer;
 	private camera: THREE.PerspectiveCamera;
-
-	// Define the shader uniforms
-	// private uniforms = {
-	// 	u_time: {
-	// 		type: "f",
-	// 		value: 0.0
-	// 	},
-	// 	u_resolution: {
-	// 		type: "v2",
-	// 		value: new THREE.Vector2(window.innerWidth, window.innerHeight)
-	// 			.multiplyScalar(window.devicePixelRatio)
-	// 	},
-	// 	u_mouse: {
-	// 		type: "v2",
-	// 		value: new THREE.Vector2(0.7 * window.innerWidth, window.innerHeight)
-	// 			.multiplyScalar(window.devicePixelRatio)
-	// 	}
-	// };
 
 	constructor(
 		renderer: THREE.WebGLRenderer,
@@ -93,10 +57,9 @@ export default class TextCloud implements IRenderable {
 	) {
 		let initParams: NavItem = navItems.at(0)!;
 
-		this.renderer = renderer; // TODO: move out / remove dependency
-		this.camera = camera; // TODO: move out / remove dependency
-		this.isMobile = isMobile; // TODO: move out / remove dependency
-		// this.isPortraitMode = isPortrait;
+		this.renderer = renderer;
+		this.camera = camera;
+		this.isMobile = isMobile;
 
 		this.particleSystem = new TextParticleSystem();
 		this.particleSystem.setNumParticles(particleCount);
@@ -111,12 +74,9 @@ export default class TextCloud implements IRenderable {
 				this.particleSystem.setCurrParticlesPos(vWorldPos);
 			}
 
-			// if (lookAt != null) {
-			// 	this.particleSystem.getParticleSystem().lookAt(lookAt);
-			// 	this.lookAt = lookAt;
-			// }
 
-			scene.add(this.particleSystem.getParticleSystem()); // TODO: move out
+
+			scene.add(this.particleSystem.getParticleSystem());
 
 			// play initial animation
 			this.startEntryAnimation(initParams);
@@ -141,19 +101,14 @@ export default class TextCloud implements IRenderable {
 		}
 
 		this.tweenMorphing.update();
-		// this.tween.update(deltaTime);
-
-		// this.uniforms.u_time.value = this.clock.getElapsedTime();
 	}
 
 	public onNavigationChange(item: NavItem) {
 		if (!this.ready) return;
-		// console.log('Text Cloud: scene onNavChange', item);
 		this.tweenMorphing.morphTo(item);
 	}
 
 	public onThemeChange(val: boolean) {
-		// if (!this.ready) return;
 		this.particleSystem.onThemeChange(val);
 	}
 
@@ -162,24 +117,17 @@ export default class TextCloud implements IRenderable {
 	}
 
 	public onAfterUiUpdate() {
-		// console.log('TextCloud - onAfterUiUpdate: ');
 		if (!this.ready) return;
 		let vWorldPos = this.getMainTitleTextPosition();
-		console.log('onAfterUiUpdate - vWorldPos: ', vWorldPos);
 
 		this.particleSystem.setCurrParticlesPos(vWorldPos);
 	}
 
-	// Updates the uniforms when the mouse moves
 	public onMouseMove(event: MouseEvent) {
-		// Update the mouse uniform
-		// this.uniforms.u_mouse.value.set(event.pageX, window.innerHeight - event.pageY).multiplyScalar(window.devicePixelRatio);
 	}
 
-	// Updates the uniforms when the touch moves
+
 	public onTouchMove(event: TouchEvent) {
-		// Update the mouse uniform
-		// this.uniforms.u_mouse.value.set(event.touches[0].pageX, window.innerHeight - event.touches[0].pageY).multiplyScalar(window.devicePixelRatio);
 	}
 
 	private onOrientationChange(isPortraitMode: boolean) {
@@ -194,7 +142,6 @@ export default class TextCloud implements IRenderable {
 
 	private getMainTitleTextPosition(): THREE.Vector3 | null {
 		let mainTitleText: (HTMLElement | null) = document.getElementById("main-title");
-		console.log('mainTitleText: ', mainTitleText);
 
 		if (mainTitleText != null) {
 			let { top, bottom, left, right } = mainTitleText.getBoundingClientRect();

@@ -13,8 +13,6 @@
 
 	onMount(() => {
 		const isMobile = detectMobile();
-		console.log('MainScene - isMobile: ', isMobile);
-
 		const allNamedRoutes = getAllNamedRoutes();
 
 		scene = new MainScene(canvas, allNamedRoutes, isMobile);
@@ -22,9 +20,7 @@
 		page.subscribe((v) => scene.onNavigationChange(routeToName(allNamedRoutes, v.url.pathname)));
 		scene.start();
 
-		// var containerNode = document.querySelectorAll('div.container')[0];
 		var containerNode = document.querySelectorAll('div')[0];
-		console.log("querySelectorAll: ", containerNode);
 		
 		const observer = new MutationObserver(() => {
 			scene.onAfterUiUpdate();
@@ -33,7 +29,6 @@
 
 		return () => {
 			scene.stop();
-			// scene.cleanup();
 			observer.disconnect();
 		};
 	});
@@ -41,7 +36,6 @@
 	onDestroy(() => {});
 </script>
 
-<!-- <canvas id="canvas" class="fixed left-0 top-0 -z-50" bind:this={canvas} /> -->
 <canvas id="canvas" bind:this={canvas}></canvas>
 
 <style lang="scss">
@@ -52,6 +46,6 @@
 		position: fixed;
 		top: 0;
 		left: 0;
-		z-index: -9999; // NOTE: comment to make input controls accessible, uncomment to bring canvas behind
+		z-index: -9999;
 	}
 </style>

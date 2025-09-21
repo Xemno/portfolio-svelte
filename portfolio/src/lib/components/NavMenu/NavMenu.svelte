@@ -3,13 +3,6 @@
 	import { theme, toggleTheme } from '$lib/stores/theme';
 	import { items } from '@data/navbar';
 	import * as HOME from '@data/home';
-
-	// import { gsap } from 'gsap';
-	// import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-	// import { ScrollToPlugin } from 'gsap/dist/ScrollToPlugin';
-	// gsap.registerPlugin(ScrollTrigger);
-	// gsap.registerPlugin(ScrollToPlugin);
-
 	import UIcon from '../Icon/UIcon.svelte';
 
 	let expanded = $state(false);
@@ -21,43 +14,6 @@
 			expanded = v;
 		}
 	};
-
-	// let currentRoute = $state('');
-	// $effect(() => {
-	// 	currentRoute = $page.url.pathname;
-	// });
-
-	// $effect(() => {
-	// 	if ($page) {
-	// 		currentRoute = $page.url.pathname;
-	// 	}
-	// });
-
-	// onMount(() => {
-	// 	const showAnim = gsap
-	// 		.from('.nav-menu', {
-	// 			yPercent: -100,
-	// 			paused: true,
-	// 			duration: 0.25
-	// 		})
-	// 		.progress(1);
-
-	// 	ScrollTrigger.create({
-	// 		start: 'top top',
-	// 		end: 'max',
-	// 		onUpdate: (self) => {
-	// 			console.log('self.progress: ', self.progress.toFixed(3)); // NOTE: Progress between 0 and 1.0
-	// 			console.log('self.direction: ', self.direction); // NOTE: -1 or 1
-	// 			console.log('self.velocity: ', self.getVelocity()); // NOTE: -1 or 1
-
-	// 			if (self.direction === -1 ) {
-	// 				showAnim.play()
-	// 			} else {
-	// 				showAnim.reverse();
-	// 			}
-	// 		}
-	// 	});
-	// });
 </script>
 
 <div class="nav-menu">
@@ -96,7 +52,7 @@
 					href={resolve(`/search`)}
 					class="text-inherit col-center self-stretch px-2 hover:bg-[color:var(--main-hover)]"
 				>
-				<UIcon icon="i-carbon-search" classes="text-1.5em" />
+					<UIcon icon="i-carbon-search" classes="text-1.5em" />
 				</a>
 				<button
 					class="bg-transparent text-1em border-none cursor-pointer hover:bg-[color:var(--main-hover)] text-[var(--secondary-text)] px-2"
@@ -170,7 +126,6 @@
 		background-color: var(--main);
 
 		&-item {
-			// NOTE: ampersand & is placeholder text for above class .nav-menu -->  &-item == .nav-menu-item
 			text-decoration: none;
 			font-weight: 400;
 			padding: 10px 20px;

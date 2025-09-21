@@ -14,14 +14,14 @@ export const items = [
 		slug: 'cpp',
 		color: 'yellow',
 		description: '',
-		logo: Assets.Cpp, // TODO: add small logo and large logo
+		logo: Assets.Cpp,
 		name: 'C++'
 	}),
 	s({
 		slug: 'c',
 		color: 'yellow',
 		description: '',
-		logo: Assets.C, // TODO: add small logo and large logo
+		logo: Assets.C,
 		name: 'C'
 	}),
 	s({

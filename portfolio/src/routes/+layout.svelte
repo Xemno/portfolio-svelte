@@ -26,48 +26,6 @@
 		});
 	});
 
-	// import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-	// import gsap from 'gsap';
-
-	// gsap.registerPlugin(ScrollTrigger);
-
-	// let scrollElem: HTMLElement;
-
-	// onMount(() => {
-	// 	const ctx = gsap.context((self) => {
-	// 		const showAnim = gsap
-	// 			.from('.nav-menu', {
-	// 				yPercent: -100,
-	// 				paused: true,
-	// 				duration: 0.25
-	// 			})
-	// 			.progress(1);
-
-	// 		ScrollTrigger.create({
-	// 			start: 'top top',
-	// 			end: 'max',
-	// 			onUpdate: (self) => {
-	// 				console.log('self.progress: ', self.progress.toFixed(3)); // NOTE: Progress between 0 and 1.0
-	// 				console.log('self.direction: ', self.direction); // NOTE: -1 or 1
-	// 				console.log('self.velocity: ', self.getVelocity()); // NOTE: -1 or 1
-
-	// 				if (self.direction === -1) {
-	// 					showAnim.play();
-	// 				} else {
-	// 					showAnim.reverse();
-	// 				}
-	// 			}
-	// 		});
-	// 	}, scrollElem); // <- Scope!
-
-	// 	// return () => ctx.revert(); // <- Cleanup!
-
-	// 	return {
-	// 		destroy: () => {
-	// 			ctx.revert();
-	// 		}
-	// 	};
-	// });
 </script>
 
 <div class={`body contents ${$theme ? 'theme-dark' : 'theme-light'}`} id="mydiv">

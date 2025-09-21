@@ -73,8 +73,8 @@ export const items: Array<Project> = [
 		links: [],
 		logo: Assets.ETH,
 		period: {
-			from: new Date(2020, 8, 1),		// TODO:
-			to: new Date(2020, 12, 1)		// TODO: 
+			from: new Date(2020, 8, 1),
+			to: new Date(2020, 12, 1)
 		},
 		skills: getSkills('c', 'cpp'),
 		type: 'Computational Robotics',

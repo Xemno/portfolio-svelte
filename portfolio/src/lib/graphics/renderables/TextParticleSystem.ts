@@ -41,10 +41,7 @@ export class TextParticleSystem {
 	}
 
 	public createCurrParticles(font: Font, initParams: NavItem) {
-		this.currParticlesPos = this.createTextParticlesPos(font, initParams); // NOTE: current particle position
-		if (this.currParticlesPos == null) {
-			console.log('Error - currParticles is NULL');
-		}
+		this.currParticlesPos = this.createTextParticlesPos(font, initParams);
 
 		// initialize particle system
 		this.instancedMeshParticles = new THREE.InstancedMesh(this.particleGeometry, this.material, this.numParticles);
@@ -80,7 +77,7 @@ export class TextParticleSystem {
 	}
 
 	public setMatrixAt(i: number, matrix: THREE.Matrix4) {
-		this.instancedMeshParticles.setMatrixAt(i, matrix); // TODO: test this.instancedMeshParticles.position.set(vWorldPos.x, vWorldPos.y, vWorldPos.z);
+		this.instancedMeshParticles.setMatrixAt(i, matrix);
 		this.instancedMeshParticles.instanceMatrix.needsUpdate = true;
 	}
 

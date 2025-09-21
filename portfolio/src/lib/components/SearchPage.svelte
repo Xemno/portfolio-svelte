@@ -42,12 +42,10 @@
 </script>
 
 <CommonPage {title}>
-	<!-- NOTE: Search bar -->
 	<div class="w-100% row">
 		<SearchInput bind:value={query} placeholder={'Search...'} {autoFocusSearch} />
 	</div>
 
-	<!-- NOTE: Content with projects / skills / work experience cards -->
 	<div class="w-100% col flex-1">
 		{@render children?.()}
 	</div>
