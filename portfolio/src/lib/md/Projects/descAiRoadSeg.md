@@ -12,8 +12,8 @@ It was done as a team of four where the goal was to find a novel solution to the
 Our data consisted of road images and their segmented labels. An example road and the corresponding label is shown here:
 
 <p align="center" >
-  <img class="w-full md:w-1/3"  style="overflow:hidden;  ; margin: 0 auto; border-radius: 5px" src="../images/chicago108.png" alt="Satellite Image of a Chicago road" >
-  <img class="w-full md:w-1/3"  style="overflow:hidden;  ; margin: 0 auto; border-radius: 5px" src="../images/label108.png" alt="Corresponding segmented label" >
+  <img class="w-full md:w-1/3"  style="overflow:hidden;  ; margin: 0 auto; border-radius: 5px" src="../images/chicago108.avif" alt="Satellite Image of a Chicago road" >
+  <img class="w-full md:w-1/3"  style="overflow:hidden;  ; margin: 0 auto; border-radius: 5px" src="../images/label108.avif" alt="Corresponding segmented label" >
 </p>
 
 ## More info

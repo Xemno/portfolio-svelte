@@ -25,7 +25,7 @@ Tomographic Reconstruction is a multidimensional inverse problem. So the challen
 
 ## System Overview
 
-<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/soft_system.png" alt="System overview" />
+<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/soft_system.avif" alt="System overview" />
 
 ### Signal Generation
 
@@ -43,19 +43,19 @@ Here with 200 Ohm and 3mA the output voltage is set to 0.6V
 The VCCS accepts an input voltage and produces a constant output current, which is important for our impedance measurements.
 As a VCCS a [Howland Current Pump](https://www.allaboutcircuits.com/technical-articles/the-howland-current-pump/) was used to produce a constant current.
 
-<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/signal_gen.png" alt="Signal generation" >
+<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/signal_gen.avif" alt="Signal generation" >
 
 #### Simulating error currents
 
 1k to 100k OHMs stepsize is 5k, resulting in 20 traces. R_S is 20k Ohm and V_in is 0.6V peak to peak.
 
-<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/error_currents.png" alt="Error currents" >
+<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/error_currents.avif" alt="Error currents" >
 
 ## Measurement Scheme
 
 The system applys is an adjacent pattern measurement scheme. In the adjacent method the measurement pattern consists of differential measurements between all adjacent electrodes except the injecting electrodes. This is then done for all adjacent electrodes as injecting electrodes resulting in 40 measurements. This results in 5 measurements per adjacent pair, which for 8 electrode pair results in a measurement matrix M of 40 entries.
 
-<img class="w-full md:w-2/3"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/measure_scheme.png" alt="Measurement scheme" >
+<img class="w-full md:w-2/3"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/measure_scheme.avif" alt="Measurement scheme" >
 
 ### Multiplexers
 
@@ -68,7 +68,7 @@ And more non-ideal properties
 
 ### Differential Voltage Measurement
 
-<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/diff_measure.png" alt="Difference measurement" >
+<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/diff_measure.avif" alt="Difference measurement" >
 
 ## Signal Sampling
 
@@ -76,8 +76,8 @@ Using the programmable delay block (PDB) of the [Teensy](https://www.pjrc.com/te
 As depicted is the measured sampling of a full signal period of the system.
 
 <p align="center" >
-  <img class="w-full md:w-1/3"  style="overflow:hidden;  ; margin: 0 auto; border-radius: 5px" src="../images/sampled_signal.png" alt="Signal sampling" >
-  <img class="w-full md:w-1/3"  style="overflow:hidden;  ; margin: 0 auto; border-radius: 5px" src="../images/sampled_signal_2.png" alt="Signal sampling" >
+  <img class="w-full md:w-1/3"  style="overflow:hidden;  ; margin: 0 auto; border-radius: 5px" src="../images/sampled_signal.avif" alt="Signal sampling" >
+  <img class="w-full md:w-1/3"  style="overflow:hidden;  ; margin: 0 auto; border-radius: 5px" src="../images/sampled_signal_2.avif" alt="Signal sampling" >
 </p>
 
 The system takes up to 512 samples per signal measurement and reducing this to one RMS value.

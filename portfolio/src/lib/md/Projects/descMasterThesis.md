@@ -33,7 +33,7 @@ Solution: [Local Motion Phases Architecture](https://www.ipab.inf.ed.ac.uk/cgvu/
 We can control the character in real-time via a gamepad or keyboard. </p> <br>
 
 <p align="center" >
-  <img class="w-full md:w-1/2" style="overflow:hidden;" src="../images/master_thesis_system.png" alt="System Architecture"/>
+  <img class="w-full md:w-1/2" style="overflow:hidden;" src="../images/master_thesis_system.avif" alt="System Architecture"/>
 </p>
 
 ### Local Motion Phases
@@ -49,7 +49,7 @@ Data extraction process for the phase extraction
 2. Fit to parametric sine function to reduce parameter space
 <img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/phase_optim0.gif" alt="Phase optimization" />
 3. Interpolate 1D phase at each start to end interval of a sine
-<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/phase_interpolate.png" alt="Phase thresholds" />
+<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/phase_interpolate.avif" alt="Phase thresholds" />
 4. Export 2D phases by mapping 1D phase to its sine and cosine value
 <img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/dataexp_viking_skelOnly.gif" alt="Phase optimization" />
 
@@ -78,8 +78,8 @@ _Fit MoCap data to terrain samples_
 - Sample up to 20’000 patches
 
 <p align="center" >
-  <img class="w-full md:w-1/3"  style="overflow:hidden; margin: 0 auto; border-radius: 5px" src="../images/terrain_patch_0.png" alt="Terrain patch" />
-  <img class="w-full md:w-1/3"  style="overflow:hidden; margin: 0 auto; border-radius: 5px" src="../images/terrain_patch_1.png" alt="Terrain patch" />
+  <img class="w-full md:w-1/3"  style="overflow:hidden; margin: 0 auto; border-radius: 5px" src="../images/terrain_patch_0.avif" alt="Terrain patch" />
+  <img class="w-full md:w-1/3"  style="overflow:hidden; margin: 0 auto; border-radius: 5px" src="../images/terrain_patch_1.avif" alt="Terrain patch" />
 </p>
 
 ### Neural Network Architecture
@@ -108,7 +108,7 @@ The Motion Prediction Network is also a three-layer fully connected network with
 - The goal of training this network is that for a given set of inputs X. we can produce the corresponding output variables Y, which is a typical regression task, with the following cost function.
 
 <p align="center" >
-  <img class="w-full md:w-1/2" style="overflow:hidden;" src="../images/master_thesis_cost_function.png" alt="Neural Network System Architecture"/>
+  <img class="w-full md:w-1/2" style="overflow:hidden;" src="../images/master_thesis_cost_function.avif" alt="Neural Network System Architecture"/>
 </p>
 
 - Stochastic gradient descent with warm restart technique
