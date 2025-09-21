@@ -13,7 +13,6 @@ const a = (light: string, dark?: string): Asset =>
 const Assets = {
 	ETH: a('image_white_mode.png', 'image_dark_mode.png'),
 	Drive: a('drive_dark.png', 'drive_light.png'),
-
 	Unity: a('unity.png'),
 	AWS: a('aws.svg'),
 	Bootstrap: a('bootstrap.svg'),
