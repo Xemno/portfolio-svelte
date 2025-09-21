@@ -1,2 +1,2 @@
-# portfolio-svelte
-Website Portfolio
+# Svelte Portfolio Website
+My personal website portfolio
