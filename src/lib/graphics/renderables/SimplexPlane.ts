@@ -78,7 +78,7 @@ export class SimplexPlane implements IRenderable {
 		this.plane.position.set(pos.x, pos.y, pos.z);
 	}
 
-	public setRotation() { }
+	public setRotation() {}
 
 	public getMesh(): THREE.Mesh {
 		return this.plane;

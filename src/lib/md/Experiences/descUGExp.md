@@ -1,4 +1,3 @@
-
 # Gameplay & Engine Programmer
 
 _For the game Transport Fever 2/3 (C++, Custom In-House 3D Engine)_

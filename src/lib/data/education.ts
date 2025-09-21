@@ -37,9 +37,9 @@ export const items: Array<Education> = [
 		shortDescription: '',
 		slug: 'education-item-2',
 		majors: [
-			'Machine Learning', 
-			'Distributed Systems', 
-			'Visual Computing', 
+			'Machine Learning',
+			'Distributed Systems',
+			'Visual Computing',
 			'Systems Programming',
 			'Neuroinformatics'
 		],
@@ -57,7 +57,8 @@ export const items: Array<Education> = [
 		slug: 'education-item-3',
 		majors: [
 			'Assembly',
-			'C', 'Electrical Engineering',
+			'C',
+			'Electrical Engineering',
 			'Electronics',
 			'Physics',
 			'Altium Designer',

@@ -3,7 +3,6 @@ import { writable } from 'svelte/store';
 
 const key = '@qais-portfolio-website';
 
-
 export const theme = writable<boolean>(false);
 
 export const toggleTheme = (value?: boolean) =>

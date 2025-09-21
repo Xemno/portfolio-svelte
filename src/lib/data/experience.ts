@@ -7,7 +7,6 @@ import shortDescQualitasExp from '@md/Experiences/shortDescQualitasExp.md?raw';
 import descUGExp from '@md/Experiences/descUGExp.md?raw';
 import shortDescUGExp from '@md/Experiences/shortDescUGExp.md?raw';
 
-
 export const title = 'Experience';
 
 export const items: Array<Experience> = [
@@ -24,7 +23,7 @@ export const items: Array<Experience> = [
 		skills: getSkills('java', 'js', 'sql', 'plsql'),
 		color: '#00BFFF',
 		links: [],
-		logo: 'i-carbon-building',
+		logo: 'i-carbon-building'
 		// bannerImage: Assets.Unknown
 	},
 	{
@@ -40,7 +39,7 @@ export const items: Array<Experience> = [
 		skills: getSkills('cpp', 'lua', 'python', 'opengl', 'vulkan'),
 		color: '#00BFFF',
 		links: [],
-		logo: 'i-carbon-game-console',
+		logo: 'i-carbon-game-console'
 		// bannerImage: Assets.Unknown
 	}
 ];

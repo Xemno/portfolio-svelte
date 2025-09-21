@@ -1,4 +1,4 @@
-Currently I am working as a Full-Stack Java Developer  in end-to-end development of web applications.
+Currently I am working as a Full-Stack Java Developer in end-to-end development of web applications.
 
 My hands-on expertise span across the entire stack:
 

@@ -28,7 +28,7 @@ export const items: Array<Project> = [
 			to: new Date(2025, 3, 15)
 		},
 		skills: getSkills('svelte', 'ts', 'css', 'js', 'html', 'nodejs'),
-		type: 'Personal Project',
+		type: 'Personal Project'
 	},
 	{
 		slug: 'dr1ve-website',
@@ -44,7 +44,7 @@ export const items: Array<Project> = [
 			to: new Date(2024, 10, 15)
 		},
 		skills: getSkills('svelte', 'ts', 'css', 'js', 'html', 'nodejs'),
-		type: 'Professional Website',
+		type: 'Professional Website'
 	},
 	{
 		slug: 'master-thesis',
@@ -60,7 +60,7 @@ export const items: Array<Project> = [
 			to: new Date(2021, 3, 15)
 		},
 		skills: getSkills('csharp', 'unity-engine', 'python'),
-		type: 'Master Thesis at Disney Research',
+		type: 'Master Thesis at Disney Research'
 	},
 
 	{
@@ -77,7 +77,7 @@ export const items: Array<Project> = [
 			to: new Date(2020, 12, 1)
 		},
 		skills: getSkills('c', 'cpp'),
-		type: 'Computational Robotics',
+		type: 'Computational Robotics'
 	},
 
 	{
@@ -94,7 +94,7 @@ export const items: Array<Project> = [
 			to: new Date(2020, 2, 10)
 		},
 		skills: getSkills('csharp', 'unity-engine', 'cpp'),
-		type: 'Computer Graphics',
+		type: 'Computer Graphics'
 	},
 
 	{
@@ -111,7 +111,7 @@ export const items: Array<Project> = [
 			to: new Date(2020, 6, 31)
 		},
 		skills: getSkills('c', 'cpp'),
-		type: 'Advanced Systems Lab',
+		type: 'Advanced Systems Lab'
 	},
 
 	{
@@ -128,7 +128,7 @@ export const items: Array<Project> = [
 			to: new Date(2019, 12, 2)
 		},
 		skills: getSkills('csharp', 'unity-engine'),
-		type: 'Computer Graphics',
+		type: 'Computer Graphics'
 	},
 
 	{
@@ -145,6 +145,6 @@ export const items: Array<Project> = [
 			to: new Date(2019, 11, 31)
 		},
 		skills: getSkills('python'),
-		type: 'Machine Learning',
+		type: 'Machine Learning'
 	}
 ];

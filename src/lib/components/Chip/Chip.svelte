@@ -47,5 +47,4 @@
 			// transform: perspective(1000px) scale(1.02);
 		}
 	}
-
 </style>

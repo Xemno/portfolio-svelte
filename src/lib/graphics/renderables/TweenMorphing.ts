@@ -13,7 +13,6 @@ export class TweenMorphing {
 
 	public update() {
 		const result = TWEEN.update();
-
 	}
 
 	public isReady(): boolean {
@@ -22,18 +21,31 @@ export class TweenMorphing {
 
 	public morphTo(navItem: NavItem) {
 		// TODO: check navItem is in range and plausible
-		const toPositionArray: Array<THREE.Vector3> = this.particleSystem.getParticlesAtPos(navItem.idx)!;
+		const toPositionArray: Array<THREE.Vector3> = this.particleSystem.getParticlesAtPos(
+			navItem.idx
+		)!;
 		this.morphCurrParticlesTo(toPositionArray, 1000, 0, TWEEN.Easing.Quartic.Out);
 	}
 
-	public morphFromTo(fromPosArray: Array<THREE.Vector3>, toPosArray: Array<THREE.Vector3>, time: number, delay: number, easing: EasingFunction): void {
+	public morphFromTo(
+		fromPosArray: Array<THREE.Vector3>,
+		toPosArray: Array<THREE.Vector3>,
+		time: number,
+		delay: number,
+		easing: EasingFunction
+	): void {
 		if (fromPosArray == null) throw new Error('morphFromTo::fromPosArray must not be null');
 		if (toPosArray == null) throw new Error('morphFromTo::toPosArray must not be null');
 		this.particleSystem.setCurrParticles(fromPosArray);
 		this.morphCurrParticlesTo(toPosArray, time, delay, easing);
 	}
 
-	private morphCurrParticlesTo(toPosArray: Array<THREE.Vector3>, time: number, delay: number, easing: EasingFunction): void {
+	private morphCurrParticlesTo(
+		toPosArray: Array<THREE.Vector3>,
+		time: number,
+		delay: number,
+		easing: EasingFunction
+	): void {
 		TWEEN.removeAll();
 
 		this.particleSystem.forEachCurrParticle((currParticlePos: THREE.Vector3, idx: number) => {

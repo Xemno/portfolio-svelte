@@ -44,14 +44,14 @@ We can control the character in real-time via a gamepad or keyboard. </p> <br>
 
 Data extraction process for the phase extraction
 
-1. Threshold  toe and ankle velocities per foot
-<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/phase_threshold_0.gif" alt="Phase thresholds" />
+1. Threshold toe and ankle velocities per foot
+   <img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/phase_threshold_0.gif" alt="Phase thresholds" />
 2. Fit to parametric sine function to reduce parameter space
-<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/phase_optim0.gif" alt="Phase optimization" />
+   <img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/phase_optim0.gif" alt="Phase optimization" />
 3. Interpolate 1D phase at each start to end interval of a sine
-<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/phase_interpolate.avif" alt="Phase thresholds" />
+   <img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/phase_interpolate.avif" alt="Phase thresholds" />
 4. Export 2D phases by mapping 1D phase to its sine and cosine value
-<img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/dataexp_viking_skelOnly.gif" alt="Phase optimization" />
+   <img class="w-full md:w-1/2"  style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/dataexp_viking_skelOnly.gif" alt="Phase optimization" />
 
 For more detailed explanation, follow [this YouTube link here](https://youtu.be/Rzj3k3yerDk?feature=shared&t=85).
 
@@ -68,7 +68,7 @@ _Fit MoCap data to terrain samples_
 **Fitting Process**
 
 - Fitting error for each motion between the feet and the patches
-<img class="w-auto m-l-2" style="overflow:hidden;" style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/master_thesis_terrain_fitting.png" alt="System Architecture"/>
+  <img class="w-auto m-l-2" style="overflow:hidden;" style="overflow:hidden;  display: block; margin: 0 auto; border-radius: 5px" src="../images/master_thesis_terrain_fitting.png" alt="System Architecture"/>
 - Take up to 5 patches with lowest error
 - Load Patches into Unity
 

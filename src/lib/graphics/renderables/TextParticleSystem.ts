@@ -7,7 +7,6 @@ import type { Font } from 'three/examples/jsm/loaders/FontLoader.js';
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
 
 export class TextParticleSystem {
-
 	private numParticles = 5000;
 
 	private instancedMeshParticles!: THREE.InstancedMesh;
@@ -37,14 +36,20 @@ export class TextParticleSystem {
 	}
 
 	public createParticles(font: Font, navItems: Array<NavItem>) {
-		navItems.forEach((navItem) => this.particlesPositions.push(this.createTextParticlesPos(font, navItem)));
+		navItems.forEach((navItem) =>
+			this.particlesPositions.push(this.createTextParticlesPos(font, navItem))
+		);
 	}
 
 	public createCurrParticles(font: Font, initParams: NavItem) {
 		this.currParticlesPos = this.createTextParticlesPos(font, initParams);
 
 		// initialize particle system
-		this.instancedMeshParticles = new THREE.InstancedMesh(this.particleGeometry, this.material, this.numParticles);
+		this.instancedMeshParticles = new THREE.InstancedMesh(
+			this.particleGeometry,
+			this.material,
+			this.numParticles
+		);
 		this.instancedMeshParticles.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
 		this.particleGeometry.dispose();
 		// this.updateInstanceMatrix();
@@ -63,7 +68,8 @@ export class TextParticleSystem {
 	}
 
 	public forEachCurrParticle(fn: (vec: THREE.Vector3, idx: number) => void) {
-		if (this.currParticlesPos == null) throw new Error('forEachCurrParticle::currParticlesPos must not be null');
+		if (this.currParticlesPos == null)
+			throw new Error('forEachCurrParticle::currParticlesPos must not be null');
 		this.currParticlesPos.forEach((vec: THREE.Vector3, idx) => fn(vec, idx));
 	}
 
@@ -96,7 +102,6 @@ export class TextParticleSystem {
 	}
 
 	private createTextParticlesPos(font: Font, text: NavItem): Array<THREE.Vector3> {
-
 		let isPortraitMode = screen.availHeight > screen.availWidth ? true : false;
 		let isMobile = detectMobile();
 		let size = isMobile ? window.innerWidth * 0.0075 : window.innerWidth * 0.005;

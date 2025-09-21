@@ -50,34 +50,34 @@ export const easing: IEasingMap = {
 	outQuad: (t) => t * (2 - t),
 
 	// Acceleration until halfway, then deceleration
-	inOutQuad: (t) => t <.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
+	inOutQuad: (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
 
 	// Accelerating from zero velocity
 	inCubic: (t) => t * t * t,
 
 	// Decelerating to zero velocity
-	outCubic: (t) => (--t) * t * t + 1,
+	outCubic: (t) => --t * t * t + 1,
 
 	// Acceleration until halfway, then deceleration
-	inOutCubic: (t) => t <.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+	inOutCubic: (t) => (t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1),
 
 	// Accelerating from zero velocity
 	inQuart: (t) => t * t * t * t,
 
 	// Decelerating to zero velocity
-	outQuart: (t) => 1 - (--t) * t * t * t,
+	outQuart: (t) => 1 - --t * t * t * t,
 
 	// Acceleration until halfway, then deceleration
-	inOutQuart: (t) => t <.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t,
+	inOutQuart: (t) => (t < 0.5 ? 8 * t * t * t * t : 1 - 8 * --t * t * t * t),
 
 	// Accelerating from zero velocity
 	inQuint: (t) => t * t * t * t * t,
 
 	// Decelerating to zero velocity
-	outQuint: (t) => 1 + (--t) * t * t * t * t,
+	outQuint: (t) => 1 + --t * t * t * t * t,
 
 	// Acceleration until halfway, then deceleration
-	inOutQuint: (t) => t < .5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t,
+	inOutQuint: (t) => (t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t),
 
 	// Accelerating from zero velocity
 	inSine: (t) => -Math.cos(t * (Math.PI / 2)) + 1,
@@ -96,10 +96,10 @@ export const easing: IEasingMap = {
 
 	// Exponential accelerating until halfway, then decelerating
 	inOutExpo: (t) => {
-		t /= .5;
+		t /= 0.5;
 		if (t < 1) return Math.pow(2, 10 * (t - 1)) / 2;
 		t--;
-		return (-Math.pow( 2, -10 * t) + 2) / 2;
+		return (-Math.pow(2, -10 * t) + 2) / 2;
 	},
 
 	// Circular accelerating from zero velocity
@@ -113,7 +113,7 @@ export const easing: IEasingMap = {
 
 	// Circular acceleration until halfway, then deceleration
 	inOutCirc: (t) => {
-		t /= .5;
+		t /= 0.5;
 		if (t < 1) return -(Math.sqrt(1 - t * t) - 1) / 2;
 		t -= 2;
 		return (Math.sqrt(1 - t * t) + 1) / 2;

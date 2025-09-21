@@ -11,7 +11,6 @@
 	}
 
 	let { src, alt, size = 50, radius = '10px', classes = '' }: Props = $props();
-
 </script>
 
 {#if typeof src === 'string'}

@@ -70,8 +70,8 @@ body {
 
 * {
 	transition-duration: 200ms;
-	transition-property: background, border-color, opacity, box-shadow, top, bottom, left, margin,
-		right;
+	transition-property:
+		background, border-color, opacity, box-shadow, top, bottom, left, margin, right;
 }
 
 :root[data-theme='dark'] {
@@ -193,8 +193,8 @@ body {
 
 	color: var(--tertiary-text);
 	overflow-y: auto !important;
-	margin-left: 1.0em;
-	margin-right: 1.0em;
+	margin-left: 1em;
+	margin-right: 1em;
 
 	code[class*='language-'],
 	pre[class*='language-'] {
@@ -330,7 +330,7 @@ body {
 		border-radius: 0.25em;
 	}
 
-	& :not(pre)>code[class*='language-'],
+	& :not(pre) > code[class*='language-'],
 	pre[class*='language-'] {
 		background-color: var(--main-hover);
 		border: 1px solid var(--border);
@@ -391,7 +391,6 @@ body {
 	}
 
 	&:hover {
-
 		&::before,
 		&::after {
 			background-color: auto;

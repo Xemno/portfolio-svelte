@@ -25,7 +25,6 @@
 			});
 		});
 	});
-
 </script>
 
 <div class={`body contents ${$theme ? 'theme-dark' : 'theme-light'}`} id="mydiv">

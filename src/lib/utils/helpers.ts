@@ -97,7 +97,7 @@ export const isBlank = (str: string): boolean => {
 };
 
 export function getAllNamedRoutes(): Array<NavItem> {
-	let namedRoutes = new Array<NavItem>;
+	let namedRoutes = new Array<NavItem>();
 
 	namedRoutes.push({ slug: '/', name: name + ' ' + lastName, idx: 0 }); // default home
 	namedRoutes.push({ slug: '/search', name: 'Search', idx: 1 });
@@ -115,11 +115,15 @@ export function getAllNamedRoutes(): Array<NavItem> {
 
 	lengthOffset = namedRoutes.length;
 	experiencetItems.forEach((item: Experience, idx) => {
-		namedRoutes.push({ slug: '/experience/' + item.slug, name: item.name, idx: idx + lengthOffset });
+		namedRoutes.push({
+			slug: '/experience/' + item.slug,
+			name: item.name,
+			idx: idx + lengthOffset
+		});
 	});
 
 	return namedRoutes;
-};
+}
 
 export function routeToName(searchArray: Array<NavItem>, route: string): NavItem {
 	let navItem = searchArray.at(0); // default home

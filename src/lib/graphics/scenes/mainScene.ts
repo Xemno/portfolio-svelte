@@ -50,7 +50,12 @@ export default class MainScene {
 
 	constructor(canvas: HTMLCanvasElement, navItemArray: Array<NavItem>, isMobile: boolean) {
 		this.scene = new THREE.Scene();
-		this.camera = new THREE.PerspectiveCamera(conf.fov, window.innerWidth / window.innerHeight, 0.1, 1000);
+		this.camera = new THREE.PerspectiveCamera(
+			conf.fov,
+			window.innerWidth / window.innerHeight,
+			0.1,
+			1000
+		);
 		this.camera.position.z = conf.cameraZ;
 		this.isMobile = isMobile;
 
@@ -68,7 +73,12 @@ export default class MainScene {
 		let renderpass = new RenderPass(this.scene, this.camera);
 		renderpass.clearAlpha = 0;
 
-		const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+		const bloomPass = new UnrealBloomPass(
+			new THREE.Vector2(window.innerWidth, window.innerHeight),
+			1.5,
+			0.4,
+			0.85
+		);
 		bloomPass.threshold = params.threshold;
 		bloomPass.strength = params.strength;
 		bloomPass.radius = params.radius;
@@ -85,7 +95,6 @@ export default class MainScene {
 
 		this.initScene(navItemArray);
 	}
-
 
 	public onThemeChange(val: boolean) {
 		if (val) {
@@ -171,7 +180,6 @@ export default class MainScene {
 		);
 		this.scene.add(this.simplexPlane.getMesh());
 
-
 		this.textCloud = new TextCloud(
 			this.renderer,
 			this.camera,
@@ -221,7 +229,6 @@ export default class MainScene {
 				item.onWindowResize(this.renderWidth, this.renderHeight, this.isPortraitMode);
 			});
 		}
-
 	}
 
 	private addMouseInputSupport(): void {
@@ -233,8 +240,10 @@ export default class MainScene {
 		});
 
 		document.addEventListener('touchmove', (event) => {
-			this.normalizedTouchScreenPos.x = (event.changedTouches[0].clientX / this.windowScreenWidth) * 2 - 1;
-			this.normalizedTouchScreenPos.y = -(event.changedTouches[0].clientY / this.windowScreenHeight) * 2 + 1;
+			this.normalizedTouchScreenPos.x =
+				(event.changedTouches[0].clientX / this.windowScreenWidth) * 2 - 1;
+			this.normalizedTouchScreenPos.y =
+				-(event.changedTouches[0].clientY / this.windowScreenHeight) * 2 + 1;
 
 			this.textCloud.onTouchMove(event);
 		});

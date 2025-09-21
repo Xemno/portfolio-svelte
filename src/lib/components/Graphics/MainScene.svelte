@@ -21,7 +21,7 @@
 		scene.start();
 
 		var containerNode = document.querySelectorAll('div')[0];
-		
+
 		const observer = new MutationObserver(() => {
 			scene.onAfterUiUpdate();
 		});

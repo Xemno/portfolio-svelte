@@ -1,4 +1,3 @@
-
 # Modern Interactive Portfolio Website
 
 <p>In my free time, I, designed and developed a responsive, interactive portfolio using Svelte and TypeScript for a clean, type-safe codebase, enhanced with Three.js for immersive 3D visuals. </p> <br>
@@ -22,6 +21,6 @@
 - **Interactive Visuals**: Enhanced engagement with optimized Three.js-driven effects (e.g., [specify: 3D models, particle systems, or interactive scenes]).
 
 - **Deployment**: Deployed with GitHub Pages
-<br>
+  <br>
 
 _Credit_: The sites base UI component layout is based on [RiadhAdranis Slick Portfolio](https://github.com/RiadhAdrani/slick-portfolio-svelte).

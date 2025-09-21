@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Icon } from "$lib/types";
+	import type { Icon } from '$lib/types';
 
 	interface Props {
 		icon?: Icon;

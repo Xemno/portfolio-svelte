@@ -13,7 +13,6 @@ import { easing } from '../utils/Easing';
 import { TextParticleSystem } from './TextParticleSystem';
 import { TweenMorphing } from './TweenMorphing';
 
-
 interface Item {
 	idx: number;
 	geometry: TextGeometry;
@@ -74,8 +73,6 @@ export default class TextCloud implements IRenderable {
 				this.particleSystem.setCurrParticlesPos(vWorldPos);
 			}
 
-
-
 			scene.add(this.particleSystem.getParticleSystem());
 
 			// play initial animation
@@ -91,9 +88,7 @@ export default class TextCloud implements IRenderable {
 		return this.particleSystem.getParticleSystem();
 	}
 
-	public cleanup(): void {
-
-	}
+	public cleanup(): void {}
 
 	public update(deltaTime: number, mouseScreenPos: THREE.Vector2 | void): void {
 		if (this.lookAt != null) {
@@ -123,12 +118,9 @@ export default class TextCloud implements IRenderable {
 		this.particleSystem.setCurrParticlesPos(vWorldPos);
 	}
 
-	public onMouseMove(event: MouseEvent) {
-	}
+	public onMouseMove(event: MouseEvent) {}
 
-
-	public onTouchMove(event: TouchEvent) {
-	}
+	public onTouchMove(event: TouchEvent) {}
 
 	private onOrientationChange(isPortraitMode: boolean) {
 		if (this.isPortraitMode != isPortraitMode) {
@@ -141,7 +133,7 @@ export default class TextCloud implements IRenderable {
 	}
 
 	private getMainTitleTextPosition(): THREE.Vector3 | null {
-		let mainTitleText: (HTMLElement | null) = document.getElementById("main-title");
+		let mainTitleText: HTMLElement | null = document.getElementById('main-title');
 
 		if (mainTitleText != null) {
 			let { top, bottom, left, right } = mainTitleText.getBoundingClientRect();
@@ -172,7 +164,12 @@ export default class TextCloud implements IRenderable {
 
 		const toPositionVectors = this.particleSystem.getParticlesAtPos(navItem.idx);
 
-		this.tweenMorphing.morphFromTo(sphereParticlesPos, toPositionVectors!, 2000, 0, TWEEN.Easing.Cubic.Out);
+		this.tweenMorphing.morphFromTo(
+			sphereParticlesPos,
+			toPositionVectors!,
+			2000,
+			0,
+			TWEEN.Easing.Cubic.Out
+		);
 	}
 }
-
