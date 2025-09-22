@@ -8,6 +8,8 @@ import type { NavItem } from '$lib/types';
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
 import { TextParticleSystem } from './TextParticleSystem';
 import { TweenMorphing } from './TweenMorphing';
+// import typefaceRegular from '/src/lib/graphics/fonts/optimer_bold.typeface.json';
+// import typefaceMobile from '/src/lib/graphics/fonts/optimer_regular.typeface.json';
 
 interface Item {
 	idx: number;

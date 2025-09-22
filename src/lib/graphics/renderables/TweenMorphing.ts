@@ -2,6 +2,7 @@ import type { NavItem } from '$lib/types';
 import type { EasingFunction } from 'svelte/transition';
 import type { TextParticleSystem } from './TextParticleSystem';
 import * as THREE from 'three';
+// import * as TWEEN from '@tweenjs/tween.js';
 import * as TWEEN from 'https://unpkg.com/@tweenjs/tween.js@23.1.3/dist/tween.esm.js';
 
 export class TweenMorphing {
