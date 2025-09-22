@@ -26,8 +26,8 @@ jobs:
         run: |
           npm run build
 
-      - name: Create CNAME file
-        run: echo 'qais.elokaili.ch' > ./build/CNAME
+      # - name: Create CNAME file
+      #   run: echo 'qais.elokaili.ch' > ./build/CNAME
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
