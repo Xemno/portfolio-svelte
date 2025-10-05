@@ -19,8 +19,8 @@ type GeometryItems = Array<Item>;
 
 // Options
 const particleCount = 5000;
-const typefaceRegular = './fonts/optimer_bold.typeface.json';
-const typefaceMobile = './fonts/helvetiker_bold.typeface.json';
+const typefaceRegular = 'fonts/optimer_bold.typeface.json';
+const typefaceMobile = 'fonts/helvetiker_bold.typeface.json';
 
 export default class TextCloud implements IRenderable {
 	private lookAt?: THREE.Vector3;
