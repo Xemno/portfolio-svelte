@@ -14,6 +14,13 @@ export const base = dev ? '' : '/portfolio-svelte';
 
 export type ItemOrSkill = Item | Skill;
 
+export const isEmail = (email: string): boolean => {
+	const reg =
+		/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+	return !isBlank(email) && reg.test(email);
+};
+
 export const countMonths = (from: Date, to: Date = new Date()): number => {
 	let firstYear = 0;
 	let wholeYears = 0;
@@ -101,7 +108,7 @@ export const isBlank = (str: string): boolean => {
 
 export function getAllNamedRoutes(): Array<NavItem> {
 	let namedRoutes = new Array<NavItem>();
-	
+
 	namedRoutes.push({ slug: base + '/', name: name + ' ' + lastName, idx: 0 }); // default home
 	namedRoutes.push({ slug: base + '/search', name: 'Search', idx: 1 });
 

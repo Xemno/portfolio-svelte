@@ -106,12 +106,12 @@ export default class MainScene {
 			this.directionalLight.intensity = 300;
 		} else {
 			// white mode
-			this.renderer.toneMapping = THREE.LinearToneMapping;
-			this.renderer.toneMappingExposure = 0.75;
+			this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+			this.renderer.toneMappingExposure = 0.5;
 			this.renderer.setClearColor(NAMED_COLORS.white, 1);
 
-			this.scene.fog = new THREE.FogExp2(NAMED_COLORS.tan, 0.006);
-			this.directionalLight.intensity = 10;
+			this.scene.fog = new THREE.FogExp2(NAMED_COLORS.diserria, 0.0065);
+			this.directionalLight.intensity = 20;
 		}
 
 		this.renderables.forEach((item) => {
@@ -120,7 +120,7 @@ export default class MainScene {
 	}
 
 	public onNavigationChange(item: NavItem) {
-		this.textCloud.onNavigationChange(item);
+		if (this.textCloud != null) this.textCloud.onNavigationChange(item);
 	}
 
 	public start(): void {
@@ -135,7 +135,7 @@ export default class MainScene {
 	}
 
 	public onAfterUiUpdate() {
-		this.textCloud.onAfterUiUpdate();
+		if (this.textCloud != null) this.textCloud.onAfterUiUpdate();
 	}
 
 	private update(): void {
@@ -179,15 +179,17 @@ export default class MainScene {
 		);
 		this.scene.add(this.simplexPlane.getMesh());
 
-		this.textCloud = new TextCloud(
-			this.renderer,
-			this.camera,
-			this.scene,
-			navItemArray,
-			this.isMobile,
-			this.isPortraitMode,
-			new THREE.Vector2(this.renderer.domElement.width, this.renderer.domElement.height)
-		);
+		if (!this.isMobile) {
+			this.textCloud = new TextCloud(
+				this.renderer,
+				this.camera,
+				this.scene,
+				navItemArray,
+				this.isMobile,
+				this.isPortraitMode,
+				new THREE.Vector2(this.renderer.domElement.width, this.renderer.domElement.height)
+			);
+		}
 
 		const lightTargetObj = new THREE.Object3D();
 		lightTargetObj.position.y = 150; // set above TextCloud
@@ -205,7 +207,7 @@ export default class MainScene {
 		this.scene.add(lightMesh);
 
 		// init renderables to update
-		this.renderables.push(this.textCloud);
+		if (this.textCloud != null) this.renderables.push(this.textCloud);
 		this.renderables.push(this.simplexPlane);
 	}
 
@@ -235,7 +237,7 @@ export default class MainScene {
 			this.normalizedMouseScreenPos.x = (event.clientX / this.windowScreenWidth) * 2 - 1;
 			this.normalizedMouseScreenPos.y = -(event.clientY / this.windowScreenHeight) * 2 + 1;
 
-			this.textCloud.onMouseMove(event);
+			if (this.textCloud != null) this.textCloud.onMouseMove(event);
 		});
 
 		document.addEventListener('touchmove', (event) => {
@@ -244,7 +246,7 @@ export default class MainScene {
 			this.normalizedTouchScreenPos.y =
 				-(event.changedTouches[0].clientY / this.windowScreenHeight) * 2 + 1;
 
-			this.textCloud.onTouchMove(event);
+			if (this.textCloud != null) this.textCloud.onTouchMove(event);
 		});
 	}
 

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type { Experience } from '$lib/types';
+
 	import { getAssetURL } from '$lib/data/assets';
 	import { getTimeDiff } from '$lib/utils';
 	import { title } from '@data/experience';
-
+	import { detectMobile } from '$lib/stores/navigation';
 	import Markdown from '$lib/components/Markdown.svelte';
 	import MainTitle from '$lib/components/MainTitle/MainTitle.svelte';
 	import TabTitle from '$lib/components/TabTitle.svelte';
@@ -19,7 +20,8 @@
 	}
 
 	let { data }: Props = $props();
-
+	
+	const isMobile = detectMobile();
 	let computedTitle = $derived(data.experience ? `${data.experience.name} - ${title}` : title);
 </script>
 
@@ -36,7 +38,11 @@
 			<Banner>
 				<div class="col-center p-y-20">
 					<div class="text-0.9em">
-						<MainTitle classes="py-10">{''}</MainTitle>
+						{#if isMobile}
+							<MainTitle>{data.experience.name}</MainTitle>
+						{:else}
+							<MainTitle classes="py-10">{''}</MainTitle>
+						{/if}
 					</div>
 					<p class="font-300 text-[var(--tertiary-text)] m-y-2 text-center">
 						{data.experience.company} · {data.experience.location} · {data.experience.type}

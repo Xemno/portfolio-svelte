@@ -1,8 +1,9 @@
 <script lang="ts">
 	import type { Project } from '$lib/types';
+
 	import { getAssetURL } from '$lib/data/assets';
 	import { title } from '@data/projects';
-
+	import { detectMobile } from '$lib/stores/navigation';
 	import CardLogo from '$lib/components/Card/CardLogo.svelte';
 	import MainTitle from '$lib/components/MainTitle/MainTitle.svelte';
 	import Markdown from '$lib/components/Markdown.svelte';
@@ -19,6 +20,7 @@
 
 	let { data }: Props = $props();
 
+	const isMobile = detectMobile();
 	let computedTitle = $derived(data.project ? `${data.project.name} - ${title}` : title);
 </script>
 
@@ -35,7 +37,11 @@
 			<Banner>
 				<div class="col-center p-y-20">
 					<div class="text-0.9em">
-						<MainTitle classes="py-10">{''}</MainTitle>
+						{#if isMobile}
+							<MainTitle>{data.project.name}</MainTitle>
+						{:else}
+							<MainTitle classes="py-10">{''}</MainTitle>
+						{/if}
 					</div>
 					<p class="font-300 text-center text-[var(--tertiary-text)] m-y-2">{data.project.type}</p>
 					<div class="w-75%">

@@ -12,11 +12,13 @@
 	const isMobile = detectMobile();
 	const allNamedRoutes = getAllNamedRoutes();
 
-	afterNavigate(({ from, to }) => {
-		scene.onAfterUiUpdate();
-		scene.onNavigationChange(routeToName(allNamedRoutes, to?.url?.pathname!));
-		console.log('from: ' + from?.url?.pathname + ', to: ' + to?.url?.pathname);
-	});
+	if (!isMobile) {
+		afterNavigate(({ from, to }) => {
+			scene.onAfterUiUpdate();
+			scene.onNavigationChange(routeToName(allNamedRoutes, to?.url?.pathname!));
+			console.log('from: ' + from?.url?.pathname + ', to: ' + to?.url?.pathname);
+		});
+	}
 
 	onMount(() => onHydrated());
 
