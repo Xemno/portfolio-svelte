@@ -1,15 +1,14 @@
-import * as THREE from 'three';
 import type IRenderable from './IRenderable';
+import type { NavItem } from '$lib/types';
+
+import * as THREE from 'three';
 import { Font, FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { toWorldPosition } from '../utils/VectorUtils';
-import type { NavItem } from '$lib/types';
-
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
 import { TextParticleSystem } from './TextParticleSystem';
 import { TweenMorphing } from './TweenMorphing';
-// import typefaceRegular from '/src/lib/graphics/fonts/optimer_bold.typeface.json';
-// import typefaceMobile from '/src/lib/graphics/fonts/optimer_regular.typeface.json';
+import { base } from '$lib/utils/helpers';
 
 interface Item {
 	idx: number;
@@ -21,8 +20,8 @@ type GeometryItems = Array<Item>;
 
 // Options
 const particleCount = 5000;
-const typefaceRegular = '/src/lib/graphics/fonts/optimer_bold.typeface.json';
-const typefaceMobile = '/src/lib/graphics/fonts/optimer_regular.typeface.json';
+const typefaceRegular = base + '/fonts/optimer_bold.typeface.json';
+const typefaceMobile = base + '/fonts/helvetiker_bold.typeface.json';
 
 export default class TextCloud implements IRenderable {
 	private lookAt?: THREE.Vector3;
@@ -98,6 +97,8 @@ export default class TextCloud implements IRenderable {
 
 	public onNavigationChange(item: NavItem) {
 		if (!this.ready) return;
+
+		// let it = { slug: base + item.slug, name: item.name, idx: item.idx };
 		this.tweenMorphing.morphTo(item);
 	}
 

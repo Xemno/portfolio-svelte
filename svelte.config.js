@@ -45,6 +45,8 @@ const config = {
 			'@md': './src/lib/md',
 			'@stores': './src/lib/stores',
 			'@utils': './src/lib/utils'
+			// 'myfile': 'fonts/optimer_bold.typeface.json'
+
 		},
 		paths: {
 			base: base

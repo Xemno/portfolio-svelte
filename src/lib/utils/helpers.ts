@@ -2,12 +2,15 @@ import type { Experience, Item, NavItem, Project, Skill } from '$lib/types';
 
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import { dev } from '$app/environment';
 import { lastName, name } from '@data/home';
 import { items as projectItems } from '@data/projects';
 import { items as experiencetItems } from '@data/experience';
 import { items as navItems } from '@data/navbar';
 
 dayjs.extend(duration);
+
+export const base = dev ? '' : '/portfolio-svelte';
 
 export type ItemOrSkill = Item | Skill;
 
@@ -98,25 +101,25 @@ export const isBlank = (str: string): boolean => {
 
 export function getAllNamedRoutes(): Array<NavItem> {
 	let namedRoutes = new Array<NavItem>();
-
-	namedRoutes.push({ slug: '/', name: name + ' ' + lastName, idx: 0 }); // default home
-	namedRoutes.push({ slug: '/search', name: 'Search', idx: 1 });
+	
+	namedRoutes.push({ slug: base + '/', name: name + ' ' + lastName, idx: 0 }); // default home
+	namedRoutes.push({ slug: base + '/search', name: 'Search', idx: 1 });
 
 	let lengthOffset = namedRoutes.length;
 
 	Array.from(navItems).forEach((item, idx) => {
-		namedRoutes.push({ slug: item.to, name: item.title, idx: idx + lengthOffset });
+		namedRoutes.push({ slug: base + item.to, name: item.title, idx: idx + lengthOffset });
 	});
 
 	lengthOffset = namedRoutes.length;
 	projectItems.forEach((item: Project, idx) => {
-		namedRoutes.push({ slug: '/projects/' + item.slug, name: item.name, idx: idx + lengthOffset });
+		namedRoutes.push({ slug: base + '/projects/' + item.slug, name: item.name, idx: idx + lengthOffset });
 	});
 
 	lengthOffset = namedRoutes.length;
 	experiencetItems.forEach((item: Experience, idx) => {
 		namedRoutes.push({
-			slug: '/experience/' + item.slug,
+			slug: base + '/experience/' + item.slug,
 			name: item.name,
 			idx: idx + lengthOffset
 		});

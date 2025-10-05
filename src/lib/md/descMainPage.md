@@ -1,4 +1,4 @@
-**Software Engineer** with years of C/C++, Python, C# and Java software development
+**Software Engineer** with years of C/C++, Java, C# and Python software development
 experience. Broad experience in game programming, computer graphics, machine learning,
 web development and software optimization.
 
