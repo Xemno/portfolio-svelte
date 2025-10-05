@@ -8,7 +8,6 @@ import { toWorldPosition } from '../utils/VectorUtils';
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler.js';
 import { TextParticleSystem } from './TextParticleSystem';
 import { TweenMorphing } from './TweenMorphing';
-import { base } from '$lib/utils/helpers';
 
 interface Item {
 	idx: number;
@@ -20,8 +19,8 @@ type GeometryItems = Array<Item>;
 
 // Options
 const particleCount = 5000;
-const typefaceRegular = base + '/fonts/optimer_bold.typeface.json';
-const typefaceMobile = base + '/fonts/helvetiker_bold.typeface.json';
+const typefaceRegular = './fonts/optimer_bold.typeface.json';
+const typefaceMobile = './fonts/helvetiker_bold.typeface.json';
 
 export default class TextCloud implements IRenderable {
 	private lookAt?: THREE.Vector3;
@@ -60,6 +59,8 @@ export default class TextCloud implements IRenderable {
 		this.particleSystem = new TextParticleSystem();
 		this.particleSystem.setNumParticles(particleCount);
 		this.tweenMorphing = new TweenMorphing(this.particleSystem);
+
+		console.log('font path: ' + this.isMobile ? typefaceMobile : typefaceRegular);
 
 		// load font and execute onLoad callback
 		this.fontLoader.load(this.isMobile ? typefaceMobile : typefaceRegular, (font) => {
