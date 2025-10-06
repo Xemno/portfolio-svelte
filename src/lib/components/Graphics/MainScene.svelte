@@ -2,7 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { onHydrated, theme } from '$lib/stores/theme';
 	import { afterNavigate } from '$app/navigation';
-	import { getAllNamedRoutes, routeToName } from '$lib/utils/helpers';
+	import { base, getAllNamedRoutes, routeToName } from '$lib/utils/helpers';
 	import { detectMobile } from '$lib/stores/navigation';
 	import MainScene from '$lib/graphics/scenes/mainScene';
 
@@ -15,7 +15,7 @@
 	if (!isMobile) {
 		afterNavigate(({ from, to }) => {
 			scene.onAfterUiUpdate();
-			scene.onNavigationChange(routeToName(allNamedRoutes, '/portfolio-svelte' + to?.url?.pathname!));
+			scene.onNavigationChange(routeToName(allNamedRoutes, base + to?.url?.pathname!));
 			console.log('from: ' + from?.url?.pathname + ', to: ' + '/portfolio-svelte' + to?.url?.pathname!);
 		});
 	}
