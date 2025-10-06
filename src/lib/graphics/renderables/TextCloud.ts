@@ -60,8 +60,6 @@ export default class TextCloud implements IRenderable {
 		this.particleSystem.setNumParticles(particleCount);
 		this.tweenMorphing = new TweenMorphing(this.particleSystem);
 
-		console.log('font path: ' + this.isMobile ? typefaceMobile : typefaceRegular);
-
 		// load font and execute onLoad callback
 		this.fontLoader.load(this.isMobile ? typefaceMobile : typefaceRegular, (font) => {
 			this.particleSystem.createParticles(font, navItems);

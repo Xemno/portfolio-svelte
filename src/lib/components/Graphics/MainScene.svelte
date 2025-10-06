@@ -16,7 +16,6 @@
 		afterNavigate(({ from, to }) => {
 			scene.onAfterUiUpdate();
 			scene.onNavigationChange(routeToName(allNamedRoutes, base + to?.url?.pathname!));
-			console.log('from: ' + from?.url?.pathname + ', to: ' + '/portfolio-svelte' + to?.url?.pathname!);
 		});
 	}
 

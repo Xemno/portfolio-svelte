@@ -132,11 +132,6 @@ export function getAllNamedRoutes(): Array<NavItem> {
 		});
 	});
 
-	console.log('navItems:');
-	namedRoutes.forEach((item) => {
-		console.log('item: ' + item.slug);
-	})
-
 	return namedRoutes;
 }
 
